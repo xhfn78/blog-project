@@ -1,0 +1,3 @@
+# features/blog
+이 폴더는 블로그 관련 기능(UI, 로직, Store)을 담습니다.
+Agent-Migration이 기존 코드를 이동할 예정입니다.

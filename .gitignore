@@ -53,3 +53,6 @@ next-env.d.ts
 !.claude/settings.json
 .claude.json
 .claude.json.backup
+
+*storybook.log
+storybook-static

@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { PostList } from '@/components/blog/post-list';
-import { Button } from '@/components/ui/button';
+import { PostList } from '@/features/blog/ui/post-list';
+import { Button } from '@/shared/ui/button';
 
 export default function BlogPage() {
   return (

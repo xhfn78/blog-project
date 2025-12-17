@@ -1,4 +1,4 @@
-import { PostForm } from '@/components/blog/post-form';
+import { PostForm } from '@/features/blog/ui/post-form';
 
 export default function WritePage() {
   return (
