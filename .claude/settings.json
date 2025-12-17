@@ -1,0 +1,6 @@
+{
+  "enabledPlugins": {
+    "web-to-markdown@suji-father-marketplace": true,
+    "nextjs15-init@suji-father-marketplace": true
+  }
+}
