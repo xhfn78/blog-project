@@ -46,8 +46,7 @@ async function createTool() {
     registryContent = importStatement + registryContent;
 
     // Add new entry to the array
-    const registryArrayRegex = /(export const TOOLS_REGISTRY: ToolRegistration\[\] = \[
-)([^]*?)(\];)/;
+    const registryArrayRegex = /(export const TOOLS_REGISTRY: ToolRegistration\[\] = \[)([\s\S]*?)(\];)/;
     registryContent = registryContent.replace(registryArrayRegex, `$1$2${newEntry}$3`);
 
     await fs.writeFile(registryPath, registryContent);

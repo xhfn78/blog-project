@@ -1,3 +1,4 @@
+import { config as tailwindClassVisualizerConfig } from '@/features/tools/tools/tailwind-class-visualizer/tool.config';
 import { lazy, LazyExoticComponent } from 'react';
 import { ToolCategory } from '@/entities/content/model/tool-category';
 import { config as codeSnapshotConfig } from '@/features/tools/tools/code-snapshot/tool.config';
@@ -9,7 +10,7 @@ export interface ToolRegistration {
   category: ToolCategory;
   tags: string[];
   author: string;
-  component: LazyExoticComponent<() => React.JSX.Element>; // JSX.Element -> React.JSX.Element
+  component: LazyExoticComponent<() => React.JSX.Element>;
 }
 
 /**
@@ -23,5 +24,10 @@ export const TOOLS_REGISTRY: ToolRegistration[] = [
   {
     ...codeSnapshotConfig,
     component: lazy(() => import('@/features/tools/tools/code-snapshot')),
+  },
+
+  {
+    ...tailwindClassVisualizerConfig,
+    component: lazy(() => import('@/features/tools/tools/tailwind-class-visualizer')),
   },
 ];
