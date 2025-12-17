@@ -5,7 +5,7 @@ type ToolConfig = Omit<ToolRegistration, 'component'>;
 
 export const config: ToolConfig = {
   slug: 'tailwind-class-visualizer', // IMPORTANT: MUST BE UNIQUE
-  name: 'Tailwind class visualizer',
+  name: 'Tailwind CSS 클래스 한국어 해설 및 실시간 시각화 도구',
   description: 'A brief description of what this tool does.',
   category: 'utility', // 'converter', 'generator', 'formatter', or 'utility'
   tags: ['new', 'tool'],
