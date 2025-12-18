@@ -14,53 +14,58 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+  ),
   title: {
-    default: '바이브코딩 도구 모음 - 개발자를 위한 무료 온라인 도구',
-    template: '%s | 바이브코딩 도구 모음'
+    default: "바이브코딩 도구 모음 - 개발자를 위한 무료 온라인 도구",
+    template: "%s | 바이브코딩 도구 모음",
   },
-  description: '프론트엔드 개발을 가속화하는 전문가급 온라인 도구 모음. 코드 스냅샷, Tailwind CSS 클래스 시각화 등 실무에 바로 적용 가능한 무료 도구를 제공합니다.',
+  description:
+    "프론트엔드 개발을 가속화하는 전문가급 온라인 도구 모음. 코드 스냅샷, Tailwind CSS 클래스 시각화 등 실무에 바로 적용 가능한 무료 도구를 제공합니다.",
   keywords: [
-    '개발 도구',
-    '바이브코딩',
-    '프론트엔드 도구',
-    '온라인 변환기',
-    'Tailwind CSS',
-    '코드 스냅샷',
-    '무료 개발 도구',
-    '웹 개발 유틸리티',
-    'Next.js 도구',
-    '개발자 도구',
-    '코드 포맷터',
-    'CSS 도구'
+    "개발 도구",
+    "바이브코딩",
+    "프론트엔드 도구",
+    "온라인 변환기",
+    "Tailwind CSS",
+    "코드 스냅샷",
+    "무료 개발 도구",
+    "웹 개발 유틸리티",
+    "Next.js 도구",
+    "개발자 도구",
+    "코드 포맷터",
+    "CSS 도구",
   ],
-  authors: [{ name: '바이브코딩 팀', url: 'https://vibecoding.com' }],
-  creator: '바이브코딩',
-  publisher: '바이브코딩',
+  authors: [{ name: "바이브코딩 팀", url: "https://vibecoding.com" }],
+  creator: "바이브코딩",
+  publisher: "바이브코딩",
 
   // Open Graph (소셜 공유 최적화)
   openGraph: {
-    type: 'website',
-    locale: 'ko_KR',
-    url: '/',
-    title: '바이브코딩 도구 모음 - 개발자를 위한 무료 온라인 도구',
-    description: '프론트엔드 개발을 가속화하는 전문가급 온라인 도구 모음',
-    siteName: '바이브코딩 도구 모음',
-    images: [{
-      url: '/og-image.png',
-      width: 1200,
-      height: 630,
-      alt: '바이브코딩 도구 모음 - 개발 생산성을 높이는 무료 도구'
-    }],
+    type: "website",
+    locale: "ko_KR",
+    url: "/",
+    title: "바이브코딩 도구 모음 - 개발자를 위한 무료 온라인 도구",
+    description: "프론트엔드 개발을 가속화하는 전문가급 온라인 도구 모음",
+    siteName: "바이브코딩 도구 모음",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "바이브코딩 도구 모음 - 개발 생산성을 높이는 무료 도구",
+      },
+    ],
   },
 
   // Twitter Card 최적화
   twitter: {
-    card: 'summary_large_image',
-    title: '바이브코딩 도구 모음 - 개발자를 위한 무료 온라인 도구',
-    description: '프론트엔드 개발을 가속화하는 전문가급 온라인 도구 모음',
-    images: ['/og-image.png'],
-    creator: '@vibecoding',
+    card: "summary_large_image",
+    title: "바이브코딩 도구 모음 - 개발자를 위한 무료 온라인 도구",
+    description: "프론트엔드 개발을 가속화하는 전문가급 온라인 도구 모음",
+    images: ["/og-image.png"],
+    creator: "@vibecoding",
   },
 
   // 검색엔진 최적화
@@ -70,21 +75,21 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
 
   // Canonical URL
   alternates: {
-    canonical: '/',
+    canonical: "/",
   },
 
   // 추가 SEO 최적화
-  category: 'technology',
+  category: "technology",
   verification: {
-    google: 'google-site-verification-code', // 실제 Google Search Console에서 발급받은 코드로 교체
+    google: "google-site-verification-code", // 실제 Google Search Console에서 발급받은 코드로 교체
   },
 };
 
@@ -95,42 +100,46 @@ export default function RootLayout({
 }>) {
   // JSON-LD 구조화 데이터
   const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: '바이브코딩 도구 모음',
-    description: '프론트엔드 개발을 가속화하는 전문가급 온라인 도구 모음',
-    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://yourdomain.com',
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "바이브코딩 도구 모음",
+    description: "프론트엔드 개발을 가속화하는 전문가급 온라인 도구 모음",
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://yourdomain.com",
     publisher: {
-      '@type': 'Organization',
-      name: '바이브코딩',
+      "@type": "Organization",
+      name: "바이브코딩",
       logo: {
-        '@type': 'ImageObject',
-        url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://yourdomain.com'}/logo.png`,
+        "@type": "ImageObject",
+        url: `${
+          process.env.NEXT_PUBLIC_SITE_URL || "https://yourdomain.com"
+        }/logo.png`,
       },
     },
     potentialAction: {
-      '@type': 'SearchAction',
+      "@type": "SearchAction",
       target: {
-        '@type': 'EntryPoint',
-        urlTemplate: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://yourdomain.com'}/tools?q={search_term_string}`,
+        "@type": "EntryPoint",
+        urlTemplate: `${
+          process.env.NEXT_PUBLIC_SITE_URL || "https://yourdomain.com"
+        }/tools?q={search_term_string}`,
       },
-      'query-input': 'required name=search_term_string',
+      "query-input": "required name=search_term_string",
     },
   };
 
   const organizationJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: '바이브코딩',
-    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://yourdomain.com',
-    logo: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://yourdomain.com'}/logo.png`,
-    sameAs: [
-      'https://github.com/vibecoding',
-    ],
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "바이브코딩",
+    url: process.env.NEXT_PUBLIC_SITE_URL || "https://yourdomain.com",
+    logo: `${
+      process.env.NEXT_PUBLIC_SITE_URL || "https://yourdomain.com"
+    }/logo.png`,
+    sameAs: ["https://github.com/vibecoding"],
     contactPoint: {
-      '@type': 'ContactPoint',
-      email: 'contact@vibecoding.com',
-      contactType: '고객 지원',
+      "@type": "ContactPoint",
+      email: "contact@vibecoding.com",
+      contactType: "고객 지원",
     },
   };
 
@@ -144,7 +153,9 @@ export default function RootLayout({
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationJsonLd),
+          }}
         />
       </head>
       <body
@@ -189,9 +200,7 @@ export default function RootLayout({
           </header>
 
           {/* Main Content */}
-          <main className="flex-1">
-            {children}
-          </main>
+          <main className="flex-1">{children}</main>
 
           {/* Footer */}
           <footer className="border-t bg-muted/30">
@@ -206,7 +215,8 @@ export default function RootLayout({
                     <h3 className="font-bold text-lg">바이브코딩</h3>
                   </div>
                   <p className="text-sm text-muted-foreground leading-relaxed">
-                    개발자의 생산성을 극대화하는 무료 온라인 도구 모음. 복잡한 작업을 간단하게, 반복적인 작업을 자동화합니다.
+                    개발자의 생산성을 극대화하는 무료 온라인 도구 모음. 복잡한
+                    작업을 간단하게, 반복적인 작업을 자동화합니다.
                   </p>
                 </div>
 
@@ -215,22 +225,34 @@ export default function RootLayout({
                   <h3 className="font-semibold text-sm">빠른 링크</h3>
                   <ul className="space-y-2">
                     <li>
-                      <Link href="/tools" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                      <Link
+                        href="/tools"
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      >
                         도구 모음
                       </Link>
                     </li>
                     <li>
-                      <Link href="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                      <Link
+                        href="/about"
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      >
                         소개
                       </Link>
                     </li>
                     <li>
-                      <Link href="/contact" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                      <Link
+                        href="/contact"
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      >
                         문의하기
                       </Link>
                     </li>
                     <li>
-                      <Link href="/privacy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                      <Link
+                        href="/privacy"
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                      >
                         개인정보처리방침
                       </Link>
                     </li>
@@ -246,7 +268,11 @@ export default function RootLayout({
                         href="mailto:contact@vibecoding.com"
                         className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-2"
                       >
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <svg
+                          className="w-4 h-4"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
                           <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                           <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                         </svg>
@@ -260,8 +286,16 @@ export default function RootLayout({
                         rel="noopener noreferrer"
                         className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-2"
                       >
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                          <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
+                        <svg
+                          className="w-4 h-4"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                            clipRule="evenodd"
+                          />
                         </svg>
                         GitHub
                       </a>
@@ -272,11 +306,10 @@ export default function RootLayout({
 
               {/* Bottom Bar */}
               <div className="pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-                <p>
-                  © 2025 바이브코딩 도구 모음. All rights reserved.
-                </p>
+                <p>© 2025 바이브코딩 도구 모음. All rights reserved.</p>
                 <p className="text-xs">
-                  Made with <span className="text-red-500">♥</span> using Next.js & TypeScript
+                  Made with <span className="text-red-500">♥</span> using
+                  Next.js & TypeScript
                 </p>
               </div>
             </div>

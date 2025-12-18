@@ -69,9 +69,9 @@
   --radius: 0.75rem;
 
   /* 바이브코딩 브랜드 색상 */
-  --brand-primary: #3B82F6; /* 신뢰와 전문성 - Blue */
-  --brand-accent: #F97316; /* 활력과 혁신 - Orange */
-  --brand-success: #10B981; /* 성공과 성장 - Green */
+  --brand-primary: #3b82f6; /* 신뢰와 전문성 - Blue */
+  --brand-accent: #f97316; /* 활력과 혁신 - Orange */
+  --brand-success: #10b981; /* 성공과 성장 - Green */
 
   /* 배경 및 전경색 */
   --background: oklch(0.99 0 0);
@@ -106,8 +106,8 @@
   --info: oklch(0.55 0.22 260);
 
   /* 보더 및 인풋 */
-  --border: oklch(0.90 0.005 260);
-  --input: oklch(0.90 0.005 260);
+  --border: oklch(0.9 0.005 260);
+  --input: oklch(0.9 0.005 260);
   --ring: oklch(0.55 0.22 260);
 
   /* 도구 카테고리 색상 */
@@ -142,15 +142,15 @@
 
   /* Muted - 중성 어두운 그레이 */
   --muted: oklch(0.22 0.01 260);
-  --muted-foreground: oklch(0.60 0.01 260);
+  --muted-foreground: oklch(0.6 0.01 260);
 
   /* Accent - 밝은 오렌지 */
-  --accent: oklch(0.70 0.22 40);
+  --accent: oklch(0.7 0.22 40);
   --accent-foreground: oklch(0.12 0 0);
 
   /* 상태 색상 */
   --destructive: oklch(0.65 0.24 27);
-  --success: oklch(0.70 0.24 140);
+  --success: oklch(0.7 0.24 140);
   --warning: oklch(0.75 0.19 75);
   --info: oklch(0.65 0.24 260);
 
@@ -162,34 +162,32 @@
   /* 도구 카테고리 색상 */
   --tool-converter: oklch(0.65 0.24 260);
   --tool-converter-foreground: oklch(0.99 0 0);
-  --tool-generator: oklch(0.70 0.24 140);
+  --tool-generator: oklch(0.7 0.24 140);
   --tool-generator-foreground: oklch(0.99 0 0);
   --tool-formatter: oklch(0.65 0.26 300);
   --tool-formatter-foreground: oklch(0.99 0 0);
-  --tool-utility: oklch(0.70 0.22 40);
+  --tool-utility: oklch(0.7 0.22 40);
   --tool-utility-foreground: oklch(0.99 0 0);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    writing-mode: horizontal-tb;
-  }
-
-  html,
-  body {
-    writing-mode: horizontal-tb;
-    text-orientation: mixed;
   }
 
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: 'cv11', 'ss01';
-    font-variation-settings: 'opsz' 32;
+    font-feature-settings: "cv11", "ss01";
+    font-variation-settings: "opsz" 32;
   }
 
   /* 타이포그래피 개선 */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-bold tracking-tight;
   }
 
@@ -221,4 +219,41 @@
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-primary;
   }
+}
+
+/* max-w-2xl 규칙 수정 */
+.max-w-2xl {
+  max-width: 42rem; /* Tailwind 설정에 맞게 수정 */
+}
+
+/* .text-lg 규칙 수정 */
+.text-lg {
+  font-size: 1.125rem; /* Tailwind 설정에 맞게 수정 */
+  line-height: 1.75rem;
+}
+
+/* .text-white/90 규칙 수정 */
+.text-white\/90 {
+  color: rgba(255, 255, 255, 0.9); /* Tailwind 설정에 맞게 수정 */
+}
+
+/* .text-muted-foreground 규칙 수정 */
+.text-muted-foreground {
+  color: #6b7280; /* Tailwind 설정에 맞게 수정 */
+}
+
+/* .leading-relaxed 규칙 수정 */
+.leading-relaxed {
+  line-height: 1.5; /* 텍스트 간격을 줄여 세로 정렬 문제 해결 */
+}
+
+/* .mb-6 규칙 수정 */
+.mb-6 {
+  margin-bottom: 1.5rem; /* Tailwind 설정에 맞게 수정 */
+}
+
+/* .mx-auto 규칙 수정 */
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
 }

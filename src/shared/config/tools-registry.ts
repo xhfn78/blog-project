@@ -1,3 +1,4 @@
+import { config as jsonToTableConfig } from '@/features/tools/tools/json-to-table/tool.config';
 import { config as tailwindClassVisualizerConfig } from '@/features/tools/tools/tailwind-class-visualizer/tool.config';
 import { ToolCategory } from '@/entities/content/model/tool-category';
 import { config as codeSnapshotConfig } from '@/features/tools/tools/code-snapshot/tool.config';
@@ -21,9 +22,11 @@ export interface ToolRegistration {
 export const TOOLS_REGISTRY: ToolRegistration[] = [
   {
     ...codeSnapshotConfig,
+    component: lazy(() => import('@/features/tools/tools/code-snapshot')),
   },
 
   {
-    ...tailwindClassVisualizerConfig,
+    ...jsonToTableConfig,
+    component: lazy(() => import('@/features/tools/tools/json-to-table')),
   },
 ];
