@@ -29,4 +29,9 @@ export const TOOLS_REGISTRY: ToolRegistration[] = [
     ...jsonToTableConfig,
     component: lazy(() => import('@/features/tools/tools/json-to-table')),
   },
+
+  {
+    ...tailwindClassVisualizerConfig,
+    component: lazy(() => import('@/features/tools/tools/tailwind-class-visualizer')),
+  },
 ];
