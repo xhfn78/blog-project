@@ -56,12 +56,14 @@ export async function generateMetadata({
 
 
 
+  let metaDescription = tool.description || "";
+  if (tool.slug === 'code-snapshot') {
+    metaDescription = "개발자를 위한 강력한 코드 스냅샷 생성기. 다양한 언어, 테마, 윈도우 스타일로 멋진 코드 이미지를 만들고 공유하세요.";
+  }
+
   return {
-
     title: tool.title,
-
-    description: tool.description,
-
+    description: metaDescription,
   };
 
 }
@@ -93,7 +95,7 @@ export default async function ToolPage({ params }: ToolPageProps) {
 
   return (
     <ToolLayout config={toolRegistration}>
-      <ClientToolRenderer ToolComponent={toolRegistration.component} />
+      <ClientToolRenderer toolSlug={toolRegistration.slug} />
     </ToolLayout>
   );
 }

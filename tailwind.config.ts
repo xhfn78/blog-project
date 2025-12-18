@@ -14,19 +14,19 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#0ea5e9',
+          DEFAULT: '#3b82f6', // Reusing a strong blue for primary
           foreground: '#ffffff',
-          '50': '#f0f9ff',
-          '100': '#e0f2fe',
-          '200': '#bae6fd',
-          '300': '#7dd3fc',
-          '400': '#38bdf8',
-          '500': '#0ea5e9',
-          '600': '#0284c7',
-          '700': '#0369a1',
-          '800': '#075985',
-          '900': '#0c4a6e',
-          '950': '#082f49',
+          '50': '#eff6ff',
+          '100': '#dbeafe',
+          '200': '#bfdbfe',
+          '300': '#93c5fd',
+          '400': '#60a5fa',
+          '500': '#3b82f6',
+          '600': '#2563eb',
+          '700': '#1d4ed8',
+          '800': '#1e40af',
+          '900': '#1e3a8a',
+          '950': '#172554',
         },
         secondary: {
           '50': '#fdf2f8',
@@ -42,6 +42,8 @@ const config: Config = {
           '950': '#500724',
         },
         accent: {
+          DEFAULT: '#8b5cf6', // A vibrant purple
+          foreground: '#ffffff',
           '50': '#f5f3ff',
           '100': '#ede9fe',
           '200': '#ddd6fe',
@@ -62,21 +64,22 @@ const config: Config = {
         },
         tool: {
           converter: {
-            DEFAULT: '#3b82f6', // blue-500
-            foreground: '#ffffff',
+            DEFAULT: '#3b82f6', // Matching primary blue
+            foreground: '#000000',
           },
           generator: {
             DEFAULT: '#22c55e', // green-500
-            foreground: '#ffffff',
+            foreground: '#000000', // Already set
           },
           formatter: {
-            DEFAULT: '#a855f7', // purple-500
-            foreground: '#ffffff',
+            DEFAULT: '#a855f7', // Matching accent purple
+            foreground: '#000000',
           },
           utility: {
             DEFAULT: '#f97316', // orange-500
-            foreground: '#ffffff',
+            foreground: '#000000',
           },
+
         },
       },
       spacing: {

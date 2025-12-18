@@ -4,18 +4,29 @@
 import { useEffect } from "react";
 import { ToolCard } from "@/shared/ui/tool-card";
 import { useToolStore } from "../lib/use-tool-store";
+import { Tool } from "@/entities/content/model/types"; // Import Tool type
 
-export function ToolGrid() {
+interface ToolGridProps {
+  tools?: Tool[]; // Optional tools prop
+}
+
+export function ToolGrid({ tools }: ToolGridProps) { // Accept tools prop
   const { filteredTools, loadTools } = useToolStore();
 
+  // Determine which tools to render
+  const toolsToRender = tools || filteredTools;
+
+  // Only load tools from store if tools prop is not provided
   useEffect(() => {
-    loadTools();
-  }, [loadTools]);
+    if (!tools) {
+      loadTools();
+    }
+  }, [loadTools, tools]);
 
   return (
-    <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {filteredTools.length > 0 ? (
-        filteredTools.map((tool) => (
+    <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {toolsToRender.length > 0 ? (
+        toolsToRender.map((tool) => (
           <ToolCard
             key={tool.id}
             name={tool.title}
@@ -35,3 +46,4 @@ export function ToolGrid() {
     </section>
   );
 }
+

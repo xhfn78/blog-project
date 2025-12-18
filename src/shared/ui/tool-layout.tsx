@@ -49,7 +49,7 @@ function ToolLayout({
     <div
       data-slot="tool-layout"
       data-category={config.category} // Use config.category
-      className={cn("container mx-auto px-4 py-8 max-w-6xl", className)}
+      className={cn("container mx-auto px-4 py-10 max-w-6xl", className)}
     >
       {/* Header */}
       <header className="mb-8">
@@ -102,11 +102,13 @@ function ToolSection({
   description,
   children,
   className,
+  headingLevel = "h3", // Add headingLevel prop with default h3
 }: {
   title?: string
   description?: string
   children: React.ReactNode
   className?: string
+  headingLevel?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" // Define prop type
 }) {
   return (
     <section
@@ -115,7 +117,7 @@ function ToolSection({
     >
       {title && (
         <div className="space-y-1">
-          <Typography variant="h3" className="text-lg font-semibold">
+          <Typography variant={headingLevel} className="text-lg font-semibold"> {/* Use headingLevel here */}
             {title}
           </Typography>
           {description && (

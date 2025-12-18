@@ -3,7 +3,7 @@ import { Mail, MessageSquare, Clock } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "문의하기",
-  description: "Dev Toolbox에 문의사항이 있으신가요? 언제든지 연락 주세요.",
+  description: "바이브코딩 도구 모음에 문의사항이 있으신가요? 언제든지 연락 주세요.",
 };
 
 export default function ContactPage() {
@@ -24,10 +24,10 @@ export default function ContactPage() {
                 가장 빠르고 확실한 연락 방법입니다.
               </p>
               <a
-                href="mailto:contact@devtoolbox.example.com"
+                href="mailto:kyjneo@gmail.com"
                 className="text-blue-600 hover:underline font-medium"
               >
-                contact@devtoolbox.example.com
+                kyjneo@gmail.com
               </a>
             </div>
           </div>

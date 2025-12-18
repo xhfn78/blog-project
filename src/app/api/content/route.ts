@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { InMemoryContentRepository } from '@/entities/content/repository/content.repository.impl';
-import { BaseContent, ContentType, Post, Tool } from '@/entities/content/model/types';
-import { createPostSchema, createToolSchema } from '@/entities/content/model/schemas';
+import { BaseContent, ContentType, Tool } from '@/entities/content/model/types';
+import { createToolSchema } from '@/entities/content/model/schemas';
 import { ZodError } from 'zod';
 import { TOOLS_REGISTRY } from '@/shared/config/tools-registry';
 
@@ -22,12 +22,13 @@ const toolContents: Tool[] = TOOLS_REGISTRY.map(reg => ({
   usageCount: 0,
 }));
 
-const contentRepository = new InMemoryContentRepository(toolContents);
+// Initialise with only toolContents, so it will only manage tools
+const contentRepository = new InMemoryContentRepository<Tool>(toolContents);
 
-// GET /api/content?type=[blog|tool]&id=xxx - Get all content or specific content by ID
+// GET /api/content?type=tool&id=xxx - Get all content or specific content by ID
 export async function GET(request: NextRequest) {
   try {
-    const type = request.nextUrl.searchParams.get('type') as ContentType | null;
+    const type = request.nextUrl.searchParams.get('type') as ContentType | null; // type can only be 'tool' now
     const slug = request.nextUrl.searchParams.get('slug');
 
     if (slug) {
@@ -35,13 +36,18 @@ export async function GET(request: NextRequest) {
         if (!content) {
             return NextResponse.json({ error: 'Content not found' }, { status: 404 });
         }
+        // Only allow 'tool' type
+        if (content.type !== 'tool') {
+             return NextResponse.json({ error: 'Only tool content is available' }, { status: 400 });
+        }
         if (type && content.type !== type) {
             return NextResponse.json({ error: `Content type mismatch: Expected ${type}, got ${content.type}` }, { status: 400 });
         }
         return NextResponse.json(content);
     }
 
-    const contents = await contentRepository.findAll({ type, published: true }) as (Post | Tool)[];
+    // findAll now only returns tools
+    const contents = await contentRepository.findAll({ type: 'tool', published: true }) as Tool[];
     return NextResponse.json(contents);
   } catch (error) {
     console.error("Failed to fetch content:", error);
@@ -49,19 +55,17 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST /api/content - Create new content (blog or tool)
+// POST /api/content - Create new content (only tool now)
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const contentType = body.type as ContentType;
+    const contentType = body.type as ContentType; // Only 'tool' is valid now
 
     let validatedData;
-    if (contentType === 'blog') {
-      validatedData = createPostSchema.parse(body);
-    } else if (contentType === 'tool') {
+    if (contentType === 'tool') {
       validatedData = createToolSchema.parse(body);
     } else {
-      return NextResponse.json({ error: 'Invalid content type' }, { status: 400 });
+      return NextResponse.json({ error: 'Invalid content type or type must be "tool"' }, { status: 400 });
     }
 
     const newContent = await contentRepository.create({
@@ -70,7 +74,7 @@ export async function POST(request: NextRequest) {
       published: validatedData.published || false,
       createdAt: new Date(),
       updatedAt: new Date(),
-    }) as BaseContent;
+    }) as Tool;
 
     return NextResponse.json(newContent, { status: 201 });
   } catch (error) {
@@ -84,7 +88,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// PATCH /api/content?id=xxx - Update content (blog or tool)
+// PATCH /api/content?id=xxx - Update content (only tool now)
 export async function PATCH(request: NextRequest) {
   try {
     const id = request.nextUrl.searchParams.get('id');
@@ -93,24 +97,20 @@ export async function PATCH(request: NextRequest) {
     }
 
     const body = await request.json();
-    const contentType = body.type as ContentType; // Assuming type is sent in body for validation
+    const contentType = body.type as ContentType; // Only 'tool' is valid now
 
     let validatedData;
-    if (contentType === 'blog') {
-        validatedData = createPostSchema.partial().parse(body);
-    } else if (contentType === 'tool') {
+    if (contentType === 'tool') {
         validatedData = createToolSchema.partial().parse(body);
     } else {
-        // If type is not provided or invalid, we can still try to update with a generic partial
-        // or return an error depending on desired strictness. For now, allow generic update.
-        validatedData = body;
+        return NextResponse.json({ error: 'Invalid content type or type must be "tool"' }, { status: 400 });
     }
 
 
     const updatedContent = await contentRepository.update(id, {
       ...validatedData,
       updatedAt: new Date(),
-    }) as BaseContent;
+    }) as Tool;
 
     return NextResponse.json(updatedContent);
   } catch (error) {
@@ -124,7 +124,7 @@ export async function PATCH(request: NextRequest) {
   }
 }
 
-// DELETE /api/content?id=xxx - Delete content (blog or tool)
+// DELETE /api/content?id=xxx - Delete content (only tool now)
 export async function DELETE(request: NextRequest) {
   try {
     const id = request.nextUrl.searchParams.get('id');

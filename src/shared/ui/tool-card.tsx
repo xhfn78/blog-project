@@ -64,7 +64,7 @@ function ToolCard({
   ...props
 }: ToolCardProps) {
   return (
-    <Link href={href} className="block group">
+    <Link href={href} className="block group animate-in fade-in duration-500">
       <Card
         data-slot="tool-card"
         data-category={category}
@@ -105,7 +105,7 @@ function ToolCard({
               {tags.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 flex-1 min-w-0">
                   {tags.slice(0, 3).map((tag) => (
-                    <span key={tag} className="inline-flex items-center rounded-md bg-muted px-2 py-1 text-[10px] text-muted-foreground">
+                    <span key={tag} className="inline-flex items-center rounded-md bg-muted px-2 py-1 text-xs text-muted-foreground">
                       #{tag}
                     </span>
                   ))}

@@ -22,7 +22,7 @@ export interface ContentRepository<T extends BaseContent> {
   delete(id: string): Promise<void>;
 }
 
-import { Post, Tool } from '../model/types'; // Add this import
+import { Tool } from '../model/types';
 
 export interface ToolRepository extends ContentRepository<Tool> {
     // Re-declare methods from ContentRepository for direct access
@@ -40,22 +40,8 @@ export interface ToolRepository extends ContentRepository<Tool> {
     incrementUsageCount(id: string): Promise<Tool | null>;
 }
 
-export interface PostRepository extends ContentRepository<Post> {
-    // Re-declare methods from ContentRepository for direct access
-    findAll(filter?: ContentFilter): Promise<Post[]>;
-    findById(id: string): Promise<Post | null>;
-    findBySlug(slug: string): Promise<Post | null>;
-    create(data: CreateContentDTO): Promise<Post>;
-    update(id: string, data: UpdateContentDTO): Promise<Post>;
-    delete(id: string): Promise<void>;
-
-    // Specific methods for PostRepository
-    findPublished(filter?: ContentFilter): Promise<Post[]>;
-}
-
 export interface UniversalContentRepository {
     tools: ToolRepository;
-    posts: PostRepository;
     findByType(type: ContentType, filter?: ContentFilter): Promise<BaseContent[]>;
     findRecent(limit: number, type?: ContentType): Promise<BaseContent[]>;
 }

@@ -1,11 +1,10 @@
-import { BaseContent, Post, Tool, ContentType } from '../model/types';
+import { BaseContent, Tool, ContentType } from '../model/types';
 import {
     ContentRepository,
     ContentFilter,
     CreateContentDTO,
     UpdateContentDTO,
     ToolRepository,
-    PostRepository,
     UniversalContentRepository,
 } from './content.repository';
 
@@ -106,30 +105,14 @@ export class InMemoryToolRepository
     }
 }
 
-export class InMemoryPostRepository
-    extends InMemoryContentRepository<Post>
-    implements PostRepository {
-    constructor(initialPosts: Post[] = []) {
-        super(initialPosts.filter(post => post.type === 'blog'));
-    }
-
-    async findPublished(options?: ContentFilter): Promise<Post[]> {
-        return (await this.findAll(options)).filter(post => post.published);
-    }
-}
-
 export class InMemoryUniversalContentRepository implements UniversalContentRepository {
     private static instance: InMemoryUniversalContentRepository;
 
     public tools: InMemoryToolRepository;
-    public posts: InMemoryPostRepository;
 
     private constructor(initialContents: BaseContent[] = []) {
         this.tools = new InMemoryToolRepository(
             initialContents.filter((c) => c.type === 'tool') as Tool[]
-        );
-        this.posts = new InMemoryPostRepository(
-            initialContents.filter((c) => c.type === 'blog') as Post[]
         );
     }
 
@@ -143,8 +126,6 @@ export class InMemoryUniversalContentRepository implements UniversalContentRepos
     async findByType(type: ContentType, filter?: ContentFilter): Promise<BaseContent[]> {
         if (type === 'tool') {
             return this.tools.findAll(filter);
-        } else if (type === 'blog') {
-            return this.posts.findAll(filter);
         }
         return [];
     }
@@ -152,7 +133,6 @@ export class InMemoryUniversalContentRepository implements UniversalContentRepos
     async findRecent(limit: number, type?: ContentType): Promise<BaseContent[]> {
         const allContent: BaseContent[] = [
             ...(await this.tools.findAll()),
-            ...(await this.posts.findAll()),
         ];
 
         return allContent

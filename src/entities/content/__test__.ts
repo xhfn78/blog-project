@@ -5,17 +5,15 @@
  * 타입스크립트 컴파일이 성공하면 타입 안전성이 확보된 것입니다.
  */
 
-import type { BaseContent, Tool, Post } from './model/types';
+import type { BaseContent, Tool } from './model/types';
 import { z } from 'zod';
 
 type CreateToolDTO = z.infer<typeof createToolSchema>;
-type CreatePostDTO = z.infer<typeof createPostSchema>;
+
 import { ToolCategory, TOOL_CATEGORIES, TOOL_CATEGORY_METADATA } from './model/tool-category';
 import {
   createToolSchema,
-  createPostSchema,
   validateCreateTool,
-  validateCreatePost,
 } from './model/schemas';
 import { contentRepository } from './repository';
 
@@ -31,14 +29,6 @@ const toolExample: CreateToolDTO = {
   author: 'admin',
 };
 
-const postExample: CreatePostDTO = {
-  title: 'Next.js 15 소개',
-  slug: 'nextjs-15-intro',
-  description: 'Next.js 15의 새로운 기능들을 알아봅니다',
-  content: '# Next.js 15\n\nNext.js 15는...',
-  published: true,
-};
-
 // ===== 카테고리 테스트 =====
 
 const categoryMeta = TOOL_CATEGORY_METADATA['formatter'];
@@ -52,9 +42,6 @@ async function testValidation() {
     // 유효한 데이터
     const validTool = validateCreateTool(toolExample);
     console.log('Valid Tool:', validTool);
-
-    const validPost = validateCreatePost(postExample);
-    console.log('Valid Post:', validPost);
 
     // 무효한 데이터 (에러 발생 예상)
     try {
@@ -107,20 +94,9 @@ async function testRepository() {
     const toolWithUsage = await contentRepository.tools.incrementUsageCount(createdTool.id);
     console.log('Tool with incremented usage:', toolWithUsage);
 
-    // Post 생성
-    const createdPost = await contentRepository.posts.create({
-      type: 'blog',
-      ...postExample,
-    });
-    console.log('Created Post:', createdPost);
-
-    // 공개된 포스트 조회
-    const publishedPosts = await contentRepository.posts.findPublished();
-    console.log('Published Posts:', publishedPosts);
-
     // 최근 콘텐츠 조회
     const recentContent = await contentRepository.findRecent(5);
-    console.log('Recent Content:', recentContent);
+    console.log('Recent Content (should only contain tools):', recentContent);
 
     // 타입별 콘텐츠 조회
     const toolContents = await contentRepository.findByType('tool');
@@ -134,9 +110,6 @@ async function testRepository() {
     console.log('Filtered Tools:', filteredTools);
 
     // 페이지네이션 테스트
-    // InMemoryContentRepository's findAll does not support pagination directly
-    // If pagination is needed, it should be implemented within findAll or as a separate method.
-    // For now, removing the second argument.
     const paginatedTools = await contentRepository.tools.findAll(
       {}, // filter
     );
@@ -156,7 +129,7 @@ async function testRepository() {
 
 // ===== 타입 가드 테스트 =====
 
-import { isTool, isPost } from './model/types';
+import { isTool } from './model/types';
 
 async function testTypeGuards() {
   const tool = await contentRepository.tools.create({
@@ -164,18 +137,11 @@ async function testTypeGuards() {
     ...toolExample,
   });
 
-  const post = await contentRepository.posts.create({
-    type: 'blog',
-    ...postExample,
-  });
-
   const recentContent = await contentRepository.findRecent(10);
 
   recentContent.forEach((content: BaseContent) => {
     if (isTool(content)) {
       console.log('Tool:', content.title, content.category);
-    } else if (isPost(content)) {
-      console.log('Post:', content.title, content.excerpt);
     }
   });
 }

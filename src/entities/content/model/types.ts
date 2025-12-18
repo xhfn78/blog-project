@@ -1,6 +1,6 @@
 import { ToolCategory } from './tool-category';
 
-export type ContentType = 'tool' | 'blog' | 'snippet';
+export type ContentType = 'tool' | 'snippet';
 
 export interface BaseContent {
   id: string;
@@ -23,16 +23,6 @@ export interface Tool extends BaseContent {
   usageCount?: number;
 }
 
-export interface Post extends BaseContent {
-  type: 'blog';
-  content: string;
-  excerpt: string;
-}
-
 export function isTool(content: BaseContent): content is Tool {
   return content.type === 'tool';
-}
-
-export function isPost(content: BaseContent): content is Post {
-  return content.type === 'blog';
 }
