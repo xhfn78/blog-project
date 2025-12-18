@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://yourdomain.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   title: {
     default: 'Dev Toolbox - 개발자를 위한 실전 도구 모음',
     template: '%s | Dev Toolbox'
@@ -33,12 +33,14 @@ export const metadata: Metadata = {
     title: 'Dev Toolbox - 개발자를 위한 실전 도구 모음',
     description: '프론트엔드 개발을 가속화하는 무료 온라인 도구',
     siteName: 'Dev Toolbox',
-    images: [{
-      url: '/og-image.png',
-      width: 1200,
-      height: 630,
-      alt: 'Dev Toolbox - 개발자 도구 모음'
-    }],
+    ...(process.env.NEXT_PUBLIC_OG_IMAGE && {
+      images: [{
+        url: process.env.NEXT_PUBLIC_OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: 'Dev Toolbox - 개발자 도구 모음'
+      }],
+    }),
   },
 
   // Twitter Card
@@ -46,7 +48,9 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Dev Toolbox - 개발자를 위한 실전 도구 모음',
     description: '프론트엔드 개발을 가속화하는 무료 온라인 도구',
-    images: ['/og-image.png'],
+    ...(process.env.NEXT_PUBLIC_OG_IMAGE && {
+      images: [process.env.NEXT_PUBLIC_OG_IMAGE],
+    }),
   },
 
   // 검색엔진 최적화
