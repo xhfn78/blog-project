@@ -11,6 +11,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      // 한글 타이포그래피 최적화 설정
+      wordBreak: {
+        keep: "keep-all", // 한글: 단어 단위 유지 (기본값)
+      },
       colors: {
         primary: {
           DEFAULT: "#3b82f6", // Reusing a strong blue for primary

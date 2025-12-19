@@ -179,6 +179,10 @@
     @apply bg-background text-foreground;
     font-feature-settings: "cv11", "ss01";
     font-variation-settings: "opsz" 32;
+
+    /* 한글 타이포그래피 최적화 - 모든 텍스트 요소에 적용 */
+    word-break: keep-all;
+    overflow-wrap: break-word;
   }
 
   /* 타이포그래피 개선 */

@@ -30,8 +30,8 @@ export function CTASection({
       )}
       {...props}
     >
-      <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto text-center space-y-6">
+      <div className="container mx-auto px-4 w-full" style={{ maxWidth: '1200px' }}>
+        <div className="space-y-6" style={{ maxWidth: '768px', margin: '0 auto', width: '100%', textAlign: 'center' }}>
           <h2
             className={cn(
               "text-3xl md:text-4xl font-bold",
@@ -39,25 +39,33 @@ export function CTASection({
             )}
             style={{
               wordBreak: 'keep-all',
+              overflowWrap: 'break-word',
               whiteSpace: 'normal',
-              writingMode: 'horizontal-tb',
               display: 'block',
               width: '100%',
-              minWidth: '300px'
+              textAlign: 'center'
             }}
           >
             {title}
           </h2>
 
           {description && (
-            <div
+            <p
               className={cn(
                 "text-lg",
                 variant === "gradient" ? "text-white/90" : "text-muted-foreground"
               )}
+              style={{
+                wordBreak: 'keep-all',
+                overflowWrap: 'break-word',
+                whiteSpace: 'normal',
+                display: 'block',
+                width: '100%',
+                textAlign: 'center'
+              }}
             >
               {description}
-            </div>
+            </p>
           )}
 
           <div className="flex flex-wrap gap-4 justify-center pt-4">

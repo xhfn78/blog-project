@@ -38,16 +38,28 @@ export function HeroSection({
         </>
       )}
 
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-4xl mx-auto text-center space-y-6">
+      <div className="container mx-auto px-4 relative z-10" style={{ maxWidth: '1200px' }}>
+        <div className="space-y-6" style={{ maxWidth: '896px', margin: '0 auto', width: '100%', textAlign: 'center' }}>
           {/* 제목 */}
-          <div className="space-y-4">
+          <div className="space-y-4" style={{ width: '100%' }}>
             {title}
           </div>
 
           {/* 부제목 */}
           {subtitle && (
-            <div className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+            <div
+              className="text-lg md:text-xl text-muted-foreground"
+              style={{
+                wordBreak: 'keep-all',
+                overflowWrap: 'break-word',
+                whiteSpace: 'normal',
+                display: 'block',
+                maxWidth: '672px',
+                margin: '0 auto',
+                width: '100%',
+                textAlign: 'center'
+              }}
+            >
               {subtitle}
             </div>
           )}

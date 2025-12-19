@@ -38,14 +38,6 @@ export function StatsSection({
             {title && (
               <h2
                 className="mb-4"
-                style={{
-                  wordBreak: 'keep-all',
-                  whiteSpace: 'normal',
-                  writingMode: 'horizontal-tb',
-                  display: 'block',
-                  width: '100%',
-                  minWidth: '300px'
-                }}
               >
                 {title}
               </h2>
@@ -61,14 +53,14 @@ export function StatsSection({
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((stat, index) => (
             <div key={index} className="text-center">
-              <div className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-2">
+              <div className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-2 break-keep">
                 {stat.value}
               </div>
-              <div className="text-sm md:text-base font-semibold mb-1">
+              <div className="text-sm md:text-base font-semibold mb-1 break-keep">
                 {stat.label}
               </div>
               {stat.description && (
-                <div className="text-xs md:text-sm text-muted-foreground">
+                <div className="text-xs md:text-sm text-muted-foreground break-keep">
                   {stat.description}
                 </div>
               )}

@@ -33,15 +33,8 @@ export function FeatureCard({
           {icon}
         </div>
       )}
-      <h3 className="text-xl font-semibold mb-2">{title}</h3>
-      <div className="text-muted-foreground leading-relaxed" style={{
-        wordBreak: 'keep-all',
-        whiteSpace: 'normal',
-        writingMode: 'horizontal-tb',
-        display: 'block',
-        width: '100%',
-        minWidth: '200px'
-      }}>
+      <h3 className="text-xl font-semibold mb-2 break-keep">{title}</h3>
+      <div className="text-muted-foreground leading-relaxed break-keep">
         {description}
       </div>
     </Card>

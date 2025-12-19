@@ -99,14 +99,6 @@ export default function Home() {
           <div className="text-center mb-16">
             <h2
               className="text-3xl md:text-4xl font-bold mb-4"
-              style={{
-                wordBreak: 'keep-all',
-                whiteSpace: 'normal',
-                writingMode: 'horizontal-tb',
-                display: 'block',
-                width: '100%',
-                minWidth: '300px'
-              }}
             >
               왜 바이브코딩 도구 모음인가요?
             </h2>
@@ -185,14 +177,6 @@ export default function Home() {
           <div className="text-center mb-16">
             <h2
               className="text-3xl md:text-4xl font-bold mb-4"
-              style={{
-                wordBreak: 'keep-all',
-                whiteSpace: 'normal',
-                writingMode: 'horizontal-tb',
-                display: 'block',
-                width: '100%',
-                minWidth: '300px'
-              }}
             >
               인기 도구 둘러보기
             </h2>

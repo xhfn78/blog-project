@@ -1,17 +1,16 @@
-import dynamic from "next/dynamic";
+import { config as vibeTokenSlimmerConfig } from '@/features/tools/tools/vibe-token-slimmer/tool.config';
+import { config as markdownEditorConfig } from '@/features/tools/tools/markdown-editor/tool.config';
 import { config as jsonToTableConfig } from "@/features/tools/tools/json-to-table/tool.config";
 import { config as tailwindClassVisualizerConfig } from "@/features/tools/tools/tailwind-class-visualizer/tool.config";
-import { ToolCategory } from "@/entities/content/model/tool-category";
 import { config as codeSnapshotConfig } from "@/features/tools/tools/code-snapshot/tool.config";
 
 export interface ToolRegistration {
   slug: string;
   name: string;
   description: string;
-  category: ToolCategory;
+  category: "utility" | "converter" | "generator" | "formatter";
   tags: string[];
   author: string;
-  component?: React.ComponentType<any>; // 추가된 속성
 }
 
 /**
@@ -23,19 +22,18 @@ export interface ToolRegistration {
  */
 export const TOOLS_REGISTRY: ToolRegistration[] = [
   {
-    ...codeSnapshotConfig,
-    component: dynamic(() => import("@/features/tools/tools/code-snapshot")),
+    ...vibeTokenSlimmerConfig,
   },
-
+  {
+    ...codeSnapshotConfig,
+  },
   {
     ...jsonToTableConfig,
-    component: dynamic(() => import("@/features/tools/tools/json-to-table")),
   },
-
   {
     ...tailwindClassVisualizerConfig,
-    component: dynamic(
-      () => import("@/features/tools/tools/tailwind-class-visualizer")
-    ),
+  },
+  {
+    ...markdownEditorConfig,
   },
 ];
