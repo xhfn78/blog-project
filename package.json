@@ -63,5 +63,8 @@
     "typescript": "^5",
     "vite": "^7.3.0",
     "vitest": "^4.0.16"
+  },
+  "overrides": {
+    "happy-dom": "^20.0.0"
   }
 }
