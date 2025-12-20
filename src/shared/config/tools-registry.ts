@@ -1,3 +1,4 @@
+import { config as vibeVisualProConfig } from '@/features/tools/tools/vibe-visual-pro/tool.config';
 import { config as vibeTokenSlimmerConfig } from '@/features/tools/tools/vibe-token-slimmer/tool.config';
 import { config as markdownEditorConfig } from '@/features/tools/tools/markdown-editor/tool.config';
 import { config as jsonToTableConfig } from "@/features/tools/tools/json-to-table/tool.config";
@@ -35,5 +36,9 @@ export const TOOLS_REGISTRY: ToolRegistration[] = [
   },
   {
     ...markdownEditorConfig,
+  },
+
+  {
+    ...vibeVisualProConfig,
   },
 ];

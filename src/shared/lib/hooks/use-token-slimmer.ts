@@ -41,6 +41,13 @@ export function useTokenSlimmer(initialText: string = '') {
     : '0.00';
   const costSaved = (parseFloat(originalStats.cost) - parseFloat(processedStats.cost)).toFixed(4);
 
+  const originalChars = inputText.length;
+  const processedChars = processedText.length;
+  const charsSaved = originalChars - processedChars;
+  const percentageCharsSaved = originalChars > 0
+    ? ((charsSaved / originalChars) * 100).toFixed(2)
+    : '0.00';
+
   return {
     inputText,
     setInputText,
@@ -52,5 +59,9 @@ export function useTokenSlimmer(initialText: string = '') {
     tokensSaved,
     percentageSaved,
     costSaved,
+    originalChars,
+    processedChars,
+    charsSaved,
+    percentageCharsSaved,
   };
 }

@@ -4,4 +4,5 @@ export const TOOL_IMPORTS: Record<string, () => Promise<any>> = {
   'tailwind-class-visualizer': () => import('@/features/tools/tools/tailwind-class-visualizer'),
   'markdown-editor': () => import('@/features/tools/tools/markdown-editor'), // 추가
   'vibe-token-slimmer': () => import('@/features/tools/tools/vibe-token-slimmer'),
+  'vibe-visual-pro': () => import('@/features/tools/tools/vibe-visual-pro'),
 };
