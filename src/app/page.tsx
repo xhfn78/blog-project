@@ -30,9 +30,19 @@ export default function Home() {
     component: reg.slug,
     tags: reg.tags,
     author: reg.author,
-    featured: false,
+    featured: reg.featured ?? false,
     usageCount: 0,
   }));
+
+  // featured 도구를 우선적으로 표시하도록 정렬
+  const featuredTools = allTools
+    .sort((a, b) => {
+      // featured 도구를 먼저 표시
+      if (a.featured && !b.featured) return -1;
+      if (!a.featured && b.featured) return 1;
+      return 0;
+    })
+    .slice(0, 6);
 
   // 통계 데이터
   const stats = [
@@ -186,7 +196,7 @@ export default function Home() {
           </div>
 
           <div className="max-w-7xl mx-auto">
-            <ToolGrid tools={allTools.slice(0, 6)} />
+            <ToolGrid tools={featuredTools} />
           </div>
 
           <div className="text-center mt-12">

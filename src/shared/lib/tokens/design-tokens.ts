@@ -49,5 +49,6 @@ export const colors = {
     generator: '#22c55e', // green-500
     formatter: '#a855f7', // purple-500
     utility: '#f97316', // orange-500
+    claude: '#d97706', // amber-600 (Claude brand color)
   },
 } as const;

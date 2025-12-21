@@ -1,6 +1,6 @@
 import { colors } from '@/shared/lib/tokens/design-tokens';
 
-export const TOOL_CATEGORIES = ['converter', 'generator', 'formatter', 'utility'] as const;
+export const TOOL_CATEGORIES = ['converter', 'generator', 'formatter', 'utility', 'claude'] as const;
 
 export type ToolCategory = typeof TOOL_CATEGORIES[number];
 
@@ -24,5 +24,10 @@ export const TOOL_CATEGORY_METADATA: Record<ToolCategory, { color: string; icon:
         name: '유틸리티',
         color: colors.tool.utility,
         icon: 'wrench',
+    },
+    claude: {
+        name: 'Claude',
+        color: colors.tool.claude,
+        icon: 'bot',
     },
 };

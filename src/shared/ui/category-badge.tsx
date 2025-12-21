@@ -13,6 +13,7 @@ const categoryBadgeVariants = cva(
         generator: "border-transparent bg-tool-generator text-tool-generator-foreground",
         formatter: "border-transparent bg-tool-formatter text-tool-formatter-foreground",
         utility: "border-transparent bg-tool-utility text-tool-utility-foreground",
+        claude: "border-transparent bg-tool-claude text-tool-claude-foreground",
         all: "border-transparent bg-gray-500 text-gray-900", // Style for 'all' category
       },
       isActive: { // New variant for active state

@@ -1,3 +1,6 @@
+import { config as claudeWorkflowsOptimizationConfig } from '@/features/tools/tools/claude-workflows-optimization/tool.config';
+import { config as claudeConfigMasterConfig } from '@/features/tools/tools/claude-config-master/tool.config';
+import { config as quickStartChecklistConfig } from '@/features/tools/tools/quick-start-checklist/tool.config';
 import { config as vibeVisualProConfig } from '@/features/tools/tools/vibe-visual-pro/tool.config';
 import { config as vibeTokenSlimmerConfig } from '@/features/tools/tools/vibe-token-slimmer/tool.config';
 import { config as markdownEditorConfig } from '@/features/tools/tools/markdown-editor/tool.config';
@@ -9,9 +12,10 @@ export interface ToolRegistration {
   slug: string;
   name: string;
   description: string;
-  category: "utility" | "converter" | "generator" | "formatter";
+  category: "utility" | "converter" | "generator" | "formatter" | "claude";
   tags: string[];
   author: string;
+  featured?: boolean; // 메인 페이지 인기 도구 섹션에 우선 표시
 }
 
 /**
@@ -40,5 +44,16 @@ export const TOOLS_REGISTRY: ToolRegistration[] = [
 
   {
     ...vibeVisualProConfig,
+  },
+  {
+    ...quickStartChecklistConfig,
+  },
+
+  {
+    ...claudeConfigMasterConfig,
+  },
+
+  {
+    ...claudeWorkflowsOptimizationConfig,
   },
 ];

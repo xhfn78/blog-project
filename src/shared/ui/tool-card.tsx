@@ -72,7 +72,6 @@ function ToolCard({
         className={cn(
           "transition-all hover:shadow-md hover:border-primary/50",
           "group-hover:scale-[1.02]",
-          featured && "border-primary/50 bg-accent/50",
           className
         )}
         {...props}
@@ -82,11 +81,6 @@ function ToolCard({
             <div className="flex-1 min-w-0">
               <CardTitle className="flex items-center gap-2 text-lg">
                 {name}
-                {featured && (
-                  <span className="text-xs bg-primary text-primary-foreground px-2 py-0.5 rounded-full">
-                    추천
-                  </span>
-                )}
               </CardTitle>
               <CardDescription className="mt-2 line-clamp-2">
                 {description}
