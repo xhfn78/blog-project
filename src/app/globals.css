@@ -56,22 +56,16 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-2xl: 3rem;
-  --spacing-3xl: 4rem;
+  /* 기존 spacing 설정 제거하여 표준 너비 복구 */
 }
 
 :root {
   --radius: 0.75rem;
 
   /* 바이브코딩 브랜드 색상 */
-  --brand-primary: #3b82f6; /* 신뢰와 전문성 - Blue */
-  --brand-accent: #f97316; /* 활력과 혁신 - Orange */
-  --brand-success: #10b981; /* 성공과 성장 - Green */
+  --brand-primary: #3b82f6;
+  --brand-accent: #f97316;
+  --brand-success: #10b981;
 
   /* 배경 및 전경색 */
   --background: oklch(0.99 0 0);
@@ -227,36 +221,15 @@
 
 /* max-w-2xl 규칙 수정 */
 .max-w-2xl {
-  max-width: 42rem; /* Tailwind 설정에 맞게 수정 */
+  max-width: 42rem;
 }
 
 /* .text-lg 규칙 수정 */
 .text-lg {
-  font-size: 1.125rem; /* Tailwind 설정에 맞게 수정 */
+  font-size: 1.125rem;
   line-height: 1.75rem;
 }
 
-/* .text-white/90 규칙 수정 */
-.text-white\/90 {
-  color: rgba(255, 255, 255, 0.9); /* Tailwind 설정에 맞게 수정 */
-}
-
-/* .text-muted-foreground 규칙 수정 */
-.text-muted-foreground {
-  color: #6b7280; /* Tailwind 설정에 맞게 수정 */
-}
-
-/* .leading-relaxed 규칙 수정 */
-.leading-relaxed {
-  line-height: 1.5; /* 텍스트 간격을 줄여 세로 정렬 문제 해결 */
-}
-
-/* .mb-6 규칙 수정 */
-.mb-6 {
-  margin-bottom: 1.5rem; /* Tailwind 설정에 맞게 수정 */
-}
-
-/* .mx-auto 규칙 수정 */
 .mx-auto {
   margin-left: auto;
   margin-right: auto;

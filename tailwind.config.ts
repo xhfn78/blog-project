@@ -1,4 +1,8 @@
 import type { Config } from "tailwindcss";
+const {
+  default: flattenColorPalette,
+} = require("tailwindcss/lib/util/flattenColorPalette");
+const svgToDataUri = require("mini-svg-data-uri");
 
 const config: Config = {
   content: [
@@ -9,6 +13,7 @@ const config: Config = {
     "./src/features/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/entities/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: "class",
   theme: {
     extend: {
       // 한글 타이포그래피 최적화 설정
@@ -17,7 +22,7 @@ const config: Config = {
       },
       colors: {
         primary: {
-          DEFAULT: "#3b82f6", // Reusing a strong blue for primary
+          DEFAULT: "#3b82f6",
           foreground: "#ffffff",
           "50": "#eff6ff",
           "100": "#dbeafe",
@@ -45,7 +50,7 @@ const config: Config = {
           "950": "#500724",
         },
         accent: {
-          DEFAULT: "#8b5cf6", // A vibrant purple
+          DEFAULT: "#8b5cf6",
           foreground: "#ffffff",
           "50": "#f5f3ff",
           "100": "#ede9fe",
@@ -67,20 +72,82 @@ const config: Config = {
         },
         tool: {
           converter: {
-            DEFAULT: "#3b82f6", // Matching primary blue
+            DEFAULT: "#3b82f6",
             foreground: "#000000",
           },
           generator: {
-            DEFAULT: "#22c55e", // green-500
-            foreground: "#000000", // Already set
+            DEFAULT: "#22c55e",
+            foreground: "#000000",
           },
           formatter: {
-            DEFAULT: "#a855f7", // Matching accent purple
+            DEFAULT: "#a855f7",
             foreground: "#000000",
           },
           utility: {
-            DEFAULT: "#f97316", // orange-500
+            DEFAULT: "#f97316",
             foreground: "#000000",
+          },
+        },
+      },
+      animation: {
+        spotlight: "spotlight 2s ease .75s 1 forwards",
+        shimmer: "shimmer 2s linear infinite",
+        first: "moveVertical 30s ease infinite",
+        second: "moveInCircle 20s reverse infinite",
+        third: "moveInCircle 40s linear infinite",
+        fourth: "moveHorizontal 40s ease infinite",
+        fifth: "moveInCircle 20s ease infinite",
+      },
+      keyframes: {
+        spotlight: {
+          "0%": {
+            opacity: "0",
+            transform: "translate(-72%, -62%) scale(0.5)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translate(-50%,-40%) scale(1)",
+          },
+        },
+        shimmer: {
+          from: {
+            backgroundPosition: "0 0",
+          },
+          to: {
+            backgroundPosition: "-200% 0",
+          },
+        },
+        moveHorizontal: {
+          "0%": {
+            transform: "translateX(-50%) translateY(-10%)",
+          },
+          "50%": {
+            transform: "translateX(50%) translateY(10%)",
+          },
+          "100%": {
+            transform: "translateX(-50%) translateY(-10%)",
+          },
+        },
+        moveInCircle: {
+          "0%": {
+            transform: "rotate(0deg)",
+          },
+          "50%": {
+            transform: "rotate(180deg)",
+          },
+          "100%": {
+            transform: "rotate(360deg)",
+          },
+        },
+        moveVertical: {
+          "0%": {
+            transform: "translateY(-50%)",
+          },
+          "50%": {
+            transform: "translateY(50%)",
+          },
+          "100%": {
+            transform: "translateY(-50%)",
           },
         },
       },
@@ -89,33 +156,33 @@ const config: Config = {
         "22": "5.5rem",
       },
       maxWidth: {
-        xs: "20rem", // 320px
-        sm: "24rem", // 384px
-        md: "28rem", // 448px
-        lg: "32rem", // 512px
-        xl: "36rem", // 576px
-        "2xl": "42rem", // 672px
-        "3xl": "48rem", // 768px
-        "4xl": "56rem", // 896px
-        "5xl": "64rem", // 1024px
-        "6xl": "72rem", // 1152px
-        "7xl": "80rem", // 1280px
+        xs: "20rem",
+        sm: "24rem",
+        md: "28rem",
+        lg: "32rem",
+        xl: "36rem",
+        "2xl": "42rem",
+        "3xl": "48rem",
+        "4xl": "56rem",
+        "5xl": "64rem",
+        "6xl": "72rem",
+        "7xl": "80rem",
         full: "100%",
         min: "min-content",
         max: "max-content",
         fit: "fit-content",
       },
       fontSize: {
-        xs: "0.75rem", // 12px
-        sm: "0.875rem", // 14px
-        base: "1rem", // 16px
-        lg: "1.125rem", // 18px
-        xl: "1.25rem", // 20px
-        "2xl": "1.5rem", // 24px
-        "3xl": "1.875rem", // 30px
-        "4xl": "2.25rem", // 36px
-        "5xl": "3rem", // 48px
-        "6xl": "3.75rem", // 60px
+        xs: "0.75rem",
+        sm: "0.875rem",
+        base: "1rem",
+        lg: "1.125rem",
+        xl: "1.25rem",
+        "2xl": "1.5rem",
+        "3xl": "1.875rem",
+        "4xl": "2.25rem",
+        "5xl": "3rem",
+        "6xl": "3.75rem",
       },
       boxShadow: {
         sm: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
@@ -128,6 +195,43 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    addVariablesForColors,
+    function ({ matchUtilities, theme }: any) {
+      matchUtilities(
+        {
+          "bg-grid": (value: any) => ({
+            backgroundImage: `url("${svgToDataUri(
+              `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" stroke="${value}"><path d="M0 .5H31.5V32"/></svg>`
+            )}")`,
+          }),
+          "bg-grid-small": (value: any) => ({
+            backgroundImage: `url("${svgToDataUri(
+              `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="8" height="8" fill="none" stroke="${value}"><path d="M0 .5H31.5V32"/></svg>`
+            )}")`,
+          }),
+          "bg-dot": (value: any) => ({
+            backgroundImage: `url("${svgToDataUri(
+              `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="none"><circle fill="${value}" id="pattern-circle" cx="10" cy="10" r="1.6257413380501518"></circle></svg>`
+            )}")`,
+          }),
+        },
+        { values: flattenColorPalette(theme("backgroundColor")), type: "color" }
+      );
+    },
+  ],
 };
+
+function addVariablesForColors({ addBase, theme }: any) {
+  let allColors = flattenColorPalette(theme("colors"));
+  let newVars = Object.fromEntries(
+    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+  );
+
+  addBase({
+    ":root": newVars,
+  });
+}
+
 export default config;
