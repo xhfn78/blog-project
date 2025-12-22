@@ -85,7 +85,7 @@ export const metadata: Metadata = {
   // 추가 SEO 최적화
   category: "technology",
   verification: {
-    google: "google-site-verification-code", // 실제 코드로 교체 필요 시 말씀해 주세요
+    google: "google-site-verification-code",
     naver: "d0f1fdd17ed78788d85e2e01e0b0c45eed93df4c",
   },
 };
@@ -99,26 +99,22 @@ export default function RootLayout({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "바이브코딩 도구 모음",
-    description: "프론트엔드 개발을 가속화하는 전문가급 온라인 도구 모음",
-    url: process.env.NEXT_PUBLIC_SITE_URL || "https://yourdomain.com",
+    name: "코드피스(Codepis)",
+    description: "개발 생산성을 높이는 전문가용 무료 온라인 도구 모음",
+    url: "https://codepis.com",
     publisher: {
       "@type": "Organization",
-      name: "바이브코딩",
+      name: "코드피스",
       logo: {
         "@type": "ImageObject",
-        url: `${
-          process.env.NEXT_PUBLIC_SITE_URL || "https://yourdomain.com"
-        }/logo.png`,
+        url: "https://codepis.com/logo.png",
       },
     },
     potentialAction: {
       "@type": "SearchAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: `${
-          process.env.NEXT_PUBLIC_SITE_URL || "https://yourdomain.com"
-        }/tools?q={search_term_string}`,
+        urlTemplate: "https://codepis.com/tools?q={search_term_string}",
       },
       "query-input": "required name=search_term_string",
     },
@@ -127,15 +123,13 @@ export default function RootLayout({
   const organizationJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "바이브코딩",
-    url: process.env.NEXT_PUBLIC_SITE_URL || "https://yourdomain.com",
-    logo: `${
-      process.env.NEXT_PUBLIC_SITE_URL || "https://yourdomain.com"
-    }/logo.png`,
-    sameAs: ["https://github.com/vibecoding"],
+    name: "코드피스",
+    url: "https://codepis.com",
+    logo: "https://codepis.com/logo.png",
+    sameAs: ["https://github.com/codepis"],
     contactPoint: {
       "@type": "ContactPoint",
-      email: "contact@vibecoding.com",
+      email: "contact@codepis.com",
       contactType: "고객 지원",
     },
   };
@@ -165,10 +159,10 @@ export default function RootLayout({
               {/* Logo */}
               <Link href="/" className="flex items-center gap-2 group">
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-orange-500 flex items-center justify-center transition-transform group-hover:scale-110">
-                  <span className="text-white font-bold text-sm">VC</span>
+                  <span className="text-white font-bold text-sm">CP</span>
                 </div>
                 <span className="text-lg font-bold tracking-tight hidden sm:inline-block">
-                  바이브코딩
+                  코드피스
                 </span>
               </Link>
 
@@ -207,9 +201,9 @@ export default function RootLayout({
                 <div className="space-y-4">
                   <div className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-orange-500 flex items-center justify-center">
-                      <span className="text-white font-bold text-sm">VC</span>
+                      <span className="text-white font-bold text-sm">CP</span>
                     </div>
-                    <h3 className="font-bold text-lg">바이브코딩</h3>
+                    <h3 className="font-bold text-lg">코드피스(Codepis)</h3>
                   </div>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     개발자의 생산성을 극대화하는 무료 온라인 도구 모음. 복잡한
@@ -262,7 +256,7 @@ export default function RootLayout({
                   <ul className="space-y-2">
                     <li>
                       <a
-                        href="mailto:contact@vibecoding.com"
+                        href="mailto:contact@codepis.com"
                         className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-2"
                       >
                         <svg
@@ -278,7 +272,7 @@ export default function RootLayout({
                     </li>
                     <li>
                       <a
-                        href="https://github.com/vibecoding"
+                        href="https://github.com/codepis"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-2"
@@ -303,7 +297,7 @@ export default function RootLayout({
 
               {/* Bottom Bar */}
               <div className="pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-                <p>© 2025 바이브코딩 도구 모음. All rights reserved.</p>
+                <p>© 2025 코드피스(Codepis). All rights reserved.</p>
                 <p className="text-xs">
                   Made with <span className="text-red-500">♥</span> using
                   Next.js & TypeScript
