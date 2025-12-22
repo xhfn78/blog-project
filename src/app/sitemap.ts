@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 import { TOOLS_REGISTRY } from '@/shared/config/tools-registry'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://codepis.com'
 
   // 정적 페이지
   const staticPages = [
