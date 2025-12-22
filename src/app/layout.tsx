@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
+import { cn } from "@/lib/utils";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -137,9 +138,12 @@ export default function RootLayout({
     <html lang="ko" className="scroll-smooth">
       <head>
         <meta name="naver-site-verification" content="d0f1fdd17ed78788d85e2e01e0b0c45eed93df4c" />
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9600392727577544"
-             crossOrigin="anonymous"></script>
-        {/* JSON-LD 구조화 데이터 */}
+        <meta name="google-adsense-account" content="ca-pub-4234312634957489" />
+        <script 
+          async 
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4234312634957489"
+          crossOrigin="anonymous"
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -151,9 +155,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background`}
-      >
+      <body className={cn(geistSans.variable, geistMono.variable, "antialiased", "bg-background")}>
         <div className="min-h-screen flex flex-col">
           {/* Header */}
           <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
