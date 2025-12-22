@@ -86,7 +86,6 @@ export const metadata: Metadata = {
   category: "technology",
   verification: {
     google: "google-site-verification-code",
-    naver: "d0f1fdd17ed78788d85e2e01e0b0c45eed93df4c",
   },
 };
 
