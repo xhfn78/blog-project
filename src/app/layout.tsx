@@ -138,7 +138,7 @@ export default function RootLayout({
       <head>
         <meta name="naver-site-verification" content="d0f1fdd17ed78788d85e2e01e0b0c45eed93df4c" />
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9600392727577544"
-             crossorigin="anonymous"></script>
+             crossOrigin="anonymous"></script>
         {/* JSON-LD 구조화 데이터 */}
         <script
           type="application/ld+json"
