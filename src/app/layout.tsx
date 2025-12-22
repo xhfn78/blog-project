@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     template: "%s | 코드피스(Codepis)",
   },
   description:
-    "프론트엔드 개발 생산성을 극대화하는 전문가급 온라인 도구 모음. 코드 스냅샷, JSON 변환기 등 실무에 즉시 적용 가능한 무료 도구를 제공합니다.",
+    "코드피스: 개발 생산성을 높이는 전문가용 무료 온라인 도구 모음. 코드 스냅샷, JSON 변환 등 실무 필수 도구를 제공합니다.",
   keywords: [
     "코드피스",
     "Codepis",
@@ -32,8 +32,6 @@ export const metadata: Metadata = {
     "Tailwind CSS",
     "코드 스냅샷",
     "무료 개발 도구",
-    "웹 개발 유틸리티",
-    "Next.js 도구",
   ],
   authors: [{ name: "코드피스 팀", url: "https://codepis.com" }],
   creator: "코드피스",
@@ -45,7 +43,7 @@ export const metadata: Metadata = {
     locale: "ko_KR",
     url: "/",
     title: "코드피스(Codepis) - 개발자를 위한 무료 온라인 도구",
-    description: "프론트엔드 개발을 가속화하는 전문가급 온라인 도구 모음",
+    description: "개발 생산성을 높이는 전문가용 무료 온라인 도구 모음",
     siteName: "코드피스(Codepis)",
     images: [
       {
@@ -61,7 +59,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "코드피스(Codepis) - 개발자를 위한 무료 온라인 도구",
-    description: "프론트엔드 개발을 가속화하는 전문가급 온라인 도구 모음",
+    description: "개발 생산성을 높이는 전문가용 무료 온라인 도구 모음",
     images: ["/og-image.png"],
     creator: "@codepis",
   },
