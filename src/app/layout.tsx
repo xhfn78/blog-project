@@ -154,9 +154,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body
-        className={cn(geistSans.variable, geistMono.variable, "antialiased bg-background")}
-      >
+      <body className={cn(geistSans.variable, geistMono.variable, "antialiased bg-background")}>
         <div className="min-h-screen flex flex-col">
           {/* Header */}
           <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
