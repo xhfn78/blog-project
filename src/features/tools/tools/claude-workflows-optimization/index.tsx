@@ -60,7 +60,7 @@ export default function ClaudeWorkflowsOptimizationTool() {
                   <p className="text-sm text-muted-foreground mb-3">
                     아직 CLI 설치를 안 하셨나요? 5분 만에 시작하세요.
                   </p>
-                  <Link href="/utility/quick-start-checklist">
+                  <Link href="/claude/quick-start-checklist">
                     <Button variant="outline" size="sm">
                       가이드 보기
                     </Button>
@@ -79,7 +79,7 @@ export default function ClaudeWorkflowsOptimizationTool() {
                   <p className="text-sm text-muted-foreground mb-3">
                     설정이 최적화되지 않았다면 먼저 확인하세요.
                   </p>
-                  <Link href="/utility/claude-config-master">
+                  <Link href="/claude/claude-config-master">
                     <Button variant="outline" size="sm">
                       가이드 보기
                     </Button>
