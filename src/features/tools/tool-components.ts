@@ -2,7 +2,11 @@
 // 수동으로 수정하지 마세요.
 
 export const TOOL_IMPORTS: Record<string, () => Promise<any>> = {
+  'claude-code-analytics': () => import('@/features/tools/tools/claude-code-analytics'),
+  'claude-code-health-check': () => import('@/features/tools/tools/claude-code-health-check'),
   'claude-config-master': () => import('@/features/tools/tools/claude-config-master'),
+  'claude-conversation-monitor': () => import('@/features/tools/tools/claude-conversation-monitor'),
+  'claude-plugin-dashboard': () => import('@/features/tools/tools/claude-plugin-dashboard'),
   'claude-workflows-optimization': () => import('@/features/tools/tools/claude-workflows-optimization'),
   'code-snapshot': () => import('@/features/tools/tools/code-snapshot'),
   'json-to-table': () => import('@/features/tools/tools/json-to-table'),

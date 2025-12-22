@@ -4,7 +4,11 @@
 import dynamic from "next/dynamic";
 import { ToolRegistration } from "./tools-registry.types";
 export type { ToolRegistration };
+import { config as claudeCodeAnalyticsConfig } from "@/features/tools/tools/claude-code-analytics/tool.config";
+import { config as claudeCodeHealthCheckConfig } from "@/features/tools/tools/claude-code-health-check/tool.config";
 import { config as claudeConfigMasterConfig } from "@/features/tools/tools/claude-config-master/tool.config";
+import { config as claudeConversationMonitorConfig } from "@/features/tools/tools/claude-conversation-monitor/tool.config";
+import { config as claudePluginDashboardConfig } from "@/features/tools/tools/claude-plugin-dashboard/tool.config";
 import { config as claudeWorkflowsOptimizationConfig } from "@/features/tools/tools/claude-workflows-optimization/tool.config";
 import { config as codeSnapshotConfig } from "@/features/tools/tools/code-snapshot/tool.config";
 import { config as jsonToTableConfig } from "@/features/tools/tools/json-to-table/tool.config";
@@ -16,8 +20,24 @@ import { config as vibeVisualProConfig } from "@/features/tools/tools/vibe-visua
 
 export const TOOLS_REGISTRY: ToolRegistration[] = [
   {
+    ...claudeCodeAnalyticsConfig,
+    component: dynamic(() => import("@/features/tools/tools/claude-code-analytics")),
+  },
+  {
+    ...claudeCodeHealthCheckConfig,
+    component: dynamic(() => import("@/features/tools/tools/claude-code-health-check")),
+  },
+  {
     ...claudeConfigMasterConfig,
     component: dynamic(() => import("@/features/tools/tools/claude-config-master")),
+  },
+  {
+    ...claudeConversationMonitorConfig,
+    component: dynamic(() => import("@/features/tools/tools/claude-conversation-monitor")),
+  },
+  {
+    ...claudePluginDashboardConfig,
+    component: dynamic(() => import("@/features/tools/tools/claude-plugin-dashboard")),
   },
   {
     ...claudeWorkflowsOptimizationConfig,
