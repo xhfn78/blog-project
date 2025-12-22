@@ -139,6 +139,7 @@ export default function RootLayout({
       <head>
         <meta name="naver-site-verification" content="d0f1fdd17ed78788d85e2e01e0b0c45eed93df4c" />
         <meta name="google-adsense-account" content="ca-pub-4234312634957489">
+        {/* Force rebuild trigger: 2025-12-22-v3 */}
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4234312634957489"
              crossorigin="anonymous"></script>
         {/* JSON-LD 구조화 데이터 */}
