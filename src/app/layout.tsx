@@ -85,7 +85,8 @@ export const metadata: Metadata = {
   // 추가 SEO 최적화
   category: "technology",
   verification: {
-    google: "google-site-verification-code", // 실제 Google Search Console에서 발급받은 코드로 교체
+    google: "google-site-verification-code", // 실제 코드로 교체 필요 시 말씀해 주세요
+    naver: "d0f1fdd17ed78788d85e2e01e0b0c45eed93df4c",
   },
 };
 
