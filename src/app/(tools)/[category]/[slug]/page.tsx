@@ -33,39 +33,53 @@ const toolContents: Tool[] = TOOLS_REGISTRY.map(reg => ({
 const repository = new InMemoryContentRepository(toolContents);
 
 export async function generateMetadata({
-
   params,
-
 }: ToolPageProps): Promise<Metadata> {
+  const resolvedParams = await params;
+  const { slug } = resolvedParams;
 
-  const resolvedParams = await params; // params가 Promise일 경우 await를 사용
+  const toolRegistration = TOOLS_REGISTRY.find((reg) => reg.slug === slug);
 
-  const { slug } = resolvedParams; // 변경 후
-
-
-
-  const tool = (await repository.findBySlug(slug)) as Tool;
-
-
-
-  if (!tool) {
-
-    return {};
-
+  if (!toolRegistration) {
+    return {
+      title: "도구를 찾을 수 없습니다",
+    };
   }
 
-
-
-  let metaDescription = tool.description || "";
-  if (tool.slug === 'code-snapshot') {
-    metaDescription = "개발자를 위한 강력한 코드 스냅샷 생성기. 다양한 언어, 테마, 윈도우 스타일로 멋진 코드 이미지를 만들고 공유하세요.";
-  }
+  const title = `${toolRegistration.name}`;
+  const description = toolRegistration.description;
+  const baseUrl = "https://codepis.com";
+  const url = `${baseUrl}/tools/${toolRegistration.category}/${slug}`;
 
   return {
-    title: tool.title,
-    description: metaDescription,
+    title,
+    description,
+    alternates: {
+      canonical: url,
+    },
+    openGraph: {
+      title: `${title} | 코드피스(Codepis)`,
+      description,
+      url,
+      siteName: "코드피스(Codepis)",
+      locale: "ko_KR",
+      type: "article",
+      images: [
+        {
+          url: "/og-image.png", // 각 도구별 전용 이미지가 생기면 여기를 교체 가능
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} | 코드피스(Codepis)`,
+      description,
+      images: ["/og-image.png"],
+    },
   };
-
 }
 
 

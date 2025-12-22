@@ -15,17 +15,18 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+    process.env.NEXT_PUBLIC_SITE_URL || "https://codepis.com"
   ),
   title: {
-    default: "바이브코딩 도구 모음 - 개발자를 위한 무료 온라인 도구",
-    template: "%s | 바이브코딩 도구 모음",
+    default: "코드피스(Codepis) - 개발자를 위한 하이엔드 온라인 도구 모음",
+    template: "%s | 코드피스(Codepis)",
   },
   description:
-    "프론트엔드 개발을 가속화하는 전문가급 온라인 도구 모음. 코드 스냅샷, Tailwind CSS 클래스 시각화 등 실무에 바로 적용 가능한 무료 도구를 제공합니다.",
+    "프론트엔드 개발 생산성을 극대화하는 전문가급 온라인 도구 모음. 코드 스냅샷, JSON 변환기 등 실무에 즉시 적용 가능한 무료 도구를 제공합니다.",
   keywords: [
+    "코드피스",
+    "Codepis",
     "개발 도구",
-    "바이브코딩",
     "프론트엔드 도구",
     "온라인 변환기",
     "Tailwind CSS",
@@ -33,28 +34,25 @@ export const metadata: Metadata = {
     "무료 개발 도구",
     "웹 개발 유틸리티",
     "Next.js 도구",
-    "개발자 도구",
-    "코드 포맷터",
-    "CSS 도구",
   ],
-  authors: [{ name: "바이브코딩 팀", url: "https://vibecoding.com" }],
-  creator: "바이브코딩",
-  publisher: "바이브코딩",
+  authors: [{ name: "코드피스 팀", url: "https://codepis.com" }],
+  creator: "코드피스",
+  publisher: "코드피스",
 
   // Open Graph (소셜 공유 최적화)
   openGraph: {
     type: "website",
     locale: "ko_KR",
     url: "/",
-    title: "바이브코딩 도구 모음 - 개발자를 위한 무료 온라인 도구",
+    title: "코드피스(Codepis) - 개발자를 위한 무료 온라인 도구",
     description: "프론트엔드 개발을 가속화하는 전문가급 온라인 도구 모음",
-    siteName: "바이브코딩 도구 모음",
+    siteName: "코드피스(Codepis)",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "바이브코딩 도구 모음 - 개발 생산성을 높이는 무료 도구",
+        alt: "코드피스 - 개발 생산성을 높이는 무료 도구",
       },
     ],
   },
@@ -62,10 +60,10 @@ export const metadata: Metadata = {
   // Twitter Card 최적화
   twitter: {
     card: "summary_large_image",
-    title: "바이브코딩 도구 모음 - 개발자를 위한 무료 온라인 도구",
+    title: "코드피스(Codepis) - 개발자를 위한 무료 온라인 도구",
     description: "프론트엔드 개발을 가속화하는 전문가급 온라인 도구 모음",
     images: ["/og-image.png"],
-    creator: "@vibecoding",
+    creator: "@codepis",
   },
 
   // 검색엔진 최적화
