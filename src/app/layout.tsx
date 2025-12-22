@@ -137,6 +137,7 @@ export default function RootLayout({
   return (
     <html lang="ko" className="scroll-smooth">
       <head>
+        <meta name="naver-site-verification" content="d0f1fdd17ed78788d85e2e01e0b0c45eed93df4c" />
         {/* JSON-LD 구조화 데이터 */}
         <script
           type="application/ld+json"
