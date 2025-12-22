@@ -159,7 +159,7 @@ export default function ClaudeConfigMasterTool() {
         description="3부작으로 구성된 완벽 가이드"
       >
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Link href="/utility/quick-start-checklist" className="block">
+          <Link href="/claude/quick-start-checklist" className="block">
             <div className="border rounded-lg p-4 hover:shadow-md transition-shadow">
               <div className="text-xs text-muted-foreground mb-1">1편</div>
               <h4 className="font-semibold mb-2">빠른 시작 가이드</h4>
@@ -177,7 +177,7 @@ export default function ClaudeConfigMasterTool() {
             </p>
           </div>
 
-          <Link href="/utility/claude-workflows-optimization" className="block">
+          <Link href="/claude/claude-workflows-optimization" className="block">
             <div className="border rounded-lg p-4 hover:shadow-md transition-shadow">
               <div className="text-xs text-muted-foreground mb-1">3편</div>
               <h4 className="font-semibold mb-2">실전 워크플로우</h4>

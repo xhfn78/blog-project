@@ -75,7 +75,7 @@ export default function QuickStartChecklistTool() {
                   <p className="text-sm text-muted-foreground mb-3">
                     설치를 완료했다면 .clauderc와 CLAUDE.md를 최적화하세요.
                   </p>
-                  <Link href="/utility/claude-config-master">
+                  <Link href="/claude/claude-config-master">
                     <Button variant="outline" size="sm">
                       가이드 보기
                     </Button>
@@ -94,7 +94,7 @@ export default function QuickStartChecklistTool() {
                   <p className="text-sm text-muted-foreground mb-3">
                     설정을 마쳤다면 실전 워크플로우와 비용 최적화를 배워보세요.
                   </p>
-                  <Link href="/utility/claude-workflows-optimization">
+                  <Link href="/claude/claude-workflows-optimization">
                     <Button variant="outline" size="sm">
                       가이드 보기
                     </Button>
