@@ -28,6 +28,7 @@ async function syncTools() {
 
 import dynamic from "next/dynamic";
 import { ToolRegistration } from "./tools-registry.types";
+export type { ToolRegistration };
 `;
 
     for (const slug of tools) {

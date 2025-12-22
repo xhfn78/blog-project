@@ -3,6 +3,7 @@
 
 import dynamic from "next/dynamic";
 import { ToolRegistration } from "./tools-registry.types";
+export type { ToolRegistration };
 import { config as claudeConfigMasterConfig } from "@/features/tools/tools/claude-config-master/tool.config";
 import { config as claudeWorkflowsOptimizationConfig } from "@/features/tools/tools/claude-workflows-optimization/tool.config";
 import { config as codeSnapshotConfig } from "@/features/tools/tools/code-snapshot/tool.config";
