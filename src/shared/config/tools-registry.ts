@@ -10,6 +10,7 @@ import { config as claudeConfigMasterConfig } from "@/features/tools/tools/claud
 import { config as claudeConversationMonitorConfig } from "@/features/tools/tools/claude-conversation-monitor/tool.config";
 import { config as claudePluginDashboardConfig } from "@/features/tools/tools/claude-plugin-dashboard/tool.config";
 import { config as claudeWorkflowsOptimizationConfig } from "@/features/tools/tools/claude-workflows-optimization/tool.config";
+import { config as codeLensConfig } from "@/features/tools/tools/code-lens/tool.config";
 import { config as codeSnapshotConfig } from "@/features/tools/tools/code-snapshot/tool.config";
 import { config as jsonToTableConfig } from "@/features/tools/tools/json-to-table/tool.config";
 import { config as jsonToTsConfig } from "@/features/tools/tools/json-to-ts/tool.config";
@@ -43,6 +44,10 @@ export const TOOLS_REGISTRY: ToolRegistration[] = [
   {
     ...claudeWorkflowsOptimizationConfig,
     component: dynamic(() => import("@/features/tools/tools/claude-workflows-optimization")),
+  },
+  {
+    ...codeLensConfig,
+    component: dynamic(() => import("@/features/tools/tools/code-lens")),
   },
   {
     ...codeSnapshotConfig,

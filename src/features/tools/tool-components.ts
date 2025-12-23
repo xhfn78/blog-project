@@ -8,6 +8,7 @@ export const TOOL_IMPORTS: Record<string, () => Promise<any>> = {
   'claude-conversation-monitor': () => import('@/features/tools/tools/claude-conversation-monitor'),
   'claude-plugin-dashboard': () => import('@/features/tools/tools/claude-plugin-dashboard'),
   'claude-workflows-optimization': () => import('@/features/tools/tools/claude-workflows-optimization'),
+  'code-lens': () => import('@/features/tools/tools/code-lens'),
   'code-snapshot': () => import('@/features/tools/tools/code-snapshot'),
   'json-to-table': () => import('@/features/tools/tools/json-to-table'),
   'json-to-ts': () => import('@/features/tools/tools/json-to-ts'),
