@@ -118,7 +118,7 @@ export default function QuickStartChecklistTool() {
             나중에 다시 방문해도 이전 진행 상황이 그대로 유지됩니다.
           </p>
           <p>
-            "선택" 배지가 표시된 단계는 필수가 아닌 선택적 단계입니다. 기본적인 사용만 원한다면 건너뛰어도 됩니다.
+            &quot;선택&quot; 배지가 표시된 단계는 필수가 아닌 선택적 단계입니다. 기본적인 사용만 원한다면 건너뛰어도 됩니다.
           </p>
         </div>
       </ToolSection>
@@ -189,7 +189,7 @@ export default function QuickStartChecklistTool() {
             이렇게 하면 프로젝트별 설정 파일이 생성되며, Claude Code CLI가 해당 프로젝트의 컨텍스트를 이해할 수 있게 됩니다.
           </p>
           <p>
-            설정이 완료되면 <code>claude-code ask "Hello Claude"</code>와 같은 간단한 명령어로 작동을 테스트해볼 수 있습니다.
+            설정이 완료되면 <code>claude-code ask &quot;Hello Claude&quot;</code>와 같은 간단한 명령어로 작동을 테스트해볼 수 있습니다.
           </p>
 
           <h3>고급 설정 옵션</h3>
@@ -202,7 +202,7 @@ export default function QuickStartChecklistTool() {
 
           <h4>IDE 통합 (선택사항)</h4>
           <p>
-            VS Code를 사용한다면 마켓플레이스에서 "Claude Code" 확장 프로그램을 검색하여 설치할 수 있습니다.
+            VS Code를 사용한다면 마켓플레이스에서 &quot;Claude Code&quot; 확장 프로그램을 검색하여 설치할 수 있습니다.
             이를 통해 에디터 내에서 직접 Claude와 대화하고 코드 제안을 받을 수 있습니다.
             단축키 설정을 통해 더욱 빠른 워크플로우를 만들 수 있습니다.
           </p>

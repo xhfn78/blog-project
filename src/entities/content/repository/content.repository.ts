@@ -7,11 +7,11 @@ export interface ContentFilter {
 }
 
 export interface CreateContentDTO {
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface UpdateContentDTO {
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 export interface ContentRepository<T extends BaseContent> {

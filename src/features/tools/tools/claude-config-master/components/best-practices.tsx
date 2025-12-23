@@ -48,7 +48,7 @@ export function BestPractices() {
         <li>파일명 규칙 (kebab-case, PascalCase 등)</li>
       </ul>
 
-      <h4>5. 금지 사항 (Don'ts)</h4>
+      <h4>5. 금지 사항 (Don&apos;ts)</h4>
       <p>
         하지 말아야 할 것들을 명확히 나열합니다. 예를 들어:
       </p>

@@ -170,7 +170,7 @@ export default function ClaudeConversationMonitorTool() {
           <h3>효과적인 프롬프트 작성 원칙</h3>
           <h4>1. 구체성이 핵심</h4>
           <p>
-            "이 파일 수정해줘" 대신 "src/components/Header.tsx에서 로고 크기를 50px로 변경하고 색상을 #007bff로 바꿔줘"처럼 구체적으로 요청하세요.
+            &quot;이 파일 수정해줘&quot; 대신 &quot;src/components/Header.tsx에서 로고 크기를 50px로 변경하고 색상을 #007bff로 바꿔줘&quot;처럼 구체적으로 요청하세요.
             Claude는 명확한 지시를 받으면 즉시 작업을 완료할 수 있습니다.
           </p>
 
@@ -181,7 +181,7 @@ export default function ClaudeConversationMonitorTool() {
 
           <h4>3. 예상 결과 명시</h4>
           <p>
-            "로그인 실패 시 에러 토스트 표시, 입력 필드 초기화, 포커스를 이메일 필드로 이동"처럼 기대하는 동작을 상세히 설명하세요.
+            &quot;로그인 실패 시 에러 토스트 표시, 입력 필드 초기화, 포커스를 이메일 필드로 이동&quot;처럼 기대하는 동작을 상세히 설명하세요.
           </p>
 
           <h3>추가 리소스</h3>

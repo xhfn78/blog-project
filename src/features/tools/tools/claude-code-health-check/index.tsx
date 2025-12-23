@@ -229,7 +229,7 @@ export default function ClaudeCodeHealthCheckTool() {
             그대로 유지되므로 여러 번에 걸쳐 진단을 완료할 수 있습니다.
           </p>
           <p>
-            "선택" 배지가 표시된 항목은 필수가 아닌 선택적 진단 항목입니다.
+            &quot;선택&quot; 배지가 표시된 항목은 필수가 아닌 선택적 진단 항목입니다.
             기본적인 사용만 원한다면 건너뛰어도 무방하지만, 고급 기능을 활용하려면
             완료하는 것을 권장합니다.
           </p>
@@ -280,7 +280,7 @@ export default function ClaudeCodeHealthCheckTool() {
           <p>
             CLI가 전역으로 설치되어 있고 시스템 PATH에 등록되어 있어야 터미널
             어디서든 claude-code 명령어를 사용할 수 있습니다. 설치 경로나 PATH
-            설정에 문제가 있으면 "command not found" 오류가 발생합니다.
+            설정에 문제가 있으면 &quot;command not found&quot; 오류가 발생합니다.
           </p>
 
           <h4>3. API 키 설정 확인</h4>

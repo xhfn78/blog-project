@@ -278,8 +278,8 @@ export default function ClaudeCodeAnalyticsTool() {
 
           <h4>4. 생산성 점수 향상</h4>
           <p>
-            생산성 점수가 40% 미만이라면 프롬프트 작성 방식을 개선해야 합니다. "이 파일 수정해줘" 대신
-            "src/components/Header.tsx의 로고 크기를 50px로 변경하고 색상을 #007bff로 바꿔줘"처럼 구체적으로 요청하세요.
+            생산성 점수가 40% 미만이라면 프롬프트 작성 방식을 개선해야 합니다. &quot;이 파일 수정해줘&quot; 대신
+            &quot;src/components/Header.tsx의 로고 크기를 50px로 변경하고 색상을 #007bff로 바꿔줘&quot;처럼 구체적으로 요청하세요.
             명확한 지시는 Claude가 즉시 작업을 완료할 수 있게 합니다.
           </p>
 

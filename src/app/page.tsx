@@ -9,11 +9,9 @@ import { Spotlight } from "@/shared/ui/spotlight";
 import { BackgroundBeams } from "@/shared/ui/background-beams";
 import { BentoGrid, BentoGridItem } from "@/shared/ui/bento-grid";
 import { motion } from "framer-motion";
-import { 
-  Zap, 
-  ShieldCheck, 
-  RefreshCw, 
-  Lightbulb, 
+import {
+  ShieldCheck,
+  RefreshCw,
   ArrowRight,
   Code2,
   Terminal
