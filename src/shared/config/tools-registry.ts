@@ -17,6 +17,7 @@ import { config as quickStartChecklistConfig } from "@/features/tools/tools/quic
 import { config as tailwindClassVisualizerConfig } from "@/features/tools/tools/tailwind-class-visualizer/tool.config";
 import { config as vibeTokenSlimmerConfig } from "@/features/tools/tools/vibe-token-slimmer/tool.config";
 import { config as vibeVisualProConfig } from "@/features/tools/tools/vibe-visual-pro/tool.config";
+import { config as visualCommandMapConfig } from "@/features/tools/tools/visual-command-map/tool.config";
 
 export const TOOLS_REGISTRY: ToolRegistration[] = [
   {
@@ -70,5 +71,9 @@ export const TOOLS_REGISTRY: ToolRegistration[] = [
   {
     ...vibeVisualProConfig,
     component: dynamic(() => import("@/features/tools/tools/vibe-visual-pro")),
+  },
+  {
+    ...visualCommandMapConfig,
+    component: dynamic(() => import("@/features/tools/tools/visual-command-map")),
   },
 ];

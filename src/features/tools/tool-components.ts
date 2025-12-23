@@ -15,4 +15,5 @@ export const TOOL_IMPORTS: Record<string, () => Promise<any>> = {
   'tailwind-class-visualizer': () => import('@/features/tools/tools/tailwind-class-visualizer'),
   'vibe-token-slimmer': () => import('@/features/tools/tools/vibe-token-slimmer'),
   'vibe-visual-pro': () => import('@/features/tools/tools/vibe-visual-pro'),
+  'visual-command-map': () => import('@/features/tools/tools/visual-command-map'),
 };
