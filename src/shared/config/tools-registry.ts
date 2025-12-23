@@ -8,6 +8,7 @@ import { config as claudeConfigMasterConfig } from "@/features/tools/tools/claud
 import { config as claudeWorkflowsOptimizationConfig } from "@/features/tools/tools/claude-workflows-optimization/tool.config";
 import { config as codeSnapshotConfig } from "@/features/tools/tools/code-snapshot/tool.config";
 import { config as jsonToTableConfig } from "@/features/tools/tools/json-to-table/tool.config";
+import { config as jsonToTsConfig } from "@/features/tools/tools/json-to-ts/tool.config";
 import { config as markdownEditorConfig } from "@/features/tools/tools/markdown-editor/tool.config";
 import { config as quickStartChecklistConfig } from "@/features/tools/tools/quick-start-checklist/tool.config";
 import { config as tailwindClassVisualizerConfig } from "@/features/tools/tools/tailwind-class-visualizer/tool.config";
@@ -30,6 +31,10 @@ export const TOOLS_REGISTRY: ToolRegistration[] = [
   {
     ...jsonToTableConfig,
     component: dynamic(() => import("@/features/tools/tools/json-to-table")),
+  },
+  {
+    ...jsonToTsConfig,
+    component: dynamic(() => import("@/features/tools/tools/json-to-ts")),
   },
   {
     ...markdownEditorConfig,

@@ -6,6 +6,7 @@ export const TOOL_IMPORTS: Record<string, () => Promise<any>> = {
   'claude-workflows-optimization': () => import('@/features/tools/tools/claude-workflows-optimization'),
   'code-snapshot': () => import('@/features/tools/tools/code-snapshot'),
   'json-to-table': () => import('@/features/tools/tools/json-to-table'),
+  'json-to-ts': () => import('@/features/tools/tools/json-to-ts'),
   'markdown-editor': () => import('@/features/tools/tools/markdown-editor'),
   'quick-start-checklist': () => import('@/features/tools/tools/quick-start-checklist'),
   'tailwind-class-visualizer': () => import('@/features/tools/tools/tailwind-class-visualizer'),
