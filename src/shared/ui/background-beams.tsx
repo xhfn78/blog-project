@@ -31,7 +31,8 @@ export const BackgroundBeams = ({ className }: { className?: string }) => {
 
 const Beam = ({ index }: { index: number }) => {
   const [path, setPath] = useState("");
-  
+  const [duration, setDuration] = useState(15);
+
   useEffect(() => {
     // 화면 전체를 가로지르는 동적 경로 생성 (0~100 단위 사용)
     const startX = Math.random() * 100;
@@ -40,8 +41,9 @@ const Beam = ({ index }: { index: number }) => {
     const cp1y = Math.random() * 50;
     const cp2x = Math.random() * 100;
     const cp2y = 50 + Math.random() * 50;
-    
+
     setPath(`M ${startX} -10 C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${endX} 110`);
+    setDuration(10 + Math.random() * 10);
   }, []);
 
   if (!path) return null;
@@ -53,13 +55,13 @@ const Beam = ({ index }: { index: number }) => {
       strokeWidth="0.2"
       fill="none"
       initial={{ pathLength: 0, opacity: 0 }}
-      animate={{ 
-        pathLength: [0, 1], 
+      animate={{
+        pathLength: [0, 1],
         opacity: [0, 0.5, 0],
-        pathOffset: [0, 1] 
+        pathOffset: [0, 1]
       }}
       transition={{
-        duration: 10 + Math.random() * 10,
+        duration,
         repeat: Infinity,
         ease: "linear",
         delay: index * 2

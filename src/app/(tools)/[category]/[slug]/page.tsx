@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { InMemoryContentRepository } from "@/entities/content/repository/content.repository.impl";
-import { TOOLS_REGISTRY, ToolRegistration } from "@/shared/config/tools-registry";
+import { TOOLS_REGISTRY } from "@/shared/config/tools-registry";
 import { Tool } from "@/entities/content/model/types";
-import { ToolLayout } from "@/shared/ui/tool-layout"; // Assuming ToolLayout is a shared UI component
-import ClientToolRenderer from './client-tool-renderer'; // 새 컴포넌트 임포트
+import { ToolLayout } from "@/shared/ui/tool-layout";
+import ClientToolRenderer from './client-tool-renderer';
 
 interface ToolPageProps {
   params: {

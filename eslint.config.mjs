@@ -15,6 +15,14 @@ const eslintConfig = defineConfig([
     // Workthrough documentation:
     "workthrough/**",
   ]),
+  // Allow require() in config files and scripts
+  {
+    files: ["*.config.{js,ts,mjs}", "scripts/**/*.js"],
+    rules: {
+      "@typescript-eslint/no-require-imports": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;

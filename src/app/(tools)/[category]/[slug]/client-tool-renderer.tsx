@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useMemo } from "react";
 import React from 'react';
 import dynamic from 'next/dynamic';
 import { TOOL_IMPORTS } from '@/features/tools/tool-components';
@@ -12,14 +12,15 @@ interface ClientToolRendererProps {
 }
 
 export default function ClientToolRenderer({ toolSlug }: ClientToolRendererProps) {
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
   const ComponentLoader = TOOL_IMPORTS[toolSlug];
-  if (!ComponentLoader) {
+
+  // eslint-disable-next-line react-hooks/static-components
+  const DynamicToolComponent = useMemo(
+    () => ComponentLoader ? dynamic(ComponentLoader, { ssr: false }) : null,
+    [ComponentLoader]
+  );
+
+  if (!ComponentLoader || !DynamicToolComponent) {
     return (
       <Card className="min-h-[200px] flex items-center justify-center">
         <CardContent className="text-center">
@@ -27,13 +28,12 @@ export default function ClientToolRenderer({ toolSlug }: ClientToolRendererProps
             도구 로드 오류
           </Typography>
           <Typography variant="p" className="text-muted-foreground">
-            슬러그 "{toolSlug}"에 해당하는 도구 컴포넌트를 찾을 수 없습니다.
+            슬러그 &quot;{toolSlug}&quot;에 해당하는 도구 컴포넌트를 찾을 수 없습니다.
           </Typography>
         </CardContent>
       </Card>
     );
   }
-  const DynamicToolComponent = dynamic(ComponentLoader, { ssr: false });
 
   return (
     <Suspense
@@ -50,7 +50,7 @@ export default function ClientToolRenderer({ toolSlug }: ClientToolRendererProps
         </Card>
       }
     >
-      {isMounted ? <DynamicToolComponent /> : null}
+      <DynamicToolComponent />
     </Suspense>
   );
 }
