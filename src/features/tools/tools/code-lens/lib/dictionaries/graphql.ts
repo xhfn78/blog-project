@@ -37,7 +37,7 @@ export const GRAPHQL_PATTERNS: CodePattern[] = [
   { id: 'gql-alias', regex: /\w+\s*:\s*\w+/g, description: '필드 별칭', template: '**Alias**: 서버에서 주는 필드 이름이 마음에 안 들 때 **나만의 이름으로 바꿔서** 받습니다.', category: 'Structure', importance: 'low' },
 
   // [3] 스키마 정의 (Schema & Types) - 고급
-  { id: 'gql-type', regex: /\btype\s+\w+\s*{/gi, description: '객체 타입 정의', template: '**Type Definition**: 서버에서 제공하는 데이터가 어떤 모양인지 설계도를 그립니다.', category: 'TS', importance: 'high' },
-  { id: 'gql-enum', regex: /\benum\s+\w+\s*{/gi, description: '열거형 정의', template: '**Enum**: 미리 정해진 몇 가지 선택지 중 하나만 고를 수 있게 제한합니다.', category: 'TS', importance: 'medium' },
+  { id: 'gql-type', regex: /\btype\s+\w+\s*{/gi, description: '객체 타입 정의', template: '**Type Definition**: 서버에서 제공하는 데이터가 어떤 모양인지 설계도를 그립니다.', category: 'Type', importance: 'high' },
+  { id: 'gql-enum', regex: /\benum\s+\w+\s*{/gi, description: '열거형 정의', template: '**Enum**: 미리 정해진 몇 가지 선택지 중 하나만 고를 수 있게 제한합니다.', category: 'Type', importance: 'medium' },
   { id: 'gql-directive', regex: /@\w+/g, description: '쿼리 제어 지시어', template: '**Directive**: 특정 조건일 때만 필드를 포함하는 등 **쿼리의 동작을 직접 제어**합니다.', category: 'Advanced', importance: 'low' }
 ];

@@ -371,6 +371,7 @@ export const SCENARIO_PATTERNS: ScenarioPattern[] = [
   {
     id: 'scen-performance-critical',
     requiredKeywords: ['will-change', 'contain', 'content-visibility'],
+    title: '🚀 고성능 렌더링 최적화',
     description: '대규모 리스트나 복잡한 애니메이션에서 렌더링 성능을 극대화하기 위한 최적화 기법이 적용된 고성능 설계입니다.',
     category: 'Performance'
   },

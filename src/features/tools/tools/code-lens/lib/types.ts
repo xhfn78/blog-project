@@ -41,7 +41,19 @@ export interface CodePattern {
     | 'Layout'        // 레이아웃 (CSS Grid, Flexbox 등)
     | 'Positioning'   // 위치 지정
     | 'Animation'     // 애니메이션
-    | 'Form';         // 폼 요소
+    | 'Form'          // 폼 요소
+    | 'BoxModel'      // 박스 모델
+    | 'Position'      // 위치 (CSS Position)
+    | 'Typography'    // 타이포그래피
+    | 'Visual'        // 시각 효과
+    | 'Responsive'    // 반응형 디자인
+    | 'Text'          // 텍스트/콘텐츠 (HTML)
+    | 'List'          // 목록 (HTML)
+    | 'Table'         // 표 (HTML)
+    | 'Core'          // 핵심 문법 (JS/TS)
+    | 'React'         // React 관련
+    | 'Optimization'  // 최적화
+    | 'Debug';        // 디버깅
   importance: 'high' | 'medium' | 'low';
   tips?: string[];
   warnings?: string[];

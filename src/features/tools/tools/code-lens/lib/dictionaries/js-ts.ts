@@ -114,20 +114,20 @@ export const JS_TS_PATTERNS: CodePattern[] = [
     description: '데이터 타입 정의', 
     template: '**interface**: 데이터가 어떤 모양이어야 하는지 설계도를 그립니다.', 
     analogy: '프라모델을 조립하기 전의 **"부품 조립 설명서"**와 같습니다.',
-    category: 'TS', 
+    category: 'Type', 
     importance: 'high' 
   },
-  { id: 'ts-type', regex: /\btype\s+\w+\s*=/g, description: '타입 별칭', template: '**type**: 복잡한 데이터 구조에 새로운 이름을 붙여 재사용합니다.', category: 'TS', importance: 'high' },
+  { id: 'ts-type', regex: /\btype\s+\w+\s*=/g, description: '타입 별칭', template: '**type**: 복잡한 데이터 구조에 새로운 이름을 붙여 재사용합니다.', category: 'Type', importance: 'high' },
   { 
     id: 'ts-generic', 
     regex: /<\s*[A-Z][A-Za-z0-9]*\s*>/g, 
     description: '범용 타입(Generic)', 
     template: '**Generic**: 데이터 타입을 쓸 때 정하는 유연한 방식입니다.', 
     analogy: '내용물이 무엇이든 담을 수 있는 **"투명한 보관 상자"**와 같습니다.',
-    category: 'TS', 
+    category: 'Type', 
     importance: 'high' 
   },
-  { id: 'ts-utility', regex: /\b(Partial|Pick|Omit|Readonly|Record)<[^>]+>/g, description: '유틸리티 타입', template: '**Utility Type**: 기존 타입을 변형하여 새 타입을 만듭니다.', category: 'TS', importance: 'medium' },
+  { id: 'ts-utility', regex: /\b(Partial|Pick|Omit|Readonly|Record)<[^>]+>/g, description: '유틸리티 타입', template: '**Utility Type**: 기존 타입을 변형하여 새 타입을 만듭니다.', category: 'Type', importance: 'medium' },
 
   // [5] 리액트 생태계 (React)
   { 
