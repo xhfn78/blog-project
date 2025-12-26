@@ -18,7 +18,7 @@ import {
   Sparkles
 } from "lucide-react";
 
-export function SeoContent() {
+export function SeoGuide() {
   return (
     <div className="mt-20 space-y-24 pb-20 border-t pt-20">
       {/* 1. 도입부 */}

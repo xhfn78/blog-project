@@ -10,6 +10,24 @@ interface CanvasRendererProps {
   selectedIndex: number | null;
 }
 
+// 텍스트 래핑 유틸리티
+function getWrappedLines(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
+  const chars = text.split('');
+  const lines: string[] = [];
+  let currentLine = '';
+  for (let i = 0; i < chars.length; i++) {
+    const testLine = currentLine + chars[i];
+    if (ctx.measureText(testLine).width > maxWidth && i > 0) {
+      lines.push(currentLine); 
+      currentLine = chars[i];
+    } else {
+      currentLine = testLine;
+    }
+  }
+  lines.push(currentLine);
+  return lines;
+}
+
 const CanvasRenderer: React.FC<CanvasRendererProps> = ({ objects, config, selectedIndex }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -33,7 +51,7 @@ const CanvasRenderer: React.FC<CanvasRendererProps> = ({ objects, config, select
     const contentWidth = displayWidth - (padding * 2);
 
     // 1차 패스: 개별 객체 높이 및 레이아웃 계산
-    const drawData = objects.map((obj, i) => {
+    const drawData = objects.map((obj) => {
       const style = obj.style;
       const fs = style.fontSize || (obj.type === 'title' ? 32 : 18);
       ctx.font = `${style.fontWeight || 'normal'} ${fs}px "Pretendard Variable", Pretendard, sans-serif`;
@@ -102,22 +120,6 @@ const CanvasRenderer: React.FC<CanvasRendererProps> = ({ objects, config, select
     });
 
   }, [objects, config, selectedIndex]);
-
-  function getWrappedLines(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
-    const chars = text.split('');
-    const lines: string[] = [];
-    let currentLine = '';
-    for (let i = 0; i < chars.length; i++) {
-      const testLine = currentLine + chars[i];
-      if (ctx.measureText(testLine).width > maxWidth && i > 0) {
-        lines.push(currentLine); currentLine = chars[i];
-      } else {
-        currentLine = testLine;
-      }
-    }
-    lines.push(currentLine);
-    return lines;
-  }
 
   useEffect(() => { render(); }, [render]);
   useEffect(() => {

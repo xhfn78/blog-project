@@ -91,7 +91,7 @@ const STEPS = [
   {
     id: '6-3',
     name: 'SEO 콘텐츠 작성 (2500자+)',
-    prompt: 'workflows/step6-3-seo-content.md',
+    prompt: 'workflows/step6-7-seo-content.md',
     autoValidate: true,
   },
   {

@@ -5,7 +5,7 @@ import { Card } from "@/shared/ui/card";
 import { Badge } from "@/shared/ui/badge";
 import { CheckCircle2, AlertCircle, ArrowRight, Share2, Rocket, Shield, Code2, Zap, Sparkles } from "lucide-react";
 
-export function SeoContent() {
+export function SeoGuide() {
   return (
     <div className="mt-20 space-y-24 pb-20 border-t pt-20">
       {/* 1. 도입부: 탄생 배경과 Pain Points */}

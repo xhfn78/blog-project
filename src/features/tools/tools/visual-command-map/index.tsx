@@ -11,6 +11,7 @@ import { PHASES, getTotalCommands } from './lib/command-registry';
 import { useCommandMap } from './lib/use-command-map';
 import { PhaseTree } from './components/PhaseTree';
 import { AddCommandModal } from './components/AddCommandModal';
+import { SeoGuide } from './ui/seo-guide';
 
 export default function VisualCommandMap() {
   const {
@@ -32,7 +33,6 @@ export default function VisualCommandMap() {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedPhaseId, setSelectedPhaseId] = useState<string | null>(null);
 
-  // 전체 진행률 계산
   const progress = useMemo(() => {
     const totalBuiltIn = getTotalCommands();
     const totalCustom = customCommands.length;
@@ -46,7 +46,6 @@ export default function VisualCommandMap() {
     };
   }, [completedCommands.length, customCommands.length]);
 
-  // 단계별 진행 상태
   const phaseProgress = useMemo(() => {
     return PHASES.map((phase) => {
       const phaseCustom = customCommands.filter((c) => c.phaseId === phase.id);
@@ -77,7 +76,6 @@ export default function VisualCommandMap() {
     collapseAll();
   };
 
-  // 로딩 중일 때
   if (!isLoaded) {
     return (
       <ToolLayout config={config}>
@@ -90,7 +88,6 @@ export default function VisualCommandMap() {
 
   return (
     <ToolLayout config={config}>
-      {/* 진행 상태 요약 */}
       <Card className="mb-6">
         <CardContent className="pt-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
@@ -102,37 +99,18 @@ export default function VisualCommandMap() {
             </div>
 
             <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleExpandAll}
-                title="모두 펼치기"
-              >
-                <Expand className="h-4 w-4 mr-1" />
-                펼치기
+              <Button variant="outline" size="sm" onClick={handleExpandAll}>
+                <Expand className="h-4 w-4 mr-1" /> 펼치기
               </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleCollapseAll}
-                title="모두 접기"
-              >
-                <Shrink className="h-4 w-4 mr-1" />
-                접기
+              <Button variant="outline" size="sm" onClick={handleCollapseAll}>
+                <Shrink className="h-4 w-4 mr-1" /> 접기
               </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={resetProgress}
-                title="진행 상태 초기화"
-              >
-                <RotateCcw className="h-4 w-4 mr-1" />
-                초기화
+              <Button variant="outline" size="sm" onClick={resetProgress}>
+                <RotateCcw className="h-4 w-4 mr-1" /> 초기화
               </Button>
             </div>
           </div>
 
-          {/* 진행률 바 */}
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">전체 진행률</span>
@@ -141,30 +119,20 @@ export default function VisualCommandMap() {
               </span>
             </div>
             <div className="h-2 bg-muted rounded-full overflow-hidden">
-              <div
-                className="h-full bg-primary transition-all duration-300"
-                style={{ width: `${progress.percentage}%` }}
-              />
+              <div className="h-full bg-primary transition-all duration-300" style={{ width: `${progress.percentage}%` }} />
             </div>
           </div>
 
-          {/* 단계 배지들 */}
           <div className="flex flex-wrap gap-2 mt-4">
             {PHASES.map((phase, idx) => {
               const pp = phaseProgress.find((p) => p.id === phase.id);
               const isCurrent = currentPhase === phase.id;
-
               return (
                 <Badge
                   key={phase.id}
                   variant={pp?.isCompleted ? 'default' : isCurrent ? 'secondary' : 'outline'}
-                  className={`cursor-pointer transition-colors ${
-                    pp?.isCompleted ? 'bg-green-500 hover:bg-green-600' : ''
-                  }`}
-                  onClick={() => {
-                    togglePhase(phase.id);
-                    setPhase(phase.id);
-                  }}
+                  className={`cursor-pointer transition-colors ${pp?.isCompleted ? 'bg-green-500 hover:bg-green-600' : ''}`}
+                  onClick={() => { togglePhase(phase.id); setPhase(phase.id); }}
                 >
                   {idx + 1}. {phase.name}
                 </Badge>
@@ -174,7 +142,6 @@ export default function VisualCommandMap() {
         </CardContent>
       </Card>
 
-      {/* 트리 구조 */}
       <ToolSection title="개발 단계">
         <PhaseTree
           phases={PHASES}
@@ -190,21 +157,13 @@ export default function VisualCommandMap() {
         />
       </ToolSection>
 
-      {/* 안내 텍스트 */}
-      <div className="text-xs text-muted-foreground mt-6 space-y-1">
-        <p>* 체크박스를 클릭하여 완료된 명령어를 표시할 수 있습니다.</p>
-        <p>* 진행 상태는 브라우저에 자동으로 저장됩니다.</p>
-        <p>* 각 단계에서 [+] 버튼을 클릭하여 커스텀 명령어를 추가할 수 있습니다.</p>
-      </div>
+      <div className="my-12" />
+      <SeoGuide />
 
-      {/* 명령어 추가 모달 */}
       <AddCommandModal
         isOpen={modalOpen}
         phaseId={selectedPhaseId}
-        onClose={() => {
-          setModalOpen(false);
-          setSelectedPhaseId(null);
-        }}
+        onClose={() => { setModalOpen(false); setSelectedPhaseId(null); }}
         onAdd={handleModalAdd}
       />
     </ToolLayout>

@@ -9,16 +9,23 @@ import { ControlPanel } from "./ui/ControlPanel";
 import { ResultDisplay } from "./ui/ResultDisplay";
 import { VisualPreview } from "./ui/VisualPreview";
 import { HistoryPanel } from "./ui/HistoryPanel";
-import { SeoContent } from "./ui/SeoContent";
+import { SeoGuide } from "./ui/seo-guide";
 import { ToolLayout } from "@/shared/ui/tool-layout";
 import { Typography } from "@/shared/ui/typography";
 import { Card } from "@/shared/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Button } from "@/shared/ui/button";
-import { Sparkles, Code2, Zap, ShieldCheck, History, LayoutPanelLeft, Eye } from "lucide-react";
+import { Code2, Zap, Eye } from "lucide-react";
+
+export async function generateMetadata() {
+  return {
+    title: config.name,
+    description: config.description,
+  };
+}
 
 export default function SvgToReactPage() {
-  const { state, setInputSvg, setOptions, transform } = useSvgToReact();
+  const { state, setInputSvg, setOptions } = useSvgToReact();
   const { history, addToHistory, removeHistoryItem, clearHistory } = useHistory();
 
   // 변환 성공 시 히스토리에 자동 추가 (디바운스 필요)
@@ -29,7 +36,7 @@ export default function SvgToReactPage() {
       }, 2000);
       return () => clearTimeout(timer);
     }
-  }, [state.result, state.inputSvg, state.options.componentName]);
+  }, [state.result, state.inputSvg, state.options.componentName, addToHistory]);
 
   const applyPreset = (type: PresetType) => {
     setOptions(PRESETS[type].options);
@@ -113,12 +120,11 @@ export default function SvgToReactPage() {
               </Typography>
             </Card>
           </div>
-                </div>
-        
-                {/* SEO 고도화 콘텐츠 섹션 */}
-                <SeoContent />
-              </div>
-            </ToolLayout>
-          );
-        }
-        
+        </div>
+
+        {/* SEO 고도화 콘텐츠 섹션 */}
+        <SeoGuide />
+      </div>
+    </ToolLayout>
+  );
+}

@@ -6,7 +6,7 @@ import { MetaTagsData } from "./model/types";
 import { generateHtmlTags, generateNextJsMetadata } from "./lib/meta-generator";
 import { MetaInputForm } from "./ui/MetaInputForm";
 import { SocialPreviewCard } from "./ui/SocialPreviewCard";
-import { SeoContent } from "./ui/SeoContent";
+import { SeoGuide } from "./ui/seo-guide";
 import { ToolLayout } from "@/shared/ui/tool-layout";
 import { Typography } from "@/shared/ui/typography";
 import { Card } from "@/shared/ui/card";
@@ -14,7 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { CodeBlock } from "@/shared/ui/code-block";
 import { Share2, Eye, Code2, Sparkles, CheckCircle2 } from "lucide-react";
 
-export default function OgMetaTagGenerator() {
+export default function OgMetaTagGeneratorPage() {
   const [data, setData] = useState<MetaTagsData>({
     title: "",
     description: "",
@@ -102,7 +102,7 @@ export default function OgMetaTagGenerator() {
         </div>
 
         {/* SEO 콘텐츠 섹션 */}
-        <SeoContent />
+        <SeoGuide />
       </div>
     </ToolLayout>
   );

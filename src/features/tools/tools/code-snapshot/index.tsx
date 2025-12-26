@@ -8,6 +8,7 @@ import { useCopyToClipboard } from "@/shared/lib/hooks/use-copy-to-clipboard";
 import { config } from "./tool.config";
 import hljs from "highlight.js";
 import { Typography } from "@/shared/ui/typography";
+import { SeoGuide } from "./ui/seo-guide";
 
 const LANGUAGE_OPTIONS = [
   { value: "typescript", label: "TypeScript" },
@@ -78,7 +79,7 @@ export default function CodeSnapshot() {
   const [padding, setPadding] = useState<number>(32);
   const [showLineNumbers, setShowLineNumbers] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
-  const [exportError, setExportError] = useState<string | null>(null); // New state for error messages
+  const [exportError, setExportError] = useState<string | null>(null);
   const { status, copyToClipboard } = useCopyToClipboard();
   const snapshotRef = useRef<HTMLDivElement>(null);
 
@@ -106,7 +107,7 @@ export default function CodeSnapshot() {
   };
 
   const handleExportImage = async () => {
-    setExportError(null); // Clear previous errors
+    setExportError(null); 
     if (!snapshotRef.current || !code.trim()) return;
 
     setIsExporting(true);
@@ -152,7 +153,6 @@ export default function CodeSnapshot() {
         description="테마, 스타일, 언어를 선택하여 나만의 코드 스냅샷을 만드세요."
       >
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {/* Language */}
           <div className="space-y-2">
             <label htmlFor="language-select" className="text-sm font-medium">언어</label>
             <select
@@ -169,7 +169,6 @@ export default function CodeSnapshot() {
             </select>
           </div>
 
-          {/* Theme */}
           <div className="space-y-2">
             <label htmlFor="theme-select" className="text-sm font-medium">테마</label>
             <select
@@ -186,7 +185,6 @@ export default function CodeSnapshot() {
             </select>
           </div>
 
-          {/* Window Style */}
           <div className="space-y-2">
             <label htmlFor="window-style-select" className="text-sm font-medium">윈도우 스타일</label>
             <select
@@ -203,7 +201,6 @@ export default function CodeSnapshot() {
             </select>
           </div>
 
-          {/* Padding */}
           <div className="space-y-2">
             <label htmlFor="padding-range" className="text-sm font-medium">패딩: {padding}px</label>
             <input
@@ -275,10 +272,9 @@ export default function CodeSnapshot() {
               {/* Window Header */}
               {windowStyle !== "none" && (
                 <div
-                  className={`flex items-center gap-2 px-4 py-3 ${
-                    windowStyle === "macos"
-                      ? "bg-[#2d2d2d]"
-                      : "bg-[#1e1e1e]"
+                  className={`flex items-center gap-2 px-4 py-3 ${windowStyle === "macos"
+                    ? "bg-[#2d2d2d]"
+                    : "bg-[#1e1e1e]"
                   }`}
                 >
                   {windowStyle === "macos" && (
