@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Transition } from "framer-motion";
 import { ToolLayout } from "@/shared/ui/tool-layout";
 import { Typography } from "@/shared/ui/typography";
 import { Card } from "@/shared/ui/card";
@@ -35,10 +35,10 @@ export default function FramerMotionBuilder() {
   const [damping, setDamping] = useState(10);
   const [mass, setMass] = useState(1);
   const [duration, setDuration] = useState(0.5);
-  const [ease, setEase] = useState("easeInOut");
+  const [ease, setEase] = useState<any>("easeInOut");
   const [key, setKey] = useState(0);
 
-  const transition = useMemo(() => {
+  const transition = useMemo((): Transition => {
     if (type === "spring") {
       return { type, stiffness, damping, mass };
     }
@@ -182,7 +182,7 @@ export default function FramerMotionBuilder() {
                 <Typography variant="small" className="font-bold text-indigo-400 flex items-center gap-2">
                   <Code className="w-4 h-4" /> Ready-to-use Code
                 </Typography>
-                <CopyButton value={generatedCode} />
+                <CopyButton text={generatedCode} />
               </div>
               <Card className="p-0 border-primary/20 bg-[#0d1117] rounded-xl overflow-hidden shadow-2xl">
                 <CodeBlock code={generatedCode} language="tsx" />

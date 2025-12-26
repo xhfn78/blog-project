@@ -75,7 +75,7 @@ export default function KoreanAddressGenerator() {
                       >
                         <FileDown className="w-3 h-3" /> 다운로드
                       </Button>
-                      <CopyButton value={formattedData} />
+                      <CopyButton text={formattedData} />
                     </div>
                   </div>
                   <Card className="p-0 border-primary/10 bg-[#0d1117] rounded-xl overflow-hidden shadow-2xl">

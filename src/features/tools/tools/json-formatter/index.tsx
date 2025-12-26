@@ -113,7 +113,7 @@ export default function JsonFormatter() {
         <div className="space-y-4">
           {/* 입력 영역 */}
           <div>
-            <Typography variant="label">JSON 데이터 입력</Typography>
+            <Typography variant="small" className="mb-2 block">JSON 데이터 입력</Typography>
             <Textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -128,7 +128,7 @@ export default function JsonFormatter() {
 
           {/* 옵션 영역 */}
           <div className="flex items-center gap-6">
-            <Typography variant="label">들여쓰기 크기:</Typography>
+            <Typography variant="small">들여쓰기 크기:</Typography>
             <label className="flex items-center gap-2">
               <input
                 type="radio"
@@ -184,7 +184,7 @@ export default function JsonFormatter() {
 
           {/* 출력 영역 */}
           <div>
-            <Typography variant="label">변환 결과</Typography>
+            <Typography variant="small">변환 결과</Typography>
             <Textarea
               value={output}
               readOnly

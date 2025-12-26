@@ -237,23 +237,44 @@ class FullAutoOrchestrator {
         console.log(`${colors.bright}[${i + 1}/${activeSteps.length}] Step ${step.id}: ${step.name}${colors.reset}`);
         console.log(`${colors.blue}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${colors.reset}\n`);
 
-        // 단계 실행
-        if (step.requiresUserInput) {
-          await this.handleUserSelection(step);
-        } else {
-          await this.executeStep(step);
-        }
+        let passed = false;
+        let retryCount = 0;
+        const maxRetries = 3;
+        let lastError = null;
 
-        // 자동 검증
-        if (step.autoValidate) {
-          await this.autoValidate(step);
+        while (!passed && retryCount < maxRetries) {
+          try {
+            if (retryCount > 0) {
+              this.log(`재시도 중... (${retryCount}/${maxRetries}) - 사유: ${lastError}`, 'warning');
+            }
+
+            // 단계 실행
+            if (step.requiresUserInput) {
+              await this.handleUserSelection(step);
+            } else {
+              await this.executeStep(step, lastError);
+            }
+
+            // 자동 검증
+            if (step.autoValidate) {
+              await this.autoValidate(step);
+            }
+
+            passed = true;
+          } catch (error) {
+            lastError = error.message;
+            retryCount++;
+            if (retryCount >= maxRetries) throw error;
+          }
         }
 
         // 상태 저장
         this.saveState(stepIndex);
-
         this.log(`Step ${step.id} 완료\n`, 'success');
       }
+
+      // 모든 단계 완료 후 최종 빌드/린트 검증
+      await this.finalVerification();
 
       // 최종 리포트
       await this.printFinalReport();
@@ -271,7 +292,7 @@ class FullAutoOrchestrator {
     }
   }
 
-  async executeStep(step) {
+  async executeStep(step, lastError = null) {
     // Pre-execute 스크립트 실행 (Step 2 자동 크롤링 등)
     if (step.preExecute) {
       await this.runPreExecuteScript(step.preExecute);
@@ -284,7 +305,12 @@ class FullAutoOrchestrator {
       throw new Error(`프롬프트 파일 없음: ${step.prompt}`);
     }
 
-    const prompt = await fs.readFile(promptPath, 'utf-8');
+    let prompt = await fs.readFile(promptPath, 'utf-8');
+
+    // 에러 컨텍스트 주입 (재시도 시)
+    if (lastError) {
+      prompt = `\n\n⚠️ 이전 시도에서 다음 오류가 발생했습니다. 이를 수정하여 다시 작성하세요:\n${lastError}\n\n` + prompt;
+    }
 
     console.log(`${colors.dim}📄 프롬프트 파일: automation/prompts/${step.prompt}${colors.reset}`);
     console.log(`${colors.dim}📏 크기: ${Math.ceil(prompt.length / 4)} 토큰 (예상)${colors.reset}\n`);
@@ -528,6 +554,28 @@ class FullAutoOrchestrator {
     }
 
     console.log(`${colors.green}✅ 검증 통과${colors.reset}\n`);
+  }
+
+  async finalVerification() {
+    console.log(`\n${colors.magenta}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${colors.reset}`);
+    console.log(`${colors.bright}🔍 프로젝트 빌드 및 린트 최종 검증${colors.reset}`);
+    console.log(`${colors.magenta}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${colors.reset}\n`);
+
+    try {
+      this.log('린트 체크 실행 중 (npm run lint)...', 'wait');
+      execSync('npm run lint', { stdio: 'pipe', cwd: PROJECT_ROOT });
+      this.log('린트 체크 통과', 'success');
+
+      this.log('빌드 테스트 실행 중 (npm run build)...', 'wait');
+      // 빌드 시간이 길 수 있으므로 타임아웃 10분 설정
+      execSync('npm run build', { stdio: 'pipe', cwd: PROJECT_ROOT, timeout: 600000 });
+      this.log('빌드 테스트 통과', 'success');
+
+    } catch (error) {
+      const output = error.stdout?.toString() || error.stderr?.toString() || error.message;
+      this.log('최종 검증 실패', 'error');
+      throw new Error(`빌드/린트 오류 발견:\n${output}`);
+    }
   }
 
   async printFinalReport() {

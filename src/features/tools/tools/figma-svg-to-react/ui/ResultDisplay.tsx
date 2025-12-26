@@ -48,14 +48,13 @@ export function ResultDisplay({ result, isTransforming }: ResultDisplayProps) {
             {Math.round((1 - result.optimizedSize / result.originalSize) * 100)}% 최적화됨
           </Badge>
         </div>
-        <CopyButton value={result.code} />
       </div>
 
       <div className="relative group">
         <CodeBlock 
           code={result.code} 
           language="tsx" 
-          showLineNumbers 
+          showCopy={true}
         />
       </div>
 

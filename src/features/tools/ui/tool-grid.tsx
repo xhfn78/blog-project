@@ -4,7 +4,7 @@
 import { useEffect } from "react";
 import { ToolCard } from "@/shared/ui/tool-card";
 import { useToolStore } from "../lib/use-tool-store";
-import { Tool } from "@/entities/content/model/types"; // Import Tool type
+import { Tool } from "@/entities/content/model/types";
 
 interface ToolGridProps {
   tools?: Tool[]; // Optional tools prop

@@ -10,3 +10,5 @@ export interface ToolRegistration {
   component?: React.ComponentType<any>; 
   featured?: boolean;
 }
+
+export type ToolConfig = Omit<ToolRegistration, 'component'>;

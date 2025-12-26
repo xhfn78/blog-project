@@ -1,4 +1,4 @@
-import { ToolConfig } from "@/entities/content/model/types";
+import { ToolConfig } from "@/shared/config/tools-registry.types";
 import { Zap } from "lucide-react";
 
 export const config: ToolConfig = {
@@ -22,5 +22,4 @@ export const config: ToolConfig = {
     "developer-productivity",
   ],
   author: "VibeVisual AI",
-  createdAt: "2025-12-26",
 };

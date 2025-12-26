@@ -27,7 +27,7 @@ export function TailwindOutput({ result }: TailwindOutputProps) {
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <Label className="text-lg font-bold text-primary">변환된 Tailwind 클래스</Label>
-          <CopyButton value={result.fullClassName} />
+          <CopyButton text={result.fullClassName} />
         </div>
         <Card className="p-6 bg-primary/5 border-primary/20 min-h-[100px] flex items-center justify-center">
           <Typography variant="h4" className="text-center break-all font-mono text-indigo-400">
