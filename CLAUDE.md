@@ -17,12 +17,29 @@ npm run lint         # Run ESLint
 npm run test         # Run Vitest tests
 ```
 
-### Tool Creation
+### Tool Creation (Automated)
 ```bash
-npm run create-tool <slug>    # Scaffold a new developer tool
-                              # Creates feature branch: feature/tool-<slug>
+# Fully automated tool creation (recommended)
+npm run tool:start             # Start automated workflow
+                              # 1. Scan existing tools
+                              # 2. Auto-crawl trends (Playwright)
+                              # 3. Generate 100 ideas
+                              # 4. Select TOP 5
+                              # 5. User selects one (1-5)
+                              # 6. Auto-implement with SEO content
+                              # 7. Quality validation
+                              # Time: 10-15 minutes
+
+# Manual tool creation (legacy)
+npm run create-tool <slug>    # Scaffold manually
                               # Updates tools-registry.ts automatically
+
+# Trend analysis (optional)
+npm run trend-analysis        # Use 24-hour cache
+npm run trend-analysis -- --force  # Force refresh
 ```
+
+**See `automation/START_HERE.md` for detailed workflow.**
 
 ### Documentation
 ```bash

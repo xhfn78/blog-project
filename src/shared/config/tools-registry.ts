@@ -12,8 +12,15 @@ import { config as claudePluginDashboardConfig } from "@/features/tools/tools/cl
 import { config as claudeWorkflowsOptimizationConfig } from "@/features/tools/tools/claude-workflows-optimization/tool.config";
 import { config as codeLensConfig } from "@/features/tools/tools/code-lens/tool.config";
 import { config as codeSnapshotConfig } from "@/features/tools/tools/code-snapshot/tool.config";
+import { config as colorPaletteGeneratorConfig } from "@/features/tools/tools/color-palette-generator/tool.config";
+import { config as cssToTailwindConfig } from "@/features/tools/tools/css-to-tailwind/tool.config";
+import { config as figmaSvgToReactConfig } from "@/features/tools/tools/figma-svg-to-react/tool.config";
+import { config as framerMotionCodeBuilderConfig } from "@/features/tools/tools/framer-motion-code-builder/tool.config";
+import { config as githubProfileCardGeneratorConfig } from "@/features/tools/tools/github-profile-card-generator/tool.config";
+import { config as jsonFormatterConfig } from "@/features/tools/tools/json-formatter/tool.config";
 import { config as jsonToTableConfig } from "@/features/tools/tools/json-to-table/tool.config";
 import { config as jsonToTsConfig } from "@/features/tools/tools/json-to-ts/tool.config";
+import { config as koreanAddressMockGeneratorConfig } from "@/features/tools/tools/korean-address-mock-generator/tool.config";
 import { config as markdownEditorConfig } from "@/features/tools/tools/markdown-editor/tool.config";
 import { config as quickStartChecklistConfig } from "@/features/tools/tools/quick-start-checklist/tool.config";
 import { config as tailwindClassVisualizerConfig } from "@/features/tools/tools/tailwind-class-visualizer/tool.config";
@@ -55,12 +62,40 @@ export const TOOLS_REGISTRY: ToolRegistration[] = [
     component: dynamic(() => import("@/features/tools/tools/code-snapshot")),
   },
   {
+    ...colorPaletteGeneratorConfig,
+    component: dynamic(() => import("@/features/tools/tools/color-palette-generator")),
+  },
+  {
+    ...cssToTailwindConfig,
+    component: dynamic(() => import("@/features/tools/tools/css-to-tailwind")),
+  },
+  {
+    ...figmaSvgToReactConfig,
+    component: dynamic(() => import("@/features/tools/tools/figma-svg-to-react")),
+  },
+  {
+    ...framerMotionCodeBuilderConfig,
+    component: dynamic(() => import("@/features/tools/tools/framer-motion-code-builder")),
+  },
+  {
+    ...githubProfileCardGeneratorConfig,
+    component: dynamic(() => import("@/features/tools/tools/github-profile-card-generator")),
+  },
+  {
+    ...jsonFormatterConfig,
+    component: dynamic(() => import("@/features/tools/tools/json-formatter")),
+  },
+  {
     ...jsonToTableConfig,
     component: dynamic(() => import("@/features/tools/tools/json-to-table")),
   },
   {
     ...jsonToTsConfig,
     component: dynamic(() => import("@/features/tools/tools/json-to-ts")),
+  },
+  {
+    ...koreanAddressMockGeneratorConfig,
+    component: dynamic(() => import("@/features/tools/tools/korean-address-mock-generator")),
   },
   {
     ...markdownEditorConfig,

@@ -54,5 +54,8 @@ next-env.d.ts
 .claude.json
 .claude.json.backup
 
+# automation cache
+/automation/cache
+
 *storybook.log
 storybook-static

@@ -1,0 +1,21 @@
+{
+  "categories": [
+    "formatter",
+    "converter",
+    "generator",
+    "validator",
+    "utility",
+    "web-dev",
+    "productivity",
+    "image",
+    "text",
+    "dev-tools"
+  ],
+  "defaultAuthor": "V-Log Team",
+  "uiLibrary": "Tailwind CSS + Radix UI",
+  "testLibrary": "Vitest + React Testing Library",
+  "rules": {
+    "naming": "kebab-case",
+    "strictMode": true
+  }
+}

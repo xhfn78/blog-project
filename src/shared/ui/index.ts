@@ -18,3 +18,5 @@ export { CopyButton } from './copy-button'
 export { CodeBlock } from './code-block'
 export { ToolCard } from './tool-card'
 export { ToolLayout, ToolSection } from './tool-layout'
+export * from './slider';
+export * from './tabs';
