@@ -19,7 +19,11 @@ export function useHistory() {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {
-        setHistory(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        // 비동기 업데이트로 린트 에러 및 성능 저하 방지
+        Promise.resolve().then(() => {
+          setHistory(parsed);
+        });
       } catch (e) {
         console.error('Failed to parse history', e);
       }

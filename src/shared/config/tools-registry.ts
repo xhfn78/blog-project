@@ -22,6 +22,7 @@ import { config as jsonToTableConfig } from "@/features/tools/tools/json-to-tabl
 import { config as jsonToTsConfig } from "@/features/tools/tools/json-to-ts/tool.config";
 import { config as koreanAddressMockGeneratorConfig } from "@/features/tools/tools/korean-address-mock-generator/tool.config";
 import { config as markdownEditorConfig } from "@/features/tools/tools/markdown-editor/tool.config";
+import { config as ogMetaTagPreviewConfig } from "@/features/tools/tools/og-meta-tag-preview/tool.config";
 import { config as quickStartChecklistConfig } from "@/features/tools/tools/quick-start-checklist/tool.config";
 import { config as tailwindClassVisualizerConfig } from "@/features/tools/tools/tailwind-class-visualizer/tool.config";
 import { config as vibeTokenSlimmerConfig } from "@/features/tools/tools/vibe-token-slimmer/tool.config";
@@ -100,6 +101,10 @@ export const TOOLS_REGISTRY: ToolRegistration[] = [
   {
     ...markdownEditorConfig,
     component: dynamic(() => import("@/features/tools/tools/markdown-editor")),
+  },
+  {
+    ...ogMetaTagPreviewConfig,
+    component: dynamic(() => import("@/features/tools/tools/og-meta-tag-preview")),
   },
   {
     ...quickStartChecklistConfig,

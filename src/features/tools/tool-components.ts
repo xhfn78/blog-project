@@ -20,6 +20,7 @@ export const TOOL_IMPORTS: Record<string, () => Promise<any>> = {
   'json-to-ts': () => import('@/features/tools/tools/json-to-ts'),
   'korean-address-mock-generator': () => import('@/features/tools/tools/korean-address-mock-generator'),
   'markdown-editor': () => import('@/features/tools/tools/markdown-editor'),
+  'og-meta-tag-preview': () => import('@/features/tools/tools/og-meta-tag-preview'),
   'quick-start-checklist': () => import('@/features/tools/tools/quick-start-checklist'),
   'tailwind-class-visualizer': () => import('@/features/tools/tools/tailwind-class-visualizer'),
   'vibe-token-slimmer': () => import('@/features/tools/tools/vibe-token-slimmer'),
