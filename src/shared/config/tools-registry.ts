@@ -22,9 +22,12 @@ import { config as jsonToTableConfig } from "@/features/tools/tools/json-to-tabl
 import { config as jsonToTsConfig } from "@/features/tools/tools/json-to-ts/tool.config";
 import { config as koreanAddressMockGeneratorConfig } from "@/features/tools/tools/korean-address-mock-generator/tool.config";
 import { config as markdownEditorConfig } from "@/features/tools/tools/markdown-editor/tool.config";
+import { config as nextjsApiRouteGeneratorConfig } from "@/features/tools/tools/nextjs-api-route-generator/tool.config";
 import { config as ogMetaTagPreviewConfig } from "@/features/tools/tools/og-meta-tag-preview/tool.config";
+import { config as pixelToRemConverterConfig } from "@/features/tools/tools/pixel-to-rem-converter/tool.config";
 import { config as quickStartChecklistConfig } from "@/features/tools/tools/quick-start-checklist/tool.config";
 import { config as tailwindClassVisualizerConfig } from "@/features/tools/tools/tailwind-class-visualizer/tool.config";
+import { config as urlEncoderDecoderConfig } from "@/features/tools/tools/url-encoder-decoder/tool.config";
 import { config as vibeTokenSlimmerConfig } from "@/features/tools/tools/vibe-token-slimmer/tool.config";
 import { config as vibeVisualProConfig } from "@/features/tools/tools/vibe-visual-pro/tool.config";
 import { config as visualCommandMapConfig } from "@/features/tools/tools/visual-command-map/tool.config";
@@ -103,8 +106,16 @@ export const TOOLS_REGISTRY: ToolRegistration[] = [
     component: dynamic(() => import("@/features/tools/tools/markdown-editor")),
   },
   {
+    ...nextjsApiRouteGeneratorConfig,
+    component: dynamic(() => import("@/features/tools/tools/nextjs-api-route-generator")),
+  },
+  {
     ...ogMetaTagPreviewConfig,
     component: dynamic(() => import("@/features/tools/tools/og-meta-tag-preview")),
+  },
+  {
+    ...pixelToRemConverterConfig,
+    component: dynamic(() => import("@/features/tools/tools/pixel-to-rem-converter")),
   },
   {
     ...quickStartChecklistConfig,
@@ -113,6 +124,10 @@ export const TOOLS_REGISTRY: ToolRegistration[] = [
   {
     ...tailwindClassVisualizerConfig,
     component: dynamic(() => import("@/features/tools/tools/tailwind-class-visualizer")),
+  },
+  {
+    ...urlEncoderDecoderConfig,
+    component: dynamic(() => import("@/features/tools/tools/url-encoder-decoder")),
   },
   {
     ...vibeTokenSlimmerConfig,
