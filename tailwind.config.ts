@@ -97,6 +97,15 @@ const config: Config = {
         third: "moveInCircle 40s linear infinite",
         fourth: "moveHorizontal 40s ease infinite",
         fifth: "moveInCircle 20s ease infinite",
+        // BeatOnWord 플레이풀 애니메이션
+        "bob-beat": "bobbeat 0.8s ease-in-out infinite",
+        "sticker-pop": "stickerPop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+        "pulse-beat": "pulseBeat 0.5s ease-in-out",
+        wiggle: "wiggle 0.3s ease-in-out",
+        "confetti-fall": "confettiFall 1s ease-out forwards",
+        "card-flip": "cardFlip 0.6s ease-in-out",
+        bounce: "bounce 0.5s ease-in-out",
+        "spin-slow": "spin 3s linear infinite",
       },
       keyframes: {
         spotlight: {
@@ -148,6 +157,73 @@ const config: Config = {
           },
           "100%": {
             transform: "translateY(-50%)",
+          },
+        },
+        // BeatOnWord 플레이풀 키프레임
+        bobbeat: {
+          "0%, 100%": {
+            transform: "rotate(-3deg)",
+          },
+          "50%": {
+            transform: "rotate(3deg)",
+          },
+        },
+        stickerPop: {
+          "0%": {
+            transform: "scale(0) rotate(-10deg)",
+            opacity: "0",
+          },
+          "50%": {
+            transform: "scale(1.2) rotate(5deg)",
+          },
+          "100%": {
+            transform: "scale(1) rotate(0deg)",
+            opacity: "1",
+          },
+        },
+        pulseBeat: {
+          "0%, 100%": {
+            transform: "scale(1)",
+          },
+          "50%": {
+            transform: "scale(1.15)",
+          },
+        },
+        wiggle: {
+          "0%, 100%": {
+            transform: "rotate(-5deg)",
+          },
+          "50%": {
+            transform: "rotate(5deg)",
+          },
+        },
+        confettiFall: {
+          "0%": {
+            transform: "translateY(-100%) rotate(0deg)",
+            opacity: "1",
+          },
+          "100%": {
+            transform: "translateY(100vh) rotate(720deg)",
+            opacity: "0",
+          },
+        },
+        cardFlip: {
+          "0%": {
+            transform: "rotateY(0deg)",
+          },
+          "50%": {
+            transform: "rotateY(90deg)",
+          },
+          "100%": {
+            transform: "rotateY(0deg)",
+          },
+        },
+        bounce: {
+          "0%, 100%": {
+            transform: "translateY(0)",
+          },
+          "50%": {
+            transform: "translateY(-20px)",
           },
         },
       },

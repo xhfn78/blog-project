@@ -67,6 +67,32 @@
   --brand-accent: #f97316;
   --brand-success: #10b981;
 
+  /* BeatOnWord 플레이풀 색상 */
+  --playful-yellow: #FFDE59;
+  --playful-pink: #FF85A1;
+  --playful-blue: #85C1E9;
+  --playful-mint: #88D8B0;
+  --playful-purple: #C39BD3;
+  --playful-orange: #F5B041;
+  --playful-coral: #FF7F7F;
+
+  /* 카테고리별 색상 */
+  --category-numbers: var(--playful-yellow);
+  --category-colors: var(--playful-pink);
+  --category-animals: var(--playful-mint);
+  --category-food: var(--playful-orange);
+  --category-rhymes: var(--playful-purple);
+  --category-custom: var(--playful-blue);
+
+  /* 손그림 스타일 */
+  --border-dark: #2D3436;
+  --shadow-playful: 4px 4px 0px var(--border-dark);
+  --shadow-playful-hover: 6px 6px 0px var(--border-dark);
+
+  /* 배경 */
+  --bg-cream: #FFF9E6;
+  --bg-playful: #FFFDF7;
+
   /* 배경 및 전경색 */
   --background: oklch(0.99 0 0);
   --foreground: oklch(0.09 0 0);

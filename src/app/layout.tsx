@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Script from "next/script";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Gloria_Hallelujah, Gaegu } from "next/font/google";
 import { cn } from "@/lib/utils";
 import "./globals.css";
 
@@ -15,44 +15,57 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// BeatOnWord 손글씨 폰트
+const gloriaHallelujah = Gloria_Hallelujah({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-gloria",
+});
+
+const gaegu = Gaegu({
+  weight: ["300", "400", "700"],
+  subsets: ["latin"],
+  variable: "--font-gaegu",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "https://codepis.com"
+    process.env.NEXT_PUBLIC_SITE_URL || "https://beatonword.com"
   ),
   title: {
-    default: "코드피스(Codepis) - 개발자를 위한 하이엔드 온라인 도구 모음",
-    template: "%s | 코드피스(Codepis)",
+    default: "비트온워드(BeatOnWord) - 비트에 맞춰 단어를 말해요!",
+    template: "%s | 비트온워드(BeatOnWord)",
   },
   description:
-    "코드피스: 개발 생산성을 높이는 전문가용 무료 온라인 도구 모음. 코드 스냅샷, JSON 변환 등 실무 필수 도구를 제공합니다.",
+    "비트온워드: 음악 비트에 맞춰 이미지를 보고 단어를 말하는 재미있는 리듬 게임! 친구들과 함께 챌린지를 만들고 공유하세요.",
   keywords: [
-    "코드피스",
-    "Codepis",
-    "개발 도구",
-    "프론트엔드 도구",
-    "온라인 변환기",
-    "Tailwind CSS",
-    "코드 스냅샷",
-    "무료 개발 도구",
+    "비트온워드",
+    "BeatOnWord",
+    "리듬 게임",
+    "단어 게임",
+    "음악 게임",
+    "비트 게임",
+    "Say the Word",
+    "TikTok 게임",
   ],
-  authors: [{ name: "코드피스 팀", url: "https://codepis.com" }],
-  creator: "코드피스",
-  publisher: "코드피스",
+  authors: [{ name: "비트온워드 팀", url: "https://beatonword.com" }],
+  creator: "비트온워드",
+  publisher: "비트온워드",
 
   // Open Graph (소셜 공유 최적화)
   openGraph: {
     type: "website",
     locale: "ko_KR",
     url: "/",
-    title: "코드피스(Codepis) - 개발자를 위한 무료 온라인 도구",
-    description: "개발 생산성을 높이는 전문가용 무료 온라인 도구 모음",
-    siteName: "코드피스(Codepis)",
+    title: "비트온워드(BeatOnWord) - 비트에 맞춰 단어를 말해요!",
+    description: "음악 비트에 맞춰 이미지를 보고 단어를 말하는 재미있는 리듬 게임",
+    siteName: "비트온워드(BeatOnWord)",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "코드피스 - 개발 생산성을 높이는 무료 도구",
+        alt: "비트온워드 - 비트에 맞춰 단어를 말해요!",
       },
     ],
   },
@@ -60,10 +73,10 @@ export const metadata: Metadata = {
   // Twitter Card 최적화
   twitter: {
     card: "summary_large_image",
-    title: "코드피스(Codepis) - 개발자를 위한 무료 온라인 도구",
-    description: "개발 생산성을 높이는 전문가용 무료 온라인 도구 모음",
+    title: "비트온워드(BeatOnWord) - 비트에 맞춰 단어를 말해요!",
+    description: "음악 비트에 맞춰 이미지를 보고 단어를 말하는 재미있는 리듬 게임",
     images: ["/og-image.png"],
-    creator: "@codepis",
+    creator: "@beatonword",
   },
 
   // 검색엔진 최적화
@@ -85,7 +98,7 @@ export const metadata: Metadata = {
   },
 
   // 추가 SEO 최적화
-  category: "technology",
+  category: "game",
   verification: {
     google: "google-site-verification-code",
   },
@@ -100,22 +113,22 @@ export default function RootLayout({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "코드피스(Codepis)",
-    description: "개발 생산성을 높이는 전문가용 무료 온라인 도구 모음",
-    url: "https://codepis.com",
+    name: "비트온워드(BeatOnWord)",
+    description: "음악 비트에 맞춰 이미지를 보고 단어를 말하는 재미있는 리듬 게임",
+    url: "https://beatonword.com",
     publisher: {
       "@type": "Organization",
-      name: "코드피스",
+      name: "비트온워드",
       logo: {
         "@type": "ImageObject",
-        url: "https://codepis.com/logo.png",
+        url: "https://beatonword.com/logo.png",
       },
     },
     potentialAction: {
       "@type": "SearchAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: "https://codepis.com/tools?q={search_term_string}",
+        urlTemplate: "https://beatonword.com/play?q={search_term_string}",
       },
       "query-input": "required name=search_term_string",
     },
@@ -124,13 +137,13 @@ export default function RootLayout({
   const organizationJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "코드피스",
-    url: "https://codepis.com",
-    logo: "https://codepis.com/logo.png",
-    sameAs: ["https://github.com/codepis"],
+    name: "비트온워드",
+    url: "https://beatonword.com",
+    logo: "https://beatonword.com/logo.png",
+    sameAs: ["https://github.com/beatonword", "https://tiktok.com/@beatonword"],
     contactPoint: {
       "@type": "ContactPoint",
-      email: "contact@codepis.com",
+      email: "contact@beatonword.com",
       contactType: "고객 지원",
     },
   };
@@ -141,7 +154,14 @@ export default function RootLayout({
         <meta name="naver-site-verification" content="d0f1fdd17ed78788d85e2e01e0b0c45eed93df4c" />
         <meta name="google-adsense-account" content="ca-pub-4234312634957489" />
       </head>
-      <body className={cn(geistSans.variable, geistMono.variable, "antialiased", "bg-background")}>
+      <body className={cn(
+        geistSans.variable,
+        geistMono.variable,
+        gloriaHallelujah.variable,
+        gaegu.variable,
+        "antialiased",
+        "bg-[var(--bg-playful)]"
+      )}>
         {/* Google AdSense */}
         <Script
           async
@@ -163,38 +183,45 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
         <div className="min-h-screen flex flex-col">
-          {/* Header */}
-          <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          {/* Header - BeatOnWord 플레이풀 스타일 */}
+          <header className="sticky top-0 z-50 w-full border-b-4 border-[var(--border-dark)] bg-[var(--playful-yellow)]">
             <nav className="container mx-auto flex h-16 items-center justify-between px-4">
               {/* Logo */}
               <Link href="/" className="flex items-center gap-2 group">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-orange-500 flex items-center justify-center transition-transform group-hover:scale-110">
-                  <span className="text-white font-bold text-sm">CP</span>
+                <div
+                  className="w-10 h-10 rounded-xl bg-[var(--playful-pink)] border-3 border-[var(--border-dark)] flex items-center justify-center transition-transform group-hover:scale-110 group-hover:rotate-6 shadow-[3px_3px_0px_var(--border-dark)]"
+                >
+                  <span className="text-xl">🎵</span>
                 </div>
-                <span className="text-lg font-bold tracking-tight hidden sm:inline-block">
-                  코드피스
+                <span
+                  className="text-xl font-bold tracking-tight hidden sm:inline-block"
+                  style={{ fontFamily: "var(--font-gaegu), cursive" }}
+                >
+                  비트온워드
                 </span>
               </Link>
 
               {/* Navigation */}
-              <div className="flex items-center gap-6">
+              <div className="flex items-center gap-4">
+                <Link
+                  href="/play"
+                  className="px-4 py-2 text-sm font-bold bg-[var(--playful-mint)] border-3 border-[var(--border-dark)] rounded-xl shadow-[3px_3px_0px_var(--border-dark)] hover:shadow-[1px_1px_0px_var(--border-dark)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
+                  style={{ fontFamily: "var(--font-gaegu), cursive" }}
+                >
+                  🎮 플레이
+                </Link>
+                <Link
+                  href="/create"
+                  className="px-4 py-2 text-sm font-bold bg-[var(--playful-blue)] border-3 border-[var(--border-dark)] rounded-xl shadow-[3px_3px_0px_var(--border-dark)] hover:shadow-[1px_1px_0px_var(--border-dark)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
+                  style={{ fontFamily: "var(--font-gaegu), cursive" }}
+                >
+                  ✨ 만들기
+                </Link>
                 <Link
                   href="/tools"
-                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                  className="px-3 py-2 text-sm font-medium text-[var(--border-dark)] hover:bg-[var(--playful-orange)]/30 rounded-lg transition-colors hidden md:block"
                 >
-                  도구 모음
-                </Link>
-                <Link
-                  href="/about"
-                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  소개
-                </Link>
-                <Link
-                  href="/contact"
-                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  문의
+                  🛠️ 도구
                 </Link>
               </div>
             </nav>
@@ -203,58 +230,71 @@ export default function RootLayout({
           {/* Main Content */}
           <main className="flex-1">{children}</main>
 
-          {/* Footer */}
-          <footer className="border-t bg-muted/30">
+          {/* Footer - BeatOnWord 플레이풀 스타일 */}
+          <footer className="border-t-4 border-[var(--border-dark)] bg-[var(--playful-purple)]">
             <div className="container mx-auto px-4 py-12">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
                 {/* About Column */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-orange-500 flex items-center justify-center">
-                      <span className="text-white font-bold text-sm">CP</span>
+                    <div className="w-10 h-10 rounded-xl bg-[var(--playful-pink)] border-3 border-[var(--border-dark)] flex items-center justify-center shadow-[3px_3px_0px_var(--border-dark)]">
+                      <span className="text-xl">🎵</span>
                     </div>
-                    <h3 className="font-bold text-lg">코드피스(Codepis)</h3>
+                    <h3
+                      className="font-bold text-xl text-[var(--border-dark)]"
+                      style={{ fontFamily: "var(--font-gaegu), cursive" }}
+                    >
+                      비트온워드
+                    </h3>
                   </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    개발자의 생산성을 극대화하는 무료 온라인 도구 모음. 복잡한
-                    작업을 간단하게, 반복적인 작업을 자동화합니다.
+                  <p
+                    className="text-sm text-[var(--border-dark)]/80 leading-relaxed"
+                    style={{ fontFamily: "var(--font-gaegu), cursive" }}
+                  >
+                    음악 비트에 맞춰 단어를 말하는 재미있는 게임!
+                    친구들과 함께 챌린지를 만들고 공유해보세요.
                   </p>
                 </div>
 
                 {/* Quick Links Column */}
                 <div className="space-y-4">
-                  <h3 className="font-semibold text-sm">빠른 링크</h3>
+                  <h3
+                    className="font-bold text-sm text-[var(--border-dark)]"
+                    style={{ fontFamily: "var(--font-gaegu), cursive" }}
+                  >
+                    빠른 링크
+                  </h3>
                   <ul className="space-y-2">
                     <li>
                       <Link
+                        href="/play"
+                        className="text-sm text-[var(--border-dark)]/80 hover:text-[var(--border-dark)] transition-colors"
+                      >
+                        🎮 게임하기
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/create"
+                        className="text-sm text-[var(--border-dark)]/80 hover:text-[var(--border-dark)] transition-colors"
+                      >
+                        ✨ 챌린지 만들기
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
                         href="/tools"
-                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                        className="text-sm text-[var(--border-dark)]/80 hover:text-[var(--border-dark)] transition-colors"
                       >
-                        도구 모음
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/about"
-                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                      >
-                        소개
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/contact"
-                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                      >
-                        문의하기
+                        🛠️ 개발자 도구
                       </Link>
                     </li>
                     <li>
                       <Link
                         href="/privacy"
-                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                        className="text-sm text-[var(--border-dark)]/80 hover:text-[var(--border-dark)] transition-colors"
                       >
-                        개인정보처리방침
+                        📜 개인정보처리방침
                       </Link>
                     </li>
                   </ul>
@@ -262,43 +302,39 @@ export default function RootLayout({
 
                 {/* Social & Resources Column */}
                 <div className="space-y-4">
-                  <h3 className="font-semibold text-sm">리소스</h3>
+                  <h3
+                    className="font-bold text-sm text-[var(--border-dark)]"
+                    style={{ fontFamily: "var(--font-gaegu), cursive" }}
+                  >
+                    소셜
+                  </h3>
                   <ul className="space-y-2">
                     <li>
                       <a
-                        href="mailto:contact@codepis.com"
-                        className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-2"
+                        href="https://tiktok.com/@beatonword"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-[var(--border-dark)]/80 hover:text-[var(--border-dark)] transition-colors inline-flex items-center gap-2"
                       >
-                        <svg
-                          className="w-4 h-4"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                          <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                        </svg>
-                        이메일 문의
+                        📱 TikTok
                       </a>
                     </li>
                     <li>
                       <a
-                        href="https://github.com/codepis"
+                        href="https://instagram.com/beatonword"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-2"
+                        className="text-sm text-[var(--border-dark)]/80 hover:text-[var(--border-dark)] transition-colors inline-flex items-center gap-2"
                       >
-                        <svg
-                          className="w-4 h-4"
-                          fill="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        GitHub
+                        📸 Instagram
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="mailto:contact@beatonword.com"
+                        className="text-sm text-[var(--border-dark)]/80 hover:text-[var(--border-dark)] transition-colors inline-flex items-center gap-2"
+                      >
+                        ✉️ 문의하기
                       </a>
                     </li>
                   </ul>
@@ -306,11 +342,15 @@ export default function RootLayout({
               </div>
 
               {/* Bottom Bar */}
-              <div className="pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-                <p>© 2025 코드피스(Codepis). All rights reserved.</p>
-                <p className="text-xs">
-                  Made with <span className="text-red-500">♥</span> using
-                  Next.js & TypeScript
+              <div className="pt-8 border-t-2 border-[var(--border-dark)]/30 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-[var(--border-dark)]/70">
+                <p style={{ fontFamily: "var(--font-gaegu), cursive" }}>
+                  © 2025 비트온워드(BeatOnWord). All rights reserved.
+                </p>
+                <p
+                  className="text-xs"
+                  style={{ fontFamily: "var(--font-gaegu), cursive" }}
+                >
+                  Made with 🎵 and ❤️ using Next.js
                 </p>
               </div>
             </div>

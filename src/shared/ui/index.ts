@@ -20,3 +20,10 @@ export { ToolCard } from './tool-card'
 export { ToolLayout, ToolSection } from './tool-layout'
 export * from './slider';
 export * from './tabs';
+
+// BeatOnWord 플레이풀 컴포넌트 (5종)
+export { PlayfulCard, CATEGORY_COLORS, getCategoryColor } from './playful-card';
+export { StickerBadge, CategoryBadge as PlayfulCategoryBadge, DifficultyBadge } from './sticker-badge';
+export { WobblyButton, WobblyIconButton, PlayButton, CreateButton } from './wobbly-button';
+export { Confetti, GradeConfetti, ConfettiBurst } from './confetti';
+export { BeatPulse, BeatDot, BeatIndicatorBar, CircularBeatGauge } from './beat-pulse';
