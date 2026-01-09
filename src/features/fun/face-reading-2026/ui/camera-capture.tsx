@@ -174,143 +174,375 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
 
   
 
-      async function init() {
-
-        // 1. 카메라 먼저 실행 (AI 기다리지 않음)
-
-        startCamera();
-
-        
-
-        // 2. AI 모델은 백그라운드에서 로드
-
-        addLog("AI 모델 준비 중...");
-
-        loadFaceModels()
-
-          .then(() => addLog("AI 모델 로드 완료"))
-
-          .catch(e => addLog("AI 로드 실패 (카메라는 계속 진행)"));
-
-        
-
-        if (!isMounted) return;
-
-        setIsLoading(false);
-
-        setIsReady(true);
+          async function loadAI() {
 
   
 
-        const renderLoop = async () => {
-
-          if (!isMounted) return;
+             addLog("AI 모델 준비 중...");
 
   
 
-          const video = videoRef.current;
-
-          const canvas = canvasRef.current;
-
-          
-
-          if (video && canvas && video.readyState >= 2) {
-
-            const ctx = canvas.getContext("2d", { alpha: false });
-
-            
-
-            if (ctx) {
-
-              // 크기 맞춤
-
-              if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
-
-                if (video.videoWidth > 0) {
-
-                  canvas.width = video.videoWidth;
-
-                  canvas.height = video.videoHeight;
-
-                  addLog(`해상도 확정: ${canvas.width}x${canvas.height}`);
-
-                }
-
-              }
+             // 모델 로드 타임아웃 (10초) 처리
 
   
 
-              // 그리기 (무조건 실행)
-
-              ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+             const timeoutPromise = new Promise((_, reject) => 
 
   
 
-              // 얼굴 감지 (가끔씩만 수행)
+               setTimeout(() => reject(new Error("모델 로딩 시간 초과")), 10000)
 
-              if (videoStarted && Date.now() % 10 === 0) {
+  
 
-                try {
+             );
 
-                  const detection = await detectFaceFromVideo(video);
+  
 
-                  if (detection && !faceDetected) setFaceDetected(true);
+      
 
-                  if (!detection && faceDetected) setFaceDetected(false);
+  
 
-                  
+             try {
 
-                  if (detection) {
+  
 
-                    ctx.strokeStyle = "#00ff00";
+               await Promise.race([loadFaceModels(), timeoutPromise]);
 
-                    ctx.lineWidth = 3;
+  
 
-                    const box = detection.detection.box;
+               addLog("AI 모델 로드 완료");
 
-                    ctx.strokeRect(box.x, box.y, box.width, box.height);
+  
 
-                  }
+               return true;
 
-                } catch (e) {}
+  
 
-              }
+             } catch (e: any) {
 
-            }
+  
+
+               addLog(`AI 로드 실패: ${e.message}`);
+
+  
+
+               return false;
+
+  
+
+             }
+
+  
 
           }
 
-          animationFrameId = requestAnimationFrame(renderLoop);
+  
 
-        };
+      
 
   
 
-        animationFrameId = requestAnimationFrame(renderLoop);
-
-      }
+          async function init() {
 
   
 
-      init();
+            // 카메라와 AI 병렬 시도
 
   
 
-      return () => {
+            loadAI();
 
-        isMounted = false;
+  
 
-        cancelAnimationFrame(animationFrameId);
+            await startCamera();
 
-        if (currentStream) {
+  
 
-          currentStream.getTracks().forEach(track => track.stop());
+            
 
-        }
+  
 
-      };
+            if (!isMounted) return;
 
-    }, []);
+  
+
+            setIsLoading(false);
+
+  
+
+            setIsReady(true);
+
+  
+
+      
+
+  
+
+            const renderLoop = async () => {
+
+  
+
+              // 탭이 활성화되어 있고 컴포넌트가 마운트된 경우에만 실행
+
+  
+
+              if (!isMounted || document.visibilityState !== "visible") {
+
+  
+
+                animationFrameId = requestAnimationFrame(renderLoop);
+
+  
+
+                return;
+
+  
+
+              }
+
+  
+
+      
+
+  
+
+              const video = videoRef.current;
+
+  
+
+              const canvas = canvasRef.current;
+
+  
+
+              
+
+  
+
+              if (video && canvas && video.readyState >= 2) {
+
+  
+
+                const ctx = canvas.getContext("2d", { alpha: false });
+
+  
+
+                
+
+  
+
+                if (ctx) {
+
+  
+
+                  if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
+
+  
+
+                    if (video.videoWidth > 0) {
+
+  
+
+                      canvas.width = video.videoWidth;
+
+  
+
+                      canvas.height = video.videoHeight;
+
+  
+
+                    }
+
+  
+
+                  }
+
+  
+
+      
+
+  
+
+                  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  
+
+      
+
+  
+
+                  // 얼굴 감지 부하 조절 (프레임 스킵)
+
+  
+
+                  if (videoStarted && Date.now() % 15 === 0) {
+
+  
+
+                    try {
+
+  
+
+                      const detection = await detectFaceFromVideo(video);
+
+  
+
+                      setFaceDetected(!!detection);
+
+  
+
+                      
+
+  
+
+                      if (detection) {
+
+  
+
+                        ctx.strokeStyle = "#00ff00";
+
+  
+
+                        ctx.lineWidth = 3;
+
+  
+
+                        const box = detection.detection.box;
+
+  
+
+                        ctx.strokeRect(box.x, box.y, box.width, box.height);
+
+  
+
+                      }
+
+  
+
+                    } catch (e) {}
+
+  
+
+                  }
+
+  
+
+                }
+
+  
+
+              }
+
+  
+
+              animationFrameId = requestAnimationFrame(renderLoop);
+
+  
+
+            };
+
+  
+
+      
+
+  
+
+            animationFrameId = requestAnimationFrame(renderLoop);
+
+  
+
+          }
+
+  
+
+      
+
+  
+
+          init();
+
+  
+
+      
+
+  
+
+          return () => {
+
+  
+
+            isMounted = false;
+
+  
+
+            cancelAnimationFrame(animationFrameId);
+
+  
+
+            
+
+  
+
+            // 카메라 스트림 및 하드웨어 자원 완전 해제
+
+  
+
+            if (currentStream) {
+
+  
+
+              currentStream.getTracks().forEach(track => {
+
+  
+
+                track.stop();
+
+  
+
+                addLog("카메라 하드웨어 연결 종료");
+
+  
+
+              });
+
+  
+
+            }
+
+  
+
+            if (streamRef.current) {
+
+  
+
+              streamRef.current.getTracks().forEach(track => track.stop());
+
+  
+
+            }
+
+  
+
+            if (videoRef.current) {
+
+  
+
+              videoRef.current.srcObject = null;
+
+  
+
+              videoRef.current.load(); // 비디오 메모리 강제 해제
+
+  
+
+            }
+
+  
+
+          };
+
+  
+
+        }, []);
 
   
 
