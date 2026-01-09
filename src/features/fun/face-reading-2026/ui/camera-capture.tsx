@@ -16,160 +16,291 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
-  const [isReady, setIsReady] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [videoStarted, setVideoStarted] = useState(false); // 비디오 실제 재생 여부
-  const [faceDetected, setFaceDetected] = useState(false);
-  const [error, setError] = useState<string>("");
-  const [debugInfo, setDebugInfo] = useState<any>(null);
-  const [capturedImage, setCapturedImage] = useState<string>("");
+    const [isReady, setIsReady] = useState(false);
 
-  // 모델 로드 및 카메라 시작
-  useEffect(() => {
-    let isMounted = true;
-    let detectionInterval: NodeJS.Timeout;
-    let currentStream: MediaStream | null = null;
+    const [isLoading, setIsLoading] = useState(true);
 
-    async function startCamera() {
-      try {
-        const envInfo = {
-          userAgent: typeof navigator !== "undefined" ? navigator.userAgent : "unknown",
-          isSecureContext: typeof window !== "undefined" ? window.isSecureContext : false,
-          hasMediaDevices: typeof navigator !== "undefined" && !!navigator.mediaDevices,
-        };
+    const [videoStarted, setVideoStarted] = useState(false);
 
-        if (!envInfo.hasMediaDevices) {
-          throw new Error("카메라 API를 지원하지 않는 환경입니다.");
-        }
+    const [faceDetected, setFaceDetected] = useState(false);
 
-        console.log("🔄 카메라 권한 요청 중...");
-        // 제약 조건을 최소화하여 호환성 극대화
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "user" },
-          audio: false,
-        });
+    const [error, setError] = useState<string>("");
 
-        if (!isMounted) {
-          stream.getTracks().forEach(track => track.stop());
-          return;
-        }
+    const [logs, setLogs] = useState<string[]>([]); // 실시간 로그 기록
 
-        currentStream = stream;
-        streamRef.current = stream;
+    const [capturedImage, setCapturedImage] = useState<string>("");
 
-        if (videoRef.current) {
-          const video = videoRef.current;
-          video.srcObject = stream;
-          
-          // 모바일 브라우저 필수 속성
-          video.setAttribute("playsinline", "true");
-          video.setAttribute("muted", "true");
-          video.muted = true;
+  
 
-          // 비디오 데이터가 실제로 들어오는지 확인
-          video.onloadeddata = () => {
-            console.log("✅ 비디오 데이터 로드됨");
-            video.play().then(() => {
-              setVideoStarted(true);
-            }).catch(e => console.warn("자동 재생 차단:", e));
+    const addLog = (msg: string) => {
+
+      console.log(`[CameraLog] ${msg}`);
+
+      setLogs(prev => [...prev.slice(-4), msg]); // 최근 5개 로그만 유지
+
+    };
+
+  
+
+    // 모델 로드 및 카메라 시작
+
+    useEffect(() => {
+
+      let isMounted = true;
+
+      let currentStream: MediaStream | null = null;
+
+      let animationFrameId: number;
+
+  
+
+      async function startCamera() {
+
+        addLog("카메라 요청 시작...");
+
+        try {
+
+          const constraints = {
+
+            video: { facingMode: "user" },
+
+            audio: false
+
           };
 
-          // 대체 재생 시도
-          setTimeout(() => {
-            if (video.paused) {
-              video.play().then(() => setVideoStarted(true)).catch(() => {});
+  
+
+          const stream = await navigator.mediaDevices.getUserMedia(constraints);
+
+          addLog("스트림 수신 성공!");
+
+  
+
+          if (!isMounted) {
+
+            stream.getTracks().forEach(track => track.stop());
+
+            return;
+
+          }
+
+  
+
+          currentStream = stream;
+
+          streamRef.current = stream;
+
+  
+
+          if (videoRef.current) {
+
+            videoRef.current.srcObject = stream;
+
+            videoRef.current.setAttribute("playsinline", "true");
+
+            videoRef.current.muted = true;
+
+            
+
+            try {
+
+              await videoRef.current.play();
+
+              addLog("비디오 재생 시작됨");
+
+              setVideoStarted(true);
+
+            } catch (e) {
+
+              addLog("자동 재생 차단 - 클릭 필요");
+
             }
-          }, 1000);
+
+          }
+
+        } catch (err: any) {
+
+          addLog(`에러: ${err.name}`);
+
+          if (isMounted) {
+
+             setError(`카메라 오류: ${err.message}`);
+
+             setIsLoading(false);
+
+          }
+
         }
-      } catch (err: any) {
-        console.error("❌ 카메라 시작 오류:", err);
-        if (isMounted) {
-           setError(err.message || "카메라를 시작할 수 없습니다.");
-           setIsLoading(false);
-           setDebugInfo((prev: any) => ({ ...prev, error: err.name, msg: err.message }));
-        }
+
       }
-    }
 
-    async function loadAI() {
-       try {
-         await loadFaceModels();
-         return true;
-       } catch (e) {
-         return false;
-       }
-    }
+  
 
-    async function init() {
-      try {
-        await startCamera();
-        await loadAI();
+      async function init() {
+
+        // 1. 카메라 먼저 실행 (AI 기다리지 않음)
+
+        startCamera();
+
+        
+
+        // 2. AI 모델은 백그라운드에서 로드
+
+        addLog("AI 모델 준비 중...");
+
+        loadFaceModels()
+
+          .then(() => addLog("AI 모델 로드 완료"))
+
+          .catch(e => addLog("AI 로드 실패 (카메라는 계속 진행)"));
+
+        
+
         if (!isMounted) return;
-        setIsReady(true);
+
         setIsLoading(false);
 
-        // 실시간 렌더링 및 감지 루프
+        setIsReady(true);
+
+  
+
         const renderLoop = async () => {
+
           if (!isMounted) return;
+
+  
+
+          const video = videoRef.current;
+
+          const canvas = canvasRef.current;
+
           
-          if (videoRef.current && canvasRef.current) {
-            const video = videoRef.current;
-            const canvas = canvasRef.current;
+
+          if (video && canvas && video.readyState >= 2) {
+
             const ctx = canvas.getContext("2d", { alpha: false });
 
-            if (video.readyState === 4 && !video.paused) {
-              if (!videoStarted) setVideoStarted(true);
-              
-              if (ctx) {
-                // 1. 비디오 프레임을 캔버스에 직접 그리기 (검은 화면 방지 핵심)
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                
-                // 2. 얼굴 감지 실행
-                try {
-                  const detection = await detectFaceFromVideo(video);
-                  if (detection) {
-                    setFaceDetected(true);
-                    // 랜드마크 그리기 (기존 drawLandmarks 대신 직접 그림)
-                    ctx.strokeStyle = "#00ff00";
-                    ctx.lineWidth = 2;
-                    const box = detection.detection.box;
-                    ctx.strokeRect(box.x, box.y, box.width, box.height);
-                  } else {
-                    setFaceDetected(false);
-                  }
+            
+
+            if (ctx) {
+
+              // 크기 맞춤
+
+              if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
+
+                if (video.videoWidth > 0) {
+
+                  canvas.width = video.videoWidth;
+
+                  canvas.height = video.videoHeight;
+
+                  addLog(`해상도 확정: ${canvas.width}x${canvas.height}`);
+
                 }
-                catch (e) {}
+
               }
+
+  
+
+              // 그리기 (무조건 실행)
+
+              ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  
+
+              // 얼굴 감지 (가끔씩만 수행)
+
+              if (videoStarted && Date.now() % 10 === 0) {
+
+                try {
+
+                  const detection = await detectFaceFromVideo(video);
+
+                  if (detection && !faceDetected) setFaceDetected(true);
+
+                  if (!detection && faceDetected) setFaceDetected(false);
+
+                  
+
+                  if (detection) {
+
+                    ctx.strokeStyle = "#00ff00";
+
+                    ctx.lineWidth = 3;
+
+                    const box = detection.detection.box;
+
+                    ctx.strokeRect(box.x, box.y, box.width, box.height);
+
+                  }
+
+                } catch (e) {}
+
+              }
+
             }
+
           }
-          requestAnimationFrame(renderLoop);
+
+          animationFrameId = requestAnimationFrame(renderLoop);
+
         };
 
-        requestAnimationFrame(renderLoop);
-      } catch (err) {
-        if (isMounted) setIsLoading(false);
+  
+
+        animationFrameId = requestAnimationFrame(renderLoop);
+
       }
-    }
 
-    init();
+  
 
-    return () => {
-      isMounted = false;
-      if (currentStream) currentStream.getTracks().forEach(track => track.stop());
+      init();
+
+  
+
+      return () => {
+
+        isMounted = false;
+
+        cancelAnimationFrame(animationFrameId);
+
+        if (currentStream) {
+
+          currentStream.getTracks().forEach(track => track.stop());
+
+        }
+
+      };
+
+    }, []);
+
+  
+
+    // 수동 시작 핸들러
+
+    const handleForcePlay = async () => {
+
+      addLog("수동 재생 시도...");
+
+      if (videoRef.current) {
+
+        try {
+
+          await videoRef.current.play();
+
+          addLog("재생 성공!");
+
+          setVideoStarted(true);
+
+        } catch (err) {
+
+          addLog("재생 실패 - 새로고침 권장");
+
+        }
+
+      }
+
     };
-  }, []);
-
-  // 비디오 수동 재생 핸들러
-  const handleForcePlay = async () => {
-    if (videoRef.current) {
-      try {
-        await videoRef.current.play();
-        setVideoStarted(true);
-      } catch (err) {
-        alert("카메라를 시작할 수 없습니다. 브라우저 설정을 확인해주세요.");
-      }
-    }
-  };
 
   // 촬영
   const handleCapture = () => {
@@ -249,40 +380,47 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
         </div>
 
         <PlayfulCard color="white" className="p-4 overflow-hidden">
-          <div className="relative aspect-square rounded-2xl overflow-hidden bg-black shadow-inner">
-            {capturedImage ? (
-              <img src={capturedImage} alt="Captured" className="w-full h-full object-cover" />
-            ) : (
-              <>
-                <video ref={videoRef} autoPlay playsInline muted className="absolute inset-0 w-full h-full object-cover opacity-0 pointer-events-none" />
-                <canvas ref={canvasRef} className="absolute inset-0 w-full h-full object-cover" style={{ transform: "scaleX(-1)" }} />
-                
-                {!videoStarted && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/60 z-30">
-                    <WobblyButton color="var(--playful-yellow)" size="xl" onClick={handleForcePlay}>▶ 카메라 켜기</WobblyButton>
-                  </div>
-                )}
-
-                {!faceDetected && videoStarted && (
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none border-4 border-dashed border-white/20 rounded-full m-8" />
-                )}
-              </>
-            )}
-          </div>
-
-          <div className="mt-6">
-            {capturedImage ? (
-              <div className="flex gap-3">
-                <WobblyButton variant="secondary" size="lg" className="flex-1" onClick={handleRetake}>🔄 다시 찍기</WobblyButton>
-                <WobblyButton variant="success" size="lg" className="flex-1" onClick={handleConfirm}>✓ 확인</WobblyButton>
-              </div>
-            ) : (
-              <WobblyButton variant="success" size="xl" className="w-full" onClick={handleCapture} disabled={!videoStarted}>
-                📸 관상 분석하기
-              </WobblyButton>
-            )}
-          </div>
-        </PlayfulCard>
+                      <div className="relative aspect-square rounded-2xl overflow-hidden bg-black shadow-inner">
+                        {capturedImage ? (
+                          <img src={capturedImage} alt="Captured" className="w-full h-full object-cover" />
+                        ) : (
+                          <>
+                            <video ref={videoRef} autoPlay playsInline muted className="absolute inset-0 w-full h-full object-cover opacity-0 pointer-events-none" />
+                            <canvas ref={canvasRef} className="absolute inset-0 w-full h-full object-cover" style={{ transform: "scaleX(-1)" }} />
+                            
+                            {!videoStarted && (
+                              <div className="absolute inset-0 flex items-center justify-center bg-black/60 z-30">
+                                <div className="text-center p-6">
+                                  <p className="text-white mb-4" style={{ fontFamily: "var(--font-gaegu), cursive" }}>
+                                    {isLoading ? "카메라 연결 중..." : "카메라가 준비되었습니다!"}
+                                  </p>
+                                  <WobblyButton color="var(--playful-yellow)" size="xl" onClick={handleForcePlay}>
+                                    ▶ 카메라 시작하기
+                                  </WobblyButton>
+                                </div>
+                              </div>
+                            )}
+                          </>
+                        )}
+          
+                        {/* 실시간 상태 로그 (디버깅용) */}
+                        <div className="absolute top-2 left-2 bg-black/40 text-[10px] text-white p-2 rounded pointer-events-none z-40 font-mono">
+                          {logs.map((log, i) => <div key={i}>{log}</div>)}
+                        </div>
+                      </div>
+          
+                      <div className="mt-6">
+                        {capturedImage ? (
+                          <div className="flex gap-3">
+                            <WobblyButton variant="secondary" size="lg" className="flex-1" onClick={handleRetake}>🔄 다시 찍기</WobblyButton>
+                            <WobblyButton variant="success" size="lg" className="flex-1" onClick={handleConfirm}>✓ 확인</WobblyButton>
+                          </div>
+                        ) : (
+                          <WobblyButton variant="success" size="xl" className="w-full" onClick={handleCapture} disabled={!videoStarted}>
+                            {videoStarted ? "📸 관상 분석하기" : "카메라 준비 중..."}
+                          </WobblyButton>
+                        )}
+                      </div>        </PlayfulCard>
       </div>
     </div>
   );
