@@ -7,6 +7,23 @@ import { PlayfulCard } from "@/shared/ui/playful-card";
 import { WobblyButton } from "@/shared/ui/wobbly-button";
 import { getZodiacInfo } from "@/features/fun/face-reading-2026/data/zodiac-2026";
 import type { FortuneResult } from "@/entities/fun";
+import dynamic from "next/dynamic";
+
+// face-api를 사용하는 컴포넌트들은 동적 import
+const CameraCapture = dynamic(
+  () => import("@/features/fun/face-reading-2026/ui/camera-capture").then((mod) => ({ default: mod.CameraCapture })),
+  { ssr: false }
+);
+
+const AnalyzingLoader = dynamic(
+  () => import("@/features/fun/face-reading-2026/ui/analyzing-loader").then((mod) => ({ default: mod.AnalyzingLoader })),
+  { ssr: false }
+);
+
+const ResultScreen = dynamic(
+  () => import("@/features/fun/face-reading-2026/ui/result-screen").then((mod) => ({ default: mod.ResultScreen })),
+  { ssr: false }
+);
 
 type Step = "landing" | "camera" | "analyzing" | "result";
 
