@@ -434,12 +434,14 @@ export function ResultScreen({
               🔄 다시 분석
             </WobblyButton>
           </div>
-          <p 
-            className="text-center text-sm text-red-600 font-bold"
-            style={{ fontFamily: "var(--font-gaegu), cursive" }}
-          >
-            ※ 사진은 공유되지 않으니 안심하세요! 🔒
-          </p>
+          <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 text-center">
+            <p 
+              className="text-lg text-red-600 font-bold leading-tight"
+              style={{ fontFamily: "var(--font-gaegu), cursive" }}
+            >
+              ※ 사진은 결과에 포함되거나 공유되지 않으니 안심하세요! 🔒
+            </p>
+          </div>
         </motion.div>
 
         {/* 해시태그 */}
