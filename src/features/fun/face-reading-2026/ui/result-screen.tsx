@@ -12,43 +12,10 @@ interface ResultScreenProps {
   onRestart: () => void;
 }
 
-export function ResultScreen({
-  result,
-  capturedImage,
-  onRestart,
-}: ResultScreenProps) {
-  const zodiacInfo = getZodiacInfo(result.birthYear);
-
-  // 공유 기능
-  const handleShare = async () => {
-    const shareText = `🔮 2026년 나의 관상 분석 결과
-    
-내 관상 등급: [${result.grade}]
-종합 점수: ${result.totalScore}점
-한줄평: "${result.viralMessage}"
-
-나의 2026년 운세가 궁금하다면? 지금 바로 확인해보세요!
-#2026관상 #AI운세 #신년운세`;
-
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: "2026 AI 관상 분석",
-          text: shareText,
-          url: window.location.origin + "/fun/face-reading-2026",
-        });
-      } catch (err) {
-        console.error("공유 실패:", err);
-      }
-    } else {
-      // 클립보드 복사
-      try {
-        await navigator.clipboard.writeText(shareText + "\n" + window.location.origin + "/fun/face-reading-2026");
-        alert("분석 결과가 클립보드에 복사되었습니다! 친구들에게 공유해보세요.");
-      } catch (err) {
-        alert("공유하기를 지원하지 않는 브라우저입니다.");
-      }
-    }
+  // 재시작 시 최상단 이동 포함
+  const handleRestartWithScroll = () => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+    onRestart();
   };
 
   // 등급별 색상
@@ -424,12 +391,12 @@ export function ResultScreen({
             <WobblyButton variant="success" size="xl" className="flex-1" onClick={handleShare}>
               📤 결과 공유하기
             </WobblyButton>
-            <WobblyButton variant="secondary" size="xl" className="flex-1" onClick={onRestart}>
+            <WobblyButton variant="secondary" size="xl" className="flex-1" onClick={handleRestartWithScroll}>
               🔄 다시 분석
             </WobblyButton>
           </div>
           <p 
-            className="text-center text-sm text-[var(--border-dark)]/50 font-bold"
+            className="text-center text-sm text-red-600 font-bold"
             style={{ fontFamily: "var(--font-gaegu), cursive" }}
           >
             ※ 사진은 공유되지 않으니 안심하세요! 🔒

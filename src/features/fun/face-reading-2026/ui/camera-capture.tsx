@@ -32,13 +32,31 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
 
   
 
-    const addLog = (msg: string) => {
+      const addLog = (msg: string) => {
 
-      console.log(`[CameraLog] ${msg}`);
+  
 
-      setLogs(prev => [...prev.slice(-4), msg]); // 최근 5개 로그만 유지
+        console.log(`[CameraLog] ${msg}`);
 
-    };
+  
+
+        // AI 모델 관련 로그만 화면에 표시
+
+  
+
+        if (msg.includes("AI 모델")) {
+
+  
+
+          setLogs(prev => [...prev.slice(-1), msg]); // 가장 최근의 AI 상태 하나만 표시
+
+  
+
+        }
+
+  
+
+      };
 
   
 
@@ -437,11 +455,12 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
                           </>
                         )}
           
-                        {/* 실시간 상태 로그 (디버깅용) */}
-                        <div className="absolute top-2 left-2 bg-black/40 text-[10px] text-white p-2 rounded pointer-events-none z-40 font-mono">
-                          {logs.map((log, i) => <div key={i}>{log}</div>)}
-                        </div>
-                      </div>
+                                      {/* 실시간 상태 로그 (AI 로딩 상태만) */}
+                                      {logs.length > 0 && (
+                                        <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-md text-[12px] text-white px-4 py-1.5 rounded-full pointer-events-none z-40 font-bold border border-white/20">
+                                          {logs[logs.length - 1]}
+                                        </div>
+                                      )}                      </div>
           
                       <div className="mt-6">
                         {capturedImage ? (
