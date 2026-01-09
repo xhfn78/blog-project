@@ -10,7 +10,6 @@ interface ResultScreenProps {
   result: FortuneResult;
   capturedImage: string;
   onRestart: () => void;
-  onShare: () => void;
 }
 
 export function ResultScreen({
