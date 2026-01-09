@@ -16,138 +16,104 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [videoStarted, setVideoStarted] = useState(false);
-  const [faceDetected, setFaceDetected] = useState(false);
+  const [status, setStatus] = useState<"idle" | "requesting" | "active" | "error">("idle");
   const [error, setError] = useState<string>("");
-  const [logs, setLogs] = useState<string[]>([]);
+  const [faceDetected, setFaceDetected] = useState(false);
+  const [aiReady, setAiReady] = useState(false);
   const [capturedImage, setCapturedImage] = useState<string>("");
 
-  const addLog = (msg: string) => {
-    console.log(`[CameraLog] ${msg}`);
-    if (msg.includes("AI 모델")) setLogs([msg]);
-  };
-
+  // 페이지 진입 시 스크롤만 수행
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
-    let isMounted = true;
-    let animationFrameId: number;
-
-    async function startCamera() {
-      try {
-        addLog("카메라 연결 시도...");
-        // 1. 가장 기본적인 설정으로 스트림 요청
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "user" },
-          audio: false
-        });
-
-        if (!isMounted) {
-          stream.getTracks().forEach(t => t.stop());
-          return;
-        }
-
-        streamRef.current = stream;
-
-        if (videoRef.current) {
-          const video = videoRef.current;
-          video.srcObject = stream;
-          video.setAttribute("playsinline", "true");
-          video.muted = true;
-          
-          // 메타데이터 로드 후 즉시 재생
-          video.onloadedmetadata = () => {
-            video.play().then(() => {
-              setVideoStarted(true);
-              addLog("카메라 작동 중");
-            }).catch(() => addLog("자동 시작 차단됨"));
-          };
-        }
-      } catch (err: any) {
-        if (isMounted) {
-          setError(`카메라를 켤 수 없습니다: ${err.message}`);
-          setIsLoading(false);
-        }
-      }
-    }
-
-    async function init() {
-      // AI와 카메라 병렬 실행
-      loadFaceModels()
-        .then(() => addLog("AI 모델 로드 완료"))
-        .catch(() => addLog("AI 모델 로드 실패"));
-      
-      await startCamera();
-      
-      if (!isMounted) return;
-      setIsLoading(false);
-
-      const renderLoop = () => {
-        if (!isMounted) return;
-        const video = videoRef.current;
-        const canvas = canvasRef.current;
-
-        if (video && canvas && video.readyState >= 2) {
-          const ctx = canvas.getContext("2d", { alpha: false });
-          if (ctx) {
-            if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
-              canvas.width = video.videoWidth;
-              canvas.height = video.videoHeight;
-            }
-            // 캔버스에 비디오 복사 (검은 화면 방지)
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-            // 얼굴 감지 (부하 분산)
-            if (videoStarted && Date.now() % 20 === 0) {
-              detectFaceFromVideo(video).then(detection => {
-                if (isMounted) {
-                  setFaceDetected(!!detection);
-                  if (detection) {
-                    ctx.strokeStyle = "#00ff00";
-                    ctx.lineWidth = 4;
-                    const box = detection.detection.box;
-                    ctx.strokeRect(box.x, box.y, box.width, box.height);
-                  }
-                }
-              }).catch(() => {});
-            }
-          }
-        }
-        animationFrameId = requestAnimationFrame(renderLoop);
-      };
-      renderLoop();
-    }
-
-    init();
+    
+    // AI 모델은 미리 백그라운드 로드
+    loadFaceModels().then(() => setAiReady(true)).catch(() => console.error("AI Load Fail"));
 
     return () => {
-      isMounted = false;
-      cancelAnimationFrame(animationFrameId);
-      if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
-      if (videoRef.current) {
-        videoRef.current.srcObject = null;
-        videoRef.current.load();
-      }
+      stopCamera();
     };
   }, []);
 
-  const handleForcePlay = async () => {
+  const stopCamera = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current = null;
+    }
     if (videoRef.current) {
-      try {
-        await videoRef.current.play();
-        setVideoStarted(true);
-      } catch (e) {
-        // 재생 실패 시 스트림 재요청
-        window.location.reload();
-      }
+      videoRef.current.srcObject = null;
     }
   };
 
+  // 사용자가 직접 버튼을 눌러 카메라 시작 (모바일에서 가장 확실한 방법)
+  const handleStartCamera = async () => {
+    setStatus("requesting");
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { 
+          facingMode: "user",
+          width: { ideal: 640 },
+          height: { ideal: 640 }
+        },
+        audio: false
+      });
+
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.setAttribute("playsinline", "true");
+        await videoRef.current.play();
+        setStatus("active");
+        startRenderLoop();
+      }
+    } catch (err: any) {
+      console.error(err);
+      setError("카메라 권한이 필요합니다. 설정에서 허용해주세요.");
+      setStatus("error");
+    }
+  };
+
+  const startRenderLoop = () => {
+    let isMounted = true;
+    const render = async () => {
+      if (!isMounted || status === "idle") return;
+
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      if (video && canvas && video.readyState >= 2) {
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          if (canvas.width !== video.videoWidth) {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+          }
+          // 화면 그리기
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+          // AI 분석 (AI 로드 완료 후 1초에 5번만 실행)
+          if (aiReady && Date.now() % 10 === 0) {
+            try {
+              const detection = await detectFaceFromVideo(video);
+              setFaceDetected(!!detection);
+              if (detection) {
+                ctx.strokeStyle = "#00ff00";
+                ctx.lineWidth = 4;
+                const box = detection.detection.box;
+                ctx.strokeRect(box.x, box.y, box.width, box.height);
+              }
+            } catch (e) {}
+          }
+        }
+      }
+      requestAnimationFrame(render);
+    };
+    requestAnimationFrame(render);
+    return () => { isMounted = false; };
+  };
+
   const handleCapture = () => {
-    if (!canvasRef.current || !videoStarted) return;
-    // 거울 모드 적용하여 캡처
-    const canvas = document.createElement("canvas");
+    if (!canvasRef.current || status !== "active") return;
     const video = videoRef.current!;
+    const canvas = document.createElement("canvas");
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     const ctx = canvas.getContext("2d");
@@ -159,41 +125,14 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
     }
   };
 
-  // 로딩 화면 (스트림 시작 전까지)
-  if (isLoading && !videoStarted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 p-4 text-center">
-        <PlayfulCard color="white" className="p-12">
-          <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} className="w-16 h-16 mx-auto mb-6 border-4 border-[var(--playful-purple)] border-t-transparent rounded-full" />
-          <p className="text-2xl font-bold" style={{ fontFamily: "var(--font-gaegu), cursive" }}>카메라 연결 중...</p>
-        </PlayfulCard>
-      </div>
-    );
-  }
-
-  // 에러 화면
-  if (error && !videoStarted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 p-4 text-center">
-        <PlayfulCard color="var(--playful-coral)" className="p-8 max-w-sm">
-          <span className="text-6xl mb-4 block">😢</span>
-          <h2 className="text-2xl font-bold mb-4" style={{ fontFamily: "var(--font-gaegu), cursive" }}>카메라 오류</h2>
-          <p className="mb-6 opacity-70" style={{ fontFamily: "var(--font-gaegu), cursive" }}>{error}</p>
-          <WobblyButton variant="success" className="w-full" onClick={() => window.location.reload()}>🔄 다시 시도</WobblyButton>
-        </PlayfulCard>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-yellow-50 py-8 px-4">
       <div className="container mx-auto max-w-2xl">
         <div className="mb-6 flex items-center justify-between">
           <WobblyButton variant="ghost" size="sm" onClick={onBack}>← 나가기</WobblyButton>
           {faceDetected && !capturedImage && (
-            <div className="px-4 py-1.5 bg-green-500 text-white rounded-full flex items-center gap-2 shadow-lg">
-              <span className="w-2 h-2 rounded-full bg-white animate-ping" />
-              <span className="text-sm font-bold">얼굴 인식 완료!</span>
+            <div className="px-4 py-1.5 bg-green-500 text-white rounded-full text-sm font-bold shadow-lg animate-bounce">
+              얼굴 인식 완료! ✓
             </div>
           )}
           <div className="w-20" />
@@ -208,18 +147,31 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
                 <video ref={videoRef} autoPlay playsInline muted className="absolute inset-0 w-full h-full object-cover opacity-0 pointer-events-none" />
                 <canvas ref={canvasRef} className="absolute inset-0 w-full h-full object-cover" style={{ transform: "scaleX(-1)" }} />
                 
-                {!videoStarted && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/80 z-30">
-                    <div className="text-center p-8 bg-white rounded-3xl border-4 border-[var(--border-dark)]">
-                      <p className="text-2xl font-bold mb-6" style={{ fontFamily: "var(--font-gaegu), cursive" }}>카메라를 시작할까요?</p>
-                      <WobblyButton color="var(--playful-yellow)" size="xl" onClick={handleForcePlay}>▶ 카메라 시작하기</WobblyButton>
+                {status !== "active" && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/80 z-30 p-6">
+                    <div className="text-center bg-white p-8 rounded-3xl border-4 border-[var(--border-dark)] w-full">
+                      {status === "requesting" ? (
+                        <div className="space-y-4">
+                          <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto" />
+                          <p className="text-xl font-bold" style={{ fontFamily: "var(--font-gaegu), cursive" }}>카메라 연결 중...</p>
+                        </div>
+                      ) : (
+                        <>
+                          <p className="text-2xl font-bold mb-2" style={{ fontFamily: "var(--font-gaegu), cursive" }}>카메라를 켤까요?</p>
+                          <p className="text-sm text-gray-500 mb-6" style={{ fontFamily: "var(--font-gaegu), cursive" }}>아래 버튼을 누르면 촬영이 시작됩니다</p>
+                          <WobblyButton color="var(--playful-yellow)" size="xl" className="w-full" onClick={handleStartCamera}>
+                            📸 카메라 시작하기
+                          </WobblyButton>
+                          {error && <p className="mt-4 text-red-500 text-sm font-bold">{error}</p>}
+                        </>
+                      )}
                     </div>
                   </div>
                 )}
 
-                {logs.length > 0 && (
-                  <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-md text-[12px] text-white px-4 py-1.5 rounded-full pointer-events-none z-40 font-bold border border-white/20">
-                    {logs[0]}
+                {aiReady && status === "active" && (
+                  <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-black/60 backdrop-blur-md text-[12px] text-white px-4 py-1.5 rounded-full z-40 font-bold border border-white/20">
+                    AI 분석 엔진 가동 중 ✨
                   </div>
                 )}
               </>
@@ -233,8 +185,14 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
                 <WobblyButton variant="success" size="lg" className="flex-1" onClick={() => onCapture(capturedImage)}>✓ 분석 시작</WobblyButton>
               </div>
             ) : (
-              <WobblyButton variant="success" size="xl" className="w-full" onClick={handleCapture} disabled={!videoStarted}>
-                {videoStarted ? "📸 사진 촬영하기" : "카메라 준비 중..."}
+              <WobblyButton 
+                variant="success" 
+                size="xl" 
+                className="w-full shadow-2xl" 
+                onClick={handleCapture} 
+                disabled={status !== "active"}
+              >
+                {status === "active" ? "📸 지금 촬영하기" : "카메라를 먼저 켜주세요"}
               </WobblyButton>
             )}
           </div>
