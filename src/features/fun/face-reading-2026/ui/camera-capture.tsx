@@ -18,9 +18,10 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
 
   const [isReady, setIsReady] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [videoStarted, setVideoStarted] = useState(false); // 비디오 실제 재생 여부
   const [faceDetected, setFaceDetected] = useState(false);
   const [error, setError] = useState<string>("");
-  const [debugInfo, setDebugInfo] = useState<any>(null); // 디버그 정보 추가
+  const [debugInfo, setDebugInfo] = useState<any>(null);
   const [capturedImage, setCapturedImage] = useState<string>("");
 
   // 모델 로드 및 카메라 시작
@@ -31,34 +32,20 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
 
     async function startCamera() {
       try {
-        // 환경 진단 정보 수집
         const envInfo = {
           userAgent: typeof navigator !== "undefined" ? navigator.userAgent : "unknown",
-          protocol: typeof window !== "undefined" ? window.location.protocol : "unknown",
-          hostname: typeof window !== "undefined" ? window.location.hostname : "unknown",
           isSecureContext: typeof window !== "undefined" ? window.isSecureContext : false,
-          hasNavigator: typeof navigator !== "undefined",
           hasMediaDevices: typeof navigator !== "undefined" && !!navigator.mediaDevices,
-          hasGetUserMedia: typeof navigator !== "undefined" && !!navigator.mediaDevices?.getUserMedia,
         };
 
-        // 브라우저 및 카메라 지원 확인 (방어 코드 강화)
-        if (!envInfo.hasMediaDevices || !envInfo.hasGetUserMedia) {
-          setDebugInfo(envInfo); // 진단 정보 저장
-          
-          if (!envInfo.isSecureContext && envInfo.hostname !== "localhost" && envInfo.hostname !== "127.0.0.1") {
-             throw new Error("보안 연결(HTTPS)이 필요합니다. 현재 연결은 안전하지 않아 카메라가 차단되었습니다.");
-          }
-          throw new Error("이 브라우저는 카메라 API를 지원하지 않거나 차단되었습니다.");
+        if (!envInfo.hasMediaDevices) {
+          throw new Error("카메라 API를 지원하지 않는 환경입니다.");
         }
 
         console.log("🔄 카메라 권한 요청 중...");
+        // 제약 조건을 최소화하여 호환성 극대화
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            width: { ideal: 1280 }, // 해상도를 표준으로 변경 (호환성 상향)
-            height: { ideal: 720 },
-            facingMode: "user",
-          },
+          video: { facingMode: "user" },
           audio: false,
         });
 
@@ -71,114 +58,86 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
         streamRef.current = stream;
 
         if (videoRef.current) {
-          videoRef.current.srcObject = stream;
+          const video = videoRef.current;
+          video.srcObject = stream;
           
-          // 비디오 로딩 대기 로직 강화
+          // 모바일 브라우저를 위한 속성 강제 주입
+          video.setAttribute("playsinline", "true");
+          video.setAttribute("muted", "true");
+          video.muted = true;
+
+          // 재생 상태 감시
+          video.onplaying = () => {
+            console.log("✅ 비디오 재생 시작됨");
+            setVideoStarted(true);
+          };
+
+          // 비디오 로딩 대기
           await new Promise<void>((resolve) => {
-             const video = videoRef.current;
-             if (!video) return resolve();
-             
              const onLoaded = () => {
                video.removeEventListener("loadedmetadata", onLoaded);
-               video.removeEventListener("canplay", onLoaded);
                resolve();
              };
-
              video.addEventListener("loadedmetadata", onLoaded);
-             video.addEventListener("canplay", onLoaded);
-             
-             // 이미 로드된 경우 대응
              if (video.readyState >= 2) resolve();
-             
-             // 타임아웃 (최대 3초 대기 후 강제 진행)
              setTimeout(resolve, 3000);
           });
 
-          if (!isMounted) return;
-
-          // 모바일 대응을 위한 지연 후 재생 시도
-          setTimeout(async () => {
-            try {
-              if (videoRef.current) {
-                await videoRef.current.play();
-                console.log("✅ 비디오 재생 시작");
-              }
-            } catch (playError) {
-              console.error("비디오 재생 실패:", playError);
-              // 자동 재생 실패 시 수동 재생 유도 등의 처리가 필요할 수 있음
-            }
-          }, 100);
+          try {
+            await video.play();
+          } catch (playError) {
+            console.warn("⚠️ 자동 재생 차단됨, 사용자 클릭 필요");
+          }
         }
       } catch (err: any) {
         console.error("❌ 카메라 시작 오류:", err);
         if (isMounted) {
-           let msg = "카메라를 시작할 수 없습니다.";
-           if (err.name === "NotAllowedError") msg = "카메라 권한이 거부되었습니다. 설정에서 허용해주세요.";
-           else if (err.name === "NotFoundError") msg = "카메라 장치를 찾을 수 없습니다.";
-           else if (err.name === "NotReadableError") msg = "카메라가 이미 다른 앱에서 사용 중입니다.";
-           else if (err.message) msg = err.message;
-           
-           setError(msg);
-           setIsLoading(false); // 중요: 에러 발생 시 로딩 종료
-           
-           // 이미 위에서 설정되지 않았다면 기본 정보라도 설정
-           setDebugInfo((prev: any) => prev || { errorName: err.name, errorMessage: err.message });
+           setError(err.message || "카메라를 시작할 수 없습니다.");
+           setIsLoading(false);
+           setDebugInfo(prev => ({ ...prev, error: err.name, msg: err.message }));
         }
-        throw err; // 상위 로직 중단
+        throw err;
       }
     }
 
     async function loadAI() {
        try {
-         console.log("🔄 AI 모델 로딩 시작...");
          await loadFaceModels();
-         console.log("✅ AI 모델 로딩 완료");
          return true;
        } catch (e) {
-         console.error("❌ AI 모델 로딩 실패", e);
-         // 모델 로드 실패는 치명적이지 않다고 가정하거나 경고만 표시 (선택사항)
-         // 여기서는 에러로 처리하지 않고 진행 (카메라는 보여주기 위함)
          return false;
        }
     }
 
     async function init() {
       try {
-        // 1. 카메라 먼저 빠르게 시작
         await startCamera();
-        
-        // 2. 백그라운드에서 AI 모델 로드
         await loadAI();
-
         if (!isMounted) return;
-
         setIsReady(true);
         setIsLoading(false);
 
-        // 3. 실시간 감지 시작
         detectionInterval = setInterval(async () => {
-          if (!videoRef.current || !canvasRef.current || !videoRef.current.paused && !videoRef.current.ended) {
+          if (!videoRef.current || !canvasRef.current) return;
+          
+          // 비디오가 실제로 데이터를 보내고 있는지 확인
+          if (videoRef.current.readyState === 4 && !videoRef.current.paused) {
+             if (!videoStarted) setVideoStarted(true);
+             
              try {
-                if (videoRef.current && videoRef.current.readyState === 4) {
-                  const detection = await detectFaceFromVideo(videoRef.current);
-                  
-                  if (detection) {
-                    setFaceDetected(true);
-                    drawLandmarks(canvasRef.current!, detection);
-                  } else {
-                    setFaceDetected(false);
-                    const ctx = canvasRef.current?.getContext("2d");
-                    ctx?.clearRect(0, 0, canvasRef.current!.width, canvasRef.current!.height);
-                  }
+                const detection = await detectFaceFromVideo(videoRef.current);
+                if (detection) {
+                  setFaceDetected(true);
+                  drawLandmarks(canvasRef.current!, detection);
+                } else {
+                  setFaceDetected(false);
+                  const ctx = canvasRef.current?.getContext("2d");
+                  ctx?.clearRect(0, 0, canvasRef.current!.width, canvasRef.current!.height);
                 }
-             } catch (err) {
-               // 감지 에러 무시
-             }
+             } catch (err) {}
           }
         }, 200);
-
       } catch (err) {
-        // startCamera 내부에서 이미 처리됨
         if (isMounted) setIsLoading(false);
       }
     }
@@ -188,33 +147,29 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
     return () => {
       isMounted = false;
       if (detectionInterval) clearInterval(detectionInterval);
-      
-      // 스트림 정리
-      if (currentStream) {
-        currentStream.getTracks().forEach((track) => track.stop());
-      }
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach((track) => track.stop());
-      }
-      
-      // 비디오 소스 제거
-      if (videoRef.current) {
-        videoRef.current.srcObject = null;
-      }
+      if (currentStream) currentStream.getTracks().forEach(track => track.stop());
     };
   }, []);
 
+  // 비디오 수동 재생 핸들러
+  const handleForcePlay = async () => {
+    if (videoRef.current) {
+      try {
+        await videoRef.current.play();
+        setVideoStarted(true);
+      } catch (err) {
+        console.error("수동 재생 실패:", err);
+      }
+    }
+  };
+
   // 캔버스 크기 설정
   useEffect(() => {
-    if (videoRef.current && canvasRef.current && isReady) {
-      const video = videoRef.current;
-      const canvas = canvasRef.current;
-
-      // 비디오 크기에 맞춰 캔버스 크기 설정
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
+    if (videoRef.current && canvasRef.current && videoStarted) {
+      canvas.width = videoRef.current.videoWidth;
+      canvas.height = videoRef.current.videoHeight;
     }
-  }, [isReady]);
+  }, [videoStarted]);
 
   // 촬영
   const handleCapture = () => {
@@ -407,6 +362,15 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
                     muted
                     className="w-full h-full object-cover transform scale-x-[-1]"
                   />
+
+                  {/* 수동 재생 버튼 (자동 재생 차단 시) */}
+                  {!videoStarted && !isLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 z-20">
+                      <WobblyButton color="var(--playful-yellow)" onClick={handleForcePlay}>
+                        ▶ 카메라 시작하기
+                      </WobblyButton>
+                    </div>
+                  )}
 
                   {/* 랜드마크 오버레이 캔버스 */}
                   <canvas
