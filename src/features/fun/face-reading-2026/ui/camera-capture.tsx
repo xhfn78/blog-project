@@ -61,33 +61,25 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
           const video = videoRef.current;
           video.srcObject = stream;
           
-          // 모바일 브라우저를 위한 속성 강제 주입
+          // 모바일 브라우저 필수 속성
           video.setAttribute("playsinline", "true");
           video.setAttribute("muted", "true");
           video.muted = true;
 
-          // 재생 상태 감시
-          video.onplaying = () => {
-            console.log("✅ 비디오 재생 시작됨");
-            setVideoStarted(true);
+          // 비디오 데이터가 실제로 들어오는지 확인
+          video.onloadeddata = () => {
+            console.log("✅ 비디오 데이터 로드됨");
+            video.play().then(() => {
+              setVideoStarted(true);
+            }).catch(e => console.warn("자동 재생 차단:", e));
           };
 
-          // 비디오 로딩 대기
-          await new Promise<void>((resolve) => {
-             const onLoaded = () => {
-               video.removeEventListener("loadedmetadata", onLoaded);
-               resolve();
-             };
-             video.addEventListener("loadedmetadata", onLoaded);
-             if (video.readyState >= 2) resolve();
-             setTimeout(resolve, 3000);
-          });
-
-          try {
-            await video.play();
-          } catch (playError) {
-            console.warn("⚠️ 자동 재생 차단됨, 사용자 클릭 필요");
-          }
+          // 대체 재생 시도
+          setTimeout(() => {
+            if (video.paused) {
+              video.play().then(() => setVideoStarted(true)).catch(() => {});
+            }
+          }, 1000);
         }
       } catch (err: any) {
         console.error("❌ 카메라 시작 오류:", err);
@@ -96,7 +88,6 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
            setIsLoading(false);
            setDebugInfo((prev: any) => ({ ...prev, error: err.name, msg: err.message }));
         }
-        throw err;
       }
     }
 
@@ -117,26 +108,44 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
         setIsReady(true);
         setIsLoading(false);
 
-        detectionInterval = setInterval(async () => {
-          if (!videoRef.current || !canvasRef.current) return;
+        // 실시간 렌더링 및 감지 루프
+        const renderLoop = async () => {
+          if (!isMounted) return;
           
-          // 비디오가 실제로 데이터를 보내고 있는지 확인
-          if (videoRef.current.readyState === 4 && !videoRef.current.paused) {
-             if (!videoStarted) setVideoStarted(true);
-             
-             try {
-                const detection = await detectFaceFromVideo(videoRef.current);
-                if (detection) {
-                  setFaceDetected(true);
-                  drawLandmarks(canvasRef.current!, detection);
-                } else {
-                  setFaceDetected(false);
-                  const ctx = canvasRef.current?.getContext("2d");
-                  ctx?.clearRect(0, 0, canvasRef.current!.width, canvasRef.current!.height);
+          if (videoRef.current && canvasRef.current) {
+            const video = videoRef.current;
+            const canvas = canvasRef.current;
+            const ctx = canvas.getContext("2d", { alpha: false });
+
+            if (video.readyState === 4 && !video.paused) {
+              if (!videoStarted) setVideoStarted(true);
+              
+              if (ctx) {
+                // 1. 비디오 프레임을 캔버스에 직접 그리기 (검은 화면 방지 핵심)
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                // 2. 얼굴 감지 실행
+                try {
+                  const detection = await detectFaceFromVideo(video);
+                  if (detection) {
+                    setFaceDetected(true);
+                    // 랜드마크 그리기 (기존 drawLandmarks 대신 직접 그림)
+                    ctx.strokeStyle = "#00ff00";
+                    ctx.lineWidth = 2;
+                    const box = detection.detection.box;
+                    ctx.strokeRect(box.x, box.y, box.width, box.height);
+                  } else {
+                    setFaceDetected(false);
+                  }
                 }
-             } catch (err) {}
+                catch (e) {}
+              }
+            }
           }
-        }, 200);
+          requestAnimationFrame(renderLoop);
+        };
+
+        requestAnimationFrame(renderLoop);
       } catch (err) {
         if (isMounted) setIsLoading(false);
       }
@@ -146,7 +155,6 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
 
     return () => {
       isMounted = false;
-      if (detectionInterval) clearInterval(detectionInterval);
       if (currentStream) currentStream.getTracks().forEach(track => track.stop());
     };
   }, []);
@@ -158,16 +166,23 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
         await videoRef.current.play();
         setVideoStarted(true);
       } catch (err) {
-        console.error("수동 재생 실패:", err);
+        alert("카메라를 시작할 수 없습니다. 브라우저 설정을 확인해주세요.");
       }
     }
   };
 
   // 캔버스 크기 설정
   useEffect(() => {
-    if (videoRef.current && canvasRef.current && videoStarted) {
-      canvasRef.current.width = videoRef.current.videoWidth;
-      canvasRef.current.height = videoRef.current.videoHeight;
+    if (videoRef.current && canvasRef.current) {
+      const updateSize = () => {
+        if (videoRef.current && videoRef.current.videoWidth > 0) {
+          canvasRef.current!.width = videoRef.current.videoWidth;
+          canvasRef.current!.height = videoRef.current.videoHeight;
+        } else {
+          setTimeout(updateSize, 500);
+        }
+      };
+      updateSize();
     }
   }, [videoStarted]);
 
@@ -355,48 +370,54 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
                 />
               ) : (
                 <>
+                  {/* 비디오는 데이터 소스로만 사용하고 화면에서는 숨김 */}
                   <video
                     ref={videoRef}
                     autoPlay
                     playsInline
                     muted
-                    className="w-full h-full object-cover transform scale-x-[-1]"
+                    className="absolute inset-0 w-full h-full object-cover opacity-0 pointer-events-none"
+                  />
+
+                  {/* 실제 화면은 캔버스에 직접 그려서 보여줌 (검은 화면 방지) */}
+                  <canvas
+                    ref={canvasRef}
+                    className="absolute inset-0 w-full h-full object-cover transform scale-x-[-1]"
                   />
 
                   {/* 수동 재생 버튼 (자동 재생 차단 시) */}
                   {!videoStarted && !isLoading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 z-20">
-                      <WobblyButton color="var(--playful-yellow)" onClick={handleForcePlay}>
-                        ▶ 카메라 시작하기
-                      </WobblyButton>
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/60 z-30">
+                      <div className="text-center p-6">
+                        <p className="text-white mb-4" style={{ fontFamily: "var(--font-gaegu), cursive" }}>
+                          카메라가 준비되었습니다!
+                        </p>
+                        <WobblyButton color="var(--playful-yellow)" onClick={handleForcePlay}>
+                          ▶ 카메라 시작하기
+                        </WobblyButton>
+                      </div>
                     </div>
                   )}
 
-                  {/* 랜드마크 오버레이 캔버스 */}
-                  <canvas
-                    ref={canvasRef}
-                    className="absolute inset-0 w-full h-full transform scale-x-[-1]"
-                  />
-
                   {/* 가이드 프레임 */}
-                  {!faceDetected && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-[80%] h-[80%] border-4 border-dashed border-white/50 rounded-full" />
+                  {!faceDetected && videoStarted && (
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+                      <div className="w-[80%] h-[80%] border-4 border-dashed border-white/30 rounded-full" />
                     </div>
                   )}
                 </>
               )}
 
               {/* 안내 메시지 */}
-              {!capturedImage && (
-                <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-sm p-4 text-center">
+              {!capturedImage && videoStarted && (
+                <div className="absolute bottom-0 left-0 right-0 bg-black/60 backdrop-blur-sm p-4 text-center z-20">
                   <p
                     className="text-white text-lg"
                     style={{ fontFamily: "var(--font-gaegu), cursive" }}
                   >
                     {faceDetected
                       ? "얼굴이 인식되었습니다! 촬영하세요 📸"
-                      : "얼굴을 프레임 안에 맞춰주세요"}
+                      : "얼굴을 화면 중앙에 맞춰주세요"}
                   </p>
                 </div>
               )}
@@ -429,7 +450,7 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
                   size="xl"
                   className="w-full"
                   onClick={handleCapture}
-                  disabled={!faceDetected}
+                  disabled={!videoStarted} // 얼굴 인식 안 되더라도 비디오만 나오면 촬영 가능하게 완화
                 >
                   📸 촬영하기
                 </WobblyButton>
