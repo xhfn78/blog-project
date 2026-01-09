@@ -7,29 +7,6 @@ import { PlayfulCard } from "@/shared/ui/playful-card";
 import { WobblyButton } from "@/shared/ui/wobbly-button";
 import { getZodiacInfo } from "@/features/fun/face-reading-2026/data/zodiac-2026";
 import type { FortuneResult } from "@/entities/fun";
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "2026년 AI 관상 분석 - 나의 신년 운세 확인하기",
-  description: "최신 AI 기술로 68개 얼굴 포인트를 분석하여 2026년 재물운, 애정운을 알려드립니다. 완벽한 프라이버시 보호.",
-  keywords: ["2026년운세", "AI관상", "얼굴분석", "신년운세", "무료관상"],
-};
-
-// face-api를 사용하는 컴포넌트들은 동적 import
-const CameraCapture = dynamic(
-  () => import("@/features/fun/face-reading-2026/ui/camera-capture").then((mod) => ({ default: mod.CameraCapture })),
-  { ssr: false }
-);
-
-const AnalyzingLoader = dynamic(
-  () => import("@/features/fun/face-reading-2026/ui/analyzing-loader").then((mod) => ({ default: mod.AnalyzingLoader })),
-  { ssr: false }
-);
-
-const ResultScreen = dynamic(
-  () => import("@/features/fun/face-reading-2026/ui/result-screen").then((mod) => ({ default: mod.ResultScreen })),
-  { ssr: false }
-);
 
 type Step = "landing" | "camera" | "analyzing" | "result";
 
