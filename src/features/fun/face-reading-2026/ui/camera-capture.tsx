@@ -55,9 +55,9 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
         console.log("🔄 카메라 권한 요청 중...");
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
-            width: { ideal: 720 },
+            width: { ideal: 1280 }, // 해상도를 표준으로 변경 (호환성 상향)
             height: { ideal: 720 },
-            facingMode: "user", // 전면 카메라
+            facingMode: "user",
           },
           audio: false,
         });
@@ -73,21 +73,41 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
           
-          // 비디오 메타데이터 로드 대기
+          // 비디오 로딩 대기 로직 강화
           await new Promise<void>((resolve) => {
-             if (!videoRef.current) return resolve();
-             videoRef.current.onloadedmetadata = () => resolve();
+             const video = videoRef.current;
+             if (!video) return resolve();
+             
+             const onLoaded = () => {
+               video.removeEventListener("loadedmetadata", onLoaded);
+               video.removeEventListener("canplay", onLoaded);
+               resolve();
+             };
+
+             video.addEventListener("loadedmetadata", onLoaded);
+             video.addEventListener("canplay", onLoaded);
+             
+             // 이미 로드된 경우 대응
+             if (video.readyState >= 2) resolve();
+             
+             // 타임아웃 (최대 3초 대기 후 강제 진행)
+             setTimeout(resolve, 3000);
           });
 
           if (!isMounted) return;
 
-          // 재생 시도 (Promise 에러 처리)
-          try {
-            await videoRef.current.play();
-            console.log("✅ 비디오 재생 시작");
-          } catch (playError) {
-            console.error("비디오 재생 실패:", playError);
-          }
+          // 모바일 대응을 위한 지연 후 재생 시도
+          setTimeout(async () => {
+            try {
+              if (videoRef.current) {
+                await videoRef.current.play();
+                console.log("✅ 비디오 재생 시작");
+              }
+            } catch (playError) {
+              console.error("비디오 재생 실패:", playError);
+              // 자동 재생 실패 시 수동 재생 유도 등의 처리가 필요할 수 있음
+            }
+          }, 100);
         }
       } catch (err: any) {
         console.error("❌ 카메라 시작 오류:", err);
