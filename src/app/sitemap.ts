@@ -7,7 +7,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // 정적 페이지
   const staticPages = [
     '',
+    '/fun',
+    '/fun/face-reading-2026',
     '/tools',
+    '/play',
     '/about',
     '/contact',
     '/privacy',
