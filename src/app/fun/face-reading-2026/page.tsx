@@ -292,7 +292,6 @@ export default function FaceReading2026Page() {
           result={fortuneResult}
           capturedImage={capturedImage}
           onRestart={handleRestart}
-          onShare={handleShare}
         />
       )}
     </>
