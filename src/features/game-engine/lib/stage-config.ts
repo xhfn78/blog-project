@@ -72,6 +72,17 @@ export function getStageByBpm(bpm: number): StageConfig {
 // 스테이지별 단어 배분
 export function distributeWordsToStages<T>(words: T[]): T[][] {
   const stages: T[][] = [];
+
+  // 40개 단어인 경우 (영상 생성용 프리셋)
+  if (words.length === 40) {
+    // 각 스테이지마다 정확히 8개씩 배분
+    for (let i = 0; i < 5; i++) {
+      stages.push(words.slice(i * 8, (i + 1) * 8));
+    }
+    return stages;
+  }
+
+  // 기존 로직 (일반 챌린지용)
   let wordIndex = 0;
 
   for (const stageConfig of STAGES) {

@@ -15,83 +15,86 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[var(--bg-playful)]">
       {/* Hero Section */}
-      <section className="relative py-16 px-4 overflow-hidden">
+      <section className="relative py-24 px-4 overflow-hidden">
         {/* 배경 장식 */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-[var(--playful-pink)]/20"
+            className="absolute -top-20 -right-20 w-60 h-60 rounded-full bg-[var(--playful-pink)]/10"
           />
           <motion.div
             animate={{ rotate: -360 }}
             transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-            className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-[var(--playful-mint)]/20"
+            className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full bg-[var(--playful-mint)]/10"
           />
         </div>
 
         <div className="container mx-auto max-w-4xl text-center relative z-10">
-          {/* 로고 애니메이션 */}
-          <motion.div
-            initial={{ scale: 0, rotate: -20 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ type: "spring", stiffness: 200, damping: 15 }}
-            className="mb-8"
-          >
-            <div
-              className="inline-flex items-center gap-3 px-6 py-3 rounded-2xl bg-[var(--playful-yellow)] border-4 border-[var(--border-dark)] shadow-[6px_6px_0px_var(--border-dark)]"
-            >
-              <span className="text-4xl">🎵</span>
-              <span
-                className="text-3xl font-bold text-[var(--border-dark)]"
-                style={{ fontFamily: "var(--font-gaegu), cursive" }}
-              >
-                비트온워드
-              </span>
-            </div>
-          </motion.div>
-
-          {/* 메인 타이틀 */}
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-4xl md:text-6xl font-bold mb-6 text-[var(--border-dark)]"
+            className="text-5xl md:text-7xl font-bold mb-8 text-[var(--border-dark)]"
             style={{ fontFamily: "var(--font-gaegu), cursive" }}
           >
-            비트에 맞춰<br />
-            <span className="text-[var(--playful-pink)]">단어</span>를 말해요!
+            오늘의 즐거움,<br />
+            <span className="text-[var(--playful-pink)]">플레이그라운드</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="text-xl text-[var(--border-dark)]/70 mb-10 max-w-lg mx-auto"
+            transition={{ delay: 0.2 }}
+            className="text-2xl text-[var(--border-dark)]/70 mb-12 max-w-xl mx-auto"
             style={{ fontFamily: "var(--font-gaegu), cursive" }}
           >
-            음악 비트에 맞춰 이미지를 보고 단어를 말하는
-            재미있는 게임! 친구들과 함께 도전해보세요 🔥
+            비트에 맞춘 리듬 게임부터 AI 관상 분석까지!<br />
+            매일 새로운 재미를 발견해보세요.
           </motion.p>
 
-          {/* CTA 버튼 */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.4 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
+            className="flex flex-wrap items-center justify-center gap-6"
           >
-            <Link href="/play">
-              <WobblyButton variant="success" size="xl">
-                🎮 지금 플레이하기
+            <Link href="/fun">
+              <WobblyButton color="var(--playful-yellow)" size="xl" className="text-2xl px-12 py-6">
+                🚀 재미있는 도구 모음
               </WobblyButton>
             </Link>
-            <Link href="/create">
+            <Link href="/tools">
               <WobblyButton variant="secondary" size="lg">
-                ✨ 챌린지 만들기
+                🛠️ 개발 도구
               </WobblyButton>
             </Link>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Fun 섹션 (퀵 선택) */}
+      <section className="py-12 px-4">
+        <div className="container mx-auto max-w-5xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <Link href="/play">
+              <PlayfulCard color="var(--playful-mint)" className="p-8 flex items-center gap-6 group">
+                <span className="text-6xl group-hover:rotate-12 transition-transform">🎵</span>
+                <div>
+                  <h2 className="text-2xl font-bold mb-1" style={{ fontFamily: "var(--font-gaegu), cursive" }}>비트온워드</h2>
+                  <p className="text-[var(--border-dark)]/60" style={{ fontFamily: "var(--font-gaegu), cursive" }}>리듬에 맞춰 단어를 말하는 챌린지!</p>
+                </div>
+              </PlayfulCard>
+            </Link>
+            <Link href="/fun/face-reading-2026">
+              <PlayfulCard color="var(--playful-coral)" className="p-8 flex items-center gap-6 group">
+                <span className="text-6xl group-hover:scale-110 transition-transform">🎭</span>
+                <div>
+                  <h2 className="text-2xl font-bold mb-1" style={{ fontFamily: "var(--font-gaegu), cursive" }}>2026 AI 관상</h2>
+                  <p className="text-[var(--border-dark)]/60" style={{ fontFamily: "var(--font-gaegu), cursive" }}>AI가 알려주는 나의 신년 운세 분석!</p>
+                </div>
+              </PlayfulCard>
+            </Link>
+          </div>
         </div>
       </section>
 

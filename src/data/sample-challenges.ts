@@ -3,11 +3,16 @@
  */
 
 import type { Challenge } from "@/entities/challenge";
+import { PRESET_CHALLENGES } from "@/shared/data/preset-challenges";
 
 // 샘플 오디오 URL (무료 비트)
 const SAMPLE_AUDIO_URL = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
 
 export const SAMPLE_CHALLENGES: Challenge[] = [
+  // 🔥 Say The Word On Beat 프리셋 챌린지
+  ...PRESET_CHALLENGES,
+
+  // 기존 샘플 챌린지
   {
     id: "numbers-basic",
     title: "숫자 기초",

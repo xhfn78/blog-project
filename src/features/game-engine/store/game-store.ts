@@ -120,8 +120,12 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const stageWords = distributeWordsToStages(challenge.words);
     const firstStageConfig = getStageConfig(1);
 
-    // 새 엔진 생성 (첫 스테이지 BPM으로 시작)
-    const engine = new BeatSyncEngine(firstStageConfig.bpm, challenge.startOffset);
+    // 새 엔진 생성
+    // 프리셋 챌린지(preset-으로 시작)는 고정 BPM 사용
+    // 일반 챌린지는 스테이지별 BPM 사용
+    const isPresetChallenge = challenge.id.startsWith("preset-");
+    const initialBpm = isPresetChallenge ? challenge.bpm : firstStageConfig.bpm;
+    const engine = new BeatSyncEngine(initialBpm, challenge.startOffset);
     const soundPlayer = getBeatSoundPlayer();
 
     try {
@@ -247,7 +251,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
    * 다음 스테이지로 전환
    */
   nextStage: () => {
-    const { currentStage, _beatEngine, _soundPlayer, stageWords } = get();
+    const { currentStage, _beatEngine, _soundPlayer, stageWords, challenge } = get();
 
     if (currentStage >= TOTAL_STAGES) {
       // 마지막 스테이지 완료 - 게임 종료
@@ -261,8 +265,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
     // 스테이지 전환 사운드
     _soundPlayer?.playStageUp();
 
-    // BPM 변경
-    _beatEngine?.setBpm(nextStageConfig.bpm);
+    // BPM 변경 (프리셋 챌린지는 고정 BPM 유지)
+    const isPresetChallenge = challenge?.id.startsWith("preset-");
+    if (!isPresetChallenge) {
+      _beatEngine?.setBpm(nextStageConfig.bpm);
+    }
 
     // 다음 스테이지의 첫 번째 단어
     const nextStageWords = stageWords[nextStageNum - 1] || [];

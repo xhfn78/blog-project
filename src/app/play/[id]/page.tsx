@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { getChallengeById } from "@/data/sample-challenges";
 import { GameBoard } from "@/features/challenge-player";
+import { VideoBoard } from "@/features/video-generator/ui/video-board";
 import { PlayfulCard, getCategoryColor } from "@/shared/ui/playful-card";
 import { StickerBadge, DifficultyBadge } from "@/shared/ui/sticker-badge";
 import { WobblyButton } from "@/shared/ui/wobbly-button";
@@ -69,8 +70,25 @@ export default function PlayChallengePage() {
     );
   }
 
+  // 프리셋 챌린지 감지 (영상 생성 모드)
+  const isPresetChallenge = challenge.id.startsWith("preset-");
+
   // 게임 플레이 중
   if (isPlaying) {
+    // 프리셋 챌린지는 VideoBoard, 일반 챌린지는 GameBoard
+    if (isPresetChallenge) {
+      return (
+        <VideoBoard
+          challenge={challenge}
+          onBack={() => setIsPlaying(false)}
+          onComplete={() => {
+            // 완료 후 처리 (선택사항)
+            console.log("Video generation completed!");
+          }}
+        />
+      );
+    }
+
     return (
       <GameBoard
         challenge={challenge}
@@ -189,20 +207,20 @@ export default function PlayChallengePage() {
                 제작: {challenge.creatorName}
               </div>
 
-              {/* 플레이 버튼 */}
+              {/* 플레이/영상 생성 버튼 */}
               <WobblyButton
                 variant="success"
                 size="xl"
                 className="w-full"
                 onClick={() => setIsPlaying(true)}
               >
-                ▶️ 플레이 시작
+                {isPresetChallenge ? "📹 영상 생성 시작" : "▶️ 플레이 시작"}
               </WobblyButton>
             </div>
           </PlayfulCard>
         </motion.div>
 
-        {/* 게임 방법 안내 */}
+        {/* 게임/영상 생성 방법 안내 */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -214,28 +232,55 @@ export default function PlayChallengePage() {
               className="text-xl font-bold text-[var(--border-dark)] mb-4"
               style={{ fontFamily: "var(--font-gaegu), cursive" }}
             >
-              🎯 플레이 방법
+              {isPresetChallenge ? "📹 영상 생성 방법" : "🎯 플레이 방법"}
             </h2>
             <ul
               className="space-y-2 text-[var(--border-dark)]/70"
               style={{ fontFamily: "var(--font-gaegu), cursive" }}
             >
-              <li className="flex items-start gap-2">
-                <span className="text-xl">1️⃣</span>
-                <span>화면에 이미지가 나타나면 해당 단어를 말해요</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-xl">2️⃣</span>
-                <span>비트에 맞춰 스페이스바 또는 화면을 터치해요</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-xl">3️⃣</span>
-                <span>타이밍이 정확할수록 높은 점수! Perfect를 노려보세요</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-xl">4️⃣</span>
-                <span>연속으로 맞추면 콤보 보너스 점수를 받아요</span>
-              </li>
+              {isPresetChallenge ? (
+                <>
+                  <li className="flex items-start gap-2">
+                    <span className="text-xl">1️⃣</span>
+                    <span>화면 녹화를 먼저 시작하세요 (Mac: Cmd+Shift+5, Windows: Win+G)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-xl">2️⃣</span>
+                    <span>"영상 생성 시작" 버튼을 클릭하세요</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-xl">3️⃣</span>
+                    <span>3초 카운트다운 후 자동으로 40개 단어가 재생됩니다</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-xl">4️⃣</span>
+                    <span>완료되면 화면 녹화를 중지하고 영상을 저장하세요</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-xl">5️⃣</span>
+                    <span>저장된 영상을 틱톡/유튜브의 "Say The Word On Beat" 음원과 함께 업로드하세요!</span>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li className="flex items-start gap-2">
+                    <span className="text-xl">1️⃣</span>
+                    <span>화면에 이미지가 나타나면 해당 단어를 말해요</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-xl">2️⃣</span>
+                    <span>비트에 맞춰 스페이스바 또는 화면을 터치해요</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-xl">3️⃣</span>
+                    <span>타이밍이 정확할수록 높은 점수! Perfect를 노려보세요</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-xl">4️⃣</span>
+                    <span>연속으로 맞추면 콤보 보너스 점수를 받아요</span>
+                  </li>
+                </>
+              )}
             </ul>
           </PlayfulCard>
         </motion.div>
