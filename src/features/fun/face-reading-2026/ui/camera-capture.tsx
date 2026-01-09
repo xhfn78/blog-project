@@ -94,7 +94,7 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
         if (isMounted) {
            setError(err.message || "카메라를 시작할 수 없습니다.");
            setIsLoading(false);
-           setDebugInfo(prev => ({ ...prev, error: err.name, msg: err.message }));
+           setDebugInfo((prev: any) => ({ ...prev, error: err.name, msg: err.message }));
         }
         throw err;
       }
@@ -166,8 +166,8 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
   // 캔버스 크기 설정
   useEffect(() => {
     if (videoRef.current && canvasRef.current && videoStarted) {
-      canvas.width = videoRef.current.videoWidth;
-      canvas.height = videoRef.current.videoHeight;
+      canvasRef.current.width = videoRef.current.videoWidth;
+      canvasRef.current.height = videoRef.current.videoHeight;
     }
   }, [videoStarted]);
 
