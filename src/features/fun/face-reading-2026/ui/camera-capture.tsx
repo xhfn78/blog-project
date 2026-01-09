@@ -42,15 +42,35 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
 
   
 
-    // 모델 로드 및 카메라 시작
+      // 모델 로드 및 카메라 시작
 
-    useEffect(() => {
+  
 
-      let isMounted = true;
+      useEffect(() => {
 
-      let currentStream: MediaStream | null = null;
+  
 
-      let animationFrameId: number;
+        // 페이지 진입 시 최상단으로 스크롤
+
+  
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
+  
+
+    
+
+  
+
+        let isMounted = true;
+
+  
+
+        let currentStream: MediaStream | null = null;
+
+  
+
+        let animationFrameId: number;
 
   
 
@@ -306,9 +326,23 @@ export function CameraCapture({ onCapture, onBack }: CameraCaptureProps) {
   const handleCapture = () => {
     if (!videoRef.current || !canvasRef.current || !videoStarted) return;
 
-    // 현재 캔버스(화면에 보이는 그대로)를 이미지로 변환
-    const imageData = canvasRef.current.toDataURL("image/jpeg", 0.9);
-    setCapturedImage(imageData);
+    const video = videoRef.current;
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext("2d");
+
+    if (ctx) {
+      // 거울 모드로 저장하기 위해 좌우 반전 적용
+      ctx.translate(canvas.width, 0);
+      ctx.scale(-1, 1);
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      // Base64 이미지 데이터 생성
+      const imageData = canvas.toDataURL("image/jpeg", 0.9);
+      setCapturedImage(imageData);
+      addLog("사진 촬영 완료 (반전 적용)");
+    }
   };
 
   // 재촬영
