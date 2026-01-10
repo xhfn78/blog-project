@@ -176,7 +176,19 @@ function extractKeyFeatures(face: FaceAnalysis) {
   });
 
   // 눈썹 (가장 중요!)
-  const eyebrowLevel = face.eyebrowThickness > 0.6 ? "thick" : face.eyebrowThickness < 0.4 ? "thin" : "arched";
+  // 수정: 두꺼운 눈썹 기준을 0.6 -> 0.7로 상향하고, 신뢰도가 낮으면 무난한 'arched'로 처리
+  // 이는 눈썹이 가려지거나 인식이 잘 안 되었을 때 엉뚱한 결과("두꺼운 눈썹")가 나오는 것을 방지함
+  const isConfident = face.confidence > 0.8;
+  let eyebrowLevel: keyof typeof EYEBROW_READINGS = "arched";
+
+  if (isConfident) {
+    if (face.eyebrowThickness > 0.7) {
+      eyebrowLevel = "thick";
+    } else if (face.eyebrowThickness < 0.4) {
+      eyebrowLevel = "thin";
+    }
+  }
+
   const eyebrowReading = EYEBROW_READINGS[eyebrowLevel];
   features.push({
     feature: "눈썹",
