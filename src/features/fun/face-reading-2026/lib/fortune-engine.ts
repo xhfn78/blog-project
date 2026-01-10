@@ -81,43 +81,49 @@ export function analyzeFortune(
 
 /**
  * 운세별 점수 계산 (0-100)
+ * 사용자 기분을 위해 기본 점수를 상향 조정 (평균 75-85점 목표)
  */
 function calculateLuckScores(
   face: FaceAnalysis,
   zodiac: ReturnType<typeof getZodiacInfo>
 ): LuckScores {
+  // 점수 보정 함수: 기본 50점 + 특징점수(0~1) * 50
+  // 특징이 평균(0.5)일 때 75점이 나오도록 설정
+  const calc = (val: number) => Math.round(50 + val * 50);
+
   // 재물운 (눈썹, 코가 중요)
-  const wealth = Math.round(
-    (face.eyebrowThickness * 0.4 +
-      face.noseHeight * 0.3 +
-      face.noseWidth * 0.2 +
-      face.foreheadWidth * 0.1) *
-      100
-  );
+  const wealthRaw =
+    face.eyebrowThickness * 0.4 +
+    face.noseHeight * 0.3 +
+    face.noseWidth * 0.2 +
+    face.foreheadWidth * 0.1;
+  const wealth = calc(wealthRaw);
 
   // 사업운 (이마, 얼굴형이 중요)
-  const career = Math.round(
-    (face.foreheadWidth * 0.4 +
-      (face.faceShape === "square" || face.faceShape === "oval" ? 0.9 : 0.6) * 0.3 +
-      face.jawlineSharp * 0.3) *
-      100
-  );
+  const careerRaw =
+    face.foreheadWidth * 0.4 +
+    (face.faceShape === "square" || face.faceShape === "oval" ? 0.9 : 0.6) * 0.3 +
+    face.jawlineSharp * 0.3;
+  const career = calc(careerRaw);
 
   // 애정운 (눈, 입이 중요)
-  const love = Math.round(
-    (face.eyeSize * 0.4 + face.mouthSize * 0.3 + (face.faceShape === "heart" ? 0.9 : 0.6) * 0.3) * 100
-  );
+  const loveRaw =
+    face.eyeSize * 0.4 +
+    face.mouthSize * 0.3 +
+    (face.faceShape === "heart" ? 0.9 : 0.6) * 0.3;
+  const love = calc(loveRaw);
 
   // 건강운 (코, 광대)
-  const health = Math.round((face.noseHeight * 0.5 + face.cheekboneWidth * 0.5) * 100);
+  const healthRaw = face.noseHeight * 0.5 + face.cheekboneWidth * 0.5;
+  const health = calc(healthRaw);
 
   // 대인운 (입, 눈썹 간격)
-  const social = Math.round(
-    (face.mouthSize * 0.4 + face.eyebrowGap * 0.3 + face.eyeSize * 0.3) * 100
-  );
+  const socialRaw =
+    face.mouthSize * 0.4 + face.eyebrowGap * 0.3 + face.eyeSize * 0.3;
+  const social = calc(socialRaw);
 
-  // 띠 보너스 (본띠는 모든 운에 +10)
-  const bonus = zodiac.sign === "horse" ? 10 : 0;
+  // 띠 보너스 (본띠는 모든 운에 +5, 최대 100)
+  const bonus = zodiac.sign === "horse" ? 5 : 0;
 
   return {
     wealth: Math.min(wealth + bonus, 100),
@@ -132,13 +138,16 @@ function calculateLuckScores(
  * 총점 계산 (0-100)
  */
 function calculateTotalScore(scores: LuckScores, face: FaceAnalysis): number {
-  const avg = (scores.wealth + scores.career + scores.love + scores.health + scores.social) / 5;
+  const avg =
+    (scores.wealth + scores.career + scores.love + scores.health + scores.social) /
+    5;
 
-  // 신뢰도 보정
-  const confidence = face.confidence;
-  const adjusted = avg * (0.8 + confidence * 0.2);
+  // 신뢰도 보정 제거: 인식이 잘 안되었다고 운세 점수를 깎는 것은 사용자 경험에 좋지 않음
+  // 대신 랜덤한 '행운 보너스'를 살짝 추가하여 기분 좋은 결과 유도 (0~5점)
+  // const confidence = face.confidence;
+  const luckyBonus = Math.floor(Math.random() * 6);
 
-  return Math.round(Math.min(adjusted, 100));
+  return Math.round(Math.min(avg + luckyBonus, 100));
 }
 
 /**
